@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('nik');
             $table->string('nama_user');
             $table->string('jenis_kelamin');
-            $table->text('alamat');
-            $table->string('no_telepon');
-            $table->string('foto');
+            $table->text('alamat')->nullable();
+            $table->string('no_telepon')->nullable();
+            $table->string('foto')->nullable();
             $table->string('username');
             $table->string('password');
             $table->string('role');
