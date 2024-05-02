@@ -30,7 +30,7 @@ class LoginController extends Controller
                 $request->session()->regenerate();
                 // alert()->success('Berhasil Login !', $word);
 
-                return redirect()->intended('/welcome');
+                return redirect()->intended('/dashboard');
 
             } else{
 

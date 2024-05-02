@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SUController;
 
 
 /*
@@ -22,3 +23,5 @@ Route::get('/welcome', function () {
 Route::get('/', [LoginController::class, 'login']);
 Route::post('/loginrequest', [LoginController::class, 'loginrequest']);
 
+//super user
+Route::get('/dashboard', [SUController::class, 'index']);

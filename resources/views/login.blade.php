@@ -104,7 +104,7 @@ body {
         <div id="login-form-wrap">
 
           <div class="logo-home">
-            <img src="assets/image/logoptdicrop.png" alt="LOGO" width="120px">
+            <img src="assets/image/logoPTDIterbaru.jpg" alt="LOGO" width="120px">
           </div>
 
           <h4 class="ps-3 pt-3 pe-3">Management Asset</h4>
