@@ -121,6 +121,8 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
+
     <div class="container-fluid p-0 d-flex container-custom">
         @include('super_user.partials.sidebar')
 
@@ -138,6 +140,7 @@
                         <li class="breadcrumb-item">Super User</li>
                         <li class="breadcrumb-item">{{ $title }}</li>
                     </ol>
+
                 </nav>
                 <div class="d-flex justify-content-between">
                     <h3>{{ $title }}</h3>
@@ -240,6 +243,19 @@
             } else {
                 dataDropdown.style.display = 'block';
                 dataDropdown2.style.display = 'none';
+            }
+        }
+        function toggleDataDropdown3() {
+            // console.log("berhasil");
+            var dataDropdown3 = document.getElementById('dataDropdown3');
+
+            // Toggle display dari <ul> ketika tautan diklik
+            if (dataDropdown3.style.display === 'block') {
+                dataDropdown3.style.display = 'none';
+            } else {
+                dataDropdown3.style.display = 'block';
+                // dataDropdown2.style.display = 'none';
+
             }
         }
     </script>

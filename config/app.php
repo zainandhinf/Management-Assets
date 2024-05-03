@@ -155,6 +155,13 @@ return [
     */
 
     'providers' => [
+        /* ... Existing Service Providers ... */
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+    ],
+
+    'providers' => [
+
+
 
         /*
          * Laravel Framework Service Providers...

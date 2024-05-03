@@ -12,7 +12,7 @@
                 </p>
             </div>
             <div class="icon-dashboard">
-                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-clipboard-user"></i>
             </div>
         </div>
         <div class="card-dashboard card-user">
@@ -36,8 +36,7 @@
                 </p>
             </div>
             <div class="icon-dashboard">
-                <i class="fa-solid fa-list"></i>
-            </div>
+                <i class="fa-solid fa-boxes-packing"></i>            </div>
         </div>
         <div class="card-dashboard card-transaction">
             <div>

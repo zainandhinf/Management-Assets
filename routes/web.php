@@ -22,6 +22,11 @@ Route::get('/welcome', function () {
 
 Route::get('/', [LoginController::class, 'login']);
 Route::post('/loginrequest', [LoginController::class, 'loginrequest']);
+Route::post('/logout', [LoginController::class, 'logout']);
 
 //super user
 Route::get('/dashboard', [SUController::class, 'index']);
+Route::get('/petugas', [SUController::class, 'goPetugas']);
+Route::get('/pegawai', [SUController::class, 'goPegawai']);
+Route::get('/barang', [SUController::class, 'goBarang']);
+Route::get('/ruangan', [SUController::class, 'goRuangan']);

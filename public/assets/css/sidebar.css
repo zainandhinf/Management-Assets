@@ -541,9 +541,25 @@ main.active-main {
     border-radius: 5px;
     transition: 0.5s;
 }
+.dropdown-custom-child button {
+    border: none;
+    color: #0d3b66;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    padding-left: 0px;
+    width: 100%;
+    border-radius: 5px;
+    transition: 0.5s;
+    font-size: 12px;
+}
 
 .dropdown-custom .active-custom {
     background-color: #479F76;
+}
+
+.ul-active{
+    background-color: red;
 }
 
 .dropdown-custom .active-custom ul {
@@ -554,6 +570,7 @@ main.active-main {
     background-color: #0d3b66;
     color: #fff;
 }
+
 
 .button-icon {
     margin-right: 9px;
@@ -570,6 +587,8 @@ main.active-main {
 .dropdown-custom ul li a {
     font-size: 12px;
 }
+
+
 
 .dropdown-active-custom ul {
     display: block;

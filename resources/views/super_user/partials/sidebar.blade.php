@@ -1,75 +1,84 @@
-<div id="bdSidebar" class="d-flex flex-column flex-shrink-0 p-3 bg-white offcanvas-md offcanvas-start"
+<div id="bdSidebar" style="overflow: auto" class="d-flex flex-column flex-shrink-0 p-3 bg-white offcanvas-md offcanvas-start"
     style="width: 280px;">
     <div class="navbar-brand d-flex mt-2">
         <div class="ms-3"><img src="assets/image/logoPTDIterbarucrop.jpg" width="50" alt=""></div>
-        <div class="ms-3 fw-bold"><h5>Management <br>Assets</h5></div>
+        <div class="ms-3 fw-bold"><h5>Management <br>Assets - LC</h5></div>
     </div>
     <hr class="mb-1">
     <ul class="mynav nav nav-pills flex-column mb-auto mt-3">
         <li class="nav-item mb-1">
-            <a href="admin-dashboard" class="{{ $title === 'Dashboard' ? 'active' : '' }}">
+            <a href="/dashboard" class="{{ $title === 'Dashboard' ? 'active' : ''}}">
                 <i class="fa-solid fa-gauge"></i>
                 Dashboard
             </a>
         </li>
-        <li class="nav-item mb-0 dropdown-custom {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
-            <button onclick="toggleDataDropdown()" href=""
-                class="{{ $active === 'data' ? 'active-custom' : '' }}">
+        <li class="nav-item active mb-0 dropdown-custom
+        {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '';  }}
+        ">
+
+            <button  onclick="toggleDataDropdown()" href="">
                 <i class="fa-solid fa-database button-icon"></i>
                 Data
                 <i class="fa-solid fa-chevron-down down"></i>
             </button>
-            <ul id="dataDropdown">
-                <li class="nav-item mb-1">
-                    <a href="/admin-officer" class="{{ $title === 'Officer' ? 'active' : '' }}">
-                        <i class="fa-solid fa-user"></i>
-                        Officer
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="/admin-user" class="{{ $title === 'User' ? 'active' : '' }}">
-                        <i class="fa-solid fa-user"></i>
-                        User
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="/admin-provinces" class="{{ $title === 'Provinces' ? 'active' : '' }}">
-                        <i class="fa-solid fa-map-location-dot"></i>
-                        Provinces
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="/admin-city" class="{{ $title === 'City' ? 'active' : '' }}">
-                        <i class="fa-solid fa-city"></i>
-                        Cities
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="/admin-countries" class="{{ $title === 'Countries' ? 'active' : '' }}">
-                        <i class="fa-solid fa-globe"></i>
-                        Countries
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="/admin-catalog" class="{{ $title === 'Catalog' ? 'active' : '' }}">
-                        <i class="fa-solid fa-list"></i>
-                        Catalogs
-                    </a>
-                </li>
 
-                {{-- <li class="nav-item mb-1">
-                    <a href="/admin-transportations" class="{{ $title === 'Transportation' ? 'active' : '' }}">
-                        <i class="fa-solid fa-car"></i>
-                        Transportations
+
+            <ul class="ms-2" id="dataDropdown">
+                <li class="nav-item mb-1">
+                    <a href="/petugas" class="{{ $title === 'Data Petugas' ? 'active' : '' }}">
+                        <i class="fa-solid fa-user-gear"></i>
+                        Petugas
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/admin-payments" class="{{ $title === 'Payment Method' ? 'active' : '' }}">
-                        <i class="fa-solid fa-credit-card"></i>
-                        Payments Method
+                    <a href="/pegawai" class="{{ $title === 'Data Pegawai' ? 'active' : '' }}">
+                        <i class="fa-solid fa-users"></i>
+                        Pegawai
                     </a>
-                </li> --}}
+                </li>
+                <li class="nav-item mb-0 dropdown-custom-child ms-2 {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
+                    <button onclick="toggleDataDropdown3()" href=""
+                        class="{{ $active === 'data' ? 'active-custom' : '' }}">
+                        <i class="fa-solid fa-share-from-square"></i>
+                        Kategori {{-- Jangan Panjang Panhjang ntar rusak --}}
+                        <i class="fa-solid fa-chevron-down down"></i>
+                    </button>
+                    <ul id="dataDropdown3">
+                        <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                            <a href="/admin-officer" class="{{ $title === 'Officer' ? 'active' : '' }}">
+                                <i class="fa-solid fa-dolly"></i>
+                                Kategori Barang
+                            </a>
+                        </li>
+                        <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                            <a href="/admin-user" class="{{ $title === 'User' ? 'active' : '' }}">
+                                <i class="fa-solid fa-tags"></i>
+                                Tipe Ruangan
+                            </a>
+                        </li>
+
+
+
+                    </ul>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="/barang"  class="{{ $title === 'Data Barang' ? 'active' : '' }}">
+                        <i class="fa-solid fa-computer"></i>
+                        Barang - Properti
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="/ruangan" class="{{ $title === 'Data Ruangan' ? 'active' : '' }}">
+                        <i class="fa-solid fa-door-closed"></i>Ruangan
+                    </a>
+                </li>
             </ul>
+        </li>
+        <li class="nav-item mb-1">
+            <a href="/admin-transactions" class="{{ $title === 'Transaction' ? 'active' : '' }}">
+                <i class="fa-solid fa-chalkboard-user"></i>
+                Training / Programs
+            </a>
         </li>
         <li class="nav-item mb-1">
             <a href="/admin-transactions" class="{{ $title === 'Transaction' ? 'active' : '' }}">
@@ -101,4 +110,5 @@
             </form>
         </div>
     </div>
+
 </div>

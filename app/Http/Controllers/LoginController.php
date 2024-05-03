@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LoginController extends Controller
 {
@@ -28,7 +29,7 @@ class LoginController extends Controller
 
 
                 $request->session()->regenerate();
-                // alert()->success('Berhasil Login !', $word);
+                Alert::success('Sukses!', 'Operasi berhasil dilakukan.');
 
                 return redirect()->intended('/dashboard');
 
@@ -48,4 +49,14 @@ class LoginController extends Controller
 
         }
     }
+
+    public function logout(Request $request) {
+        Auth::logout();
+
+        request()->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+
 }
