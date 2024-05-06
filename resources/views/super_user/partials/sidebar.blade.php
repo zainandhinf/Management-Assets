@@ -1,23 +1,26 @@
-<div id="bdSidebar" style="overflow: auto" class="d-flex flex-column flex-shrink-0 p-3 bg-white offcanvas-md offcanvas-start"
-    style="width: 280px;">
+<div id="bdSidebar" style="overflow: auto"
+    class="d-flex flex-column flex-shrink-0 p-3 bg-white offcanvas-md offcanvas-start" style="width: 280px;">
     <div class="navbar-brand d-flex mt-2">
         <div class="ms-3"><img src="assets/image/logoPTDIterbarucrop.jpg" width="50" alt=""></div>
-        <div class="ms-3 fw-bold"><h5>Management <br>Assets - LC</h5></div>
+        <div class="ms-3 fw-bold">
+            <h5>Management <br>Assets - LC</h5>
+        </div>
     </div>
     <hr class="mb-1">
     <ul class="mynav nav nav-pills flex-column mb-auto mt-3">
         <li class="nav-item mb-1">
-            <a href="/dashboard" class="{{ $title === 'Dashboard' ? 'active' : ''}}">
+            <a href="/dashboard" class="{{ $title === 'Dashboard' ? 'active' : '' }}">
                 <i class="fa-solid fa-gauge"></i>
                 Dashboard
             </a>
         </li>
-        <li class="nav-item active mb-0 dropdown-custom
-        {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '';  }}
+        <li
+            class="nav-item active mb-0 dropdown-custom
+        {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '' }}
         ">
 
-            <button  onclick="toggleDataDropdown()" href="">
-                <i class="fa-solid fa-database button-icon"></i>
+            <button onclick="toggleDataDropdown()" href="">
+                <i class="fa-solid fa-database button-icon ms-2"></i>
                 Data
                 <i class="fa-solid fa-chevron-down down"></i>
             </button>
@@ -36,14 +39,15 @@
                         Pegawai
                     </a>
                 </li>
-                <li class="nav-item mb-0 dropdown-custom-child ms-2 {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
+                <li
+                    class="nav-item mb-0 dropdown-custom-child {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
                     <button onclick="toggleDataDropdown3()" href=""
                         class="{{ $active === 'data' ? 'active-custom' : '' }}">
-                        <i class="fa-solid fa-share-from-square"></i>
+                        <i class="fa-solid fa-share-from-square ms-2"></i>
                         Kategori {{-- Jangan Panjang Panhjang ntar rusak --}}
                         <i class="fa-solid fa-chevron-down down"></i>
                     </button>
-                    <ul id="dataDropdown3">
+                    <ul id="dataDropdown3" class="ms-2">
                         <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
                             <a href="/admin-officer" class="{{ $title === 'Officer' ? 'active' : '' }}">
                                 <i class="fa-solid fa-dolly"></i>
@@ -62,7 +66,7 @@
                     </ul>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/barang"  class="{{ $title === 'Data Barang' ? 'active' : '' }}">
+                    <a href="/barang" class="{{ $title === 'Data Barang' ? 'active' : '' }}">
                         <i class="fa-solid fa-computer"></i>
                         Barang - Properti
                     </a>
@@ -81,12 +85,6 @@
             </a>
         </li>
         <li class="nav-item mb-1">
-            <a href="/admin-transactions" class="{{ $title === 'Transaction' ? 'active' : '' }}">
-                <i class="fa-solid fa-cash-register"></i>
-                Transactions
-            </a>
-        </li>
-        <li class="nav-item mb-1">
             <a href="/admin-reports" class="{{ $title === 'Reports' ? 'active' : '' }}">
                 <i class="fa-solid fa-scroll"></i>
                 Reports
@@ -95,20 +93,57 @@
     </ul>
     <hr class="mt-0 hr-custom">
     <div class="d-flex user-custom mb-0">
+        <a href="#">
             <img src="assets/image/user.png" class="img-fluid rounded me-2"
-                style="width: 50px; height: 50px; margin-top: 4px" alt="">
-        <span style="margin-top: 4px">
-            <h6 class="mt-1 mb-0">User</h6>
-            <small>Super User</small>
-        </span>
+            style="width: 50px; height: 50px; margin-top: 4px" alt="">
+        </a>
+            <span style="margin-top: 4px">
+                <h6 class="mt-1 mb-0">User</h6>
+                <small>Super User</small>
+            </span>
         <div class="logout" style="margin-bottom: 100px">
-            <form action="/logout" method="POST">
-                @csrf
-                <button class="btn btn-primary" type="submit">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-            </form>
+            <button class="btn" style="background: #0d3b66" data-bs-toggle="modal" data-bs-target="#logout">
+                <i class="fa-solid fa-power-off text-white"></i>
+            </button>
         </div>
     </div>
 
+</div>
+
+<div class="modal modal-blur fade" id="logout" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog w-50 modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
+                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                        d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
+                </svg>
+                <h6>Are you sure?</h6>
+                <div class="text-muted">Yakin? Anda akan Keluar dari halaman ini...</div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                Cancel
+                            </button></div>
+                        <form action="/logout" method="post">
+                            @csrf
+                            {{-- @method('DELETE') --}}
+                            <button class="btn btn-danger w-100">
+                                Yakin
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -95,6 +95,8 @@ body {
     <link rel="stylesheet" href="/assets/Bootstrap/css/bootstrap.min.css">
 </head>
 <body>
+    @include('sweetalert::alert')
+
     <form method="post" action="/loginrequest">
       @csrf
       <div class="wrapper-login" style="font-family: 'Inter';">
@@ -125,12 +127,12 @@ body {
                         <input class="form-control mb-2" type="password" id="password" name="password" placeholder="Password" required></td>
                 </tr>
 
-                @if(session()->has('Login Gagal'))
+                {{-- @if(session()->has('Login Gagal'))
         <div class="alert bg-danger text-light alert-dismissible fade show">
           {{ session('Login Gagal') }}
           <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="close"></button>
         </div>
-      @endif
+      @endif --}}
             </div>
             </table>
 

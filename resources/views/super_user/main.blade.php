@@ -14,14 +14,6 @@
     <script src="../assets/jquery/jquery-3.7.0.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
-        integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="assets/js/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-        crossorigin="anonymous"></script> --}}
     {{-- end JQuery --}}
 
     {{-- Bootstrap --}}
@@ -29,12 +21,20 @@
     <link rel="stylesheet" href="../assets/Bootstrap/css/bootstrap.min.css">
     <script src="assets/Bootstrap/js/bootstrap.min.js"></script>
     <script src="../assets/Bootstrap/js/bootstrap.min.js"></script>
+    <link href="/assets/demo/dist/css/tabler.min.css?1684106062" rel="stylesheet" />
+    <link href="/assets/demo/dist/css/tabler-flags.min.css?1684106062" rel="stylesheet" />
+    <link href="/assets/demo/dist/css/tabler-payments.min.css?1684106062" rel="stylesheet" />
+    <link href="/assets/demo/dist/css/tabler-vendors.min.css?1684106062" rel="stylesheet" />
+    <link href="/assets/demo/dist/css/demo.min.css?1684106062" rel="stylesheet" />
     {{-- end Bootstrap --}}
+
+
 
     {{-- Font Awesome --}}
     <link rel="stylesheet" href="assets/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
     {{-- end Font Awesome --}}
+
 
     {{-- DataTables --}}
     <link rel="stylesheet" href="assets/DataTables/dataTables.bootstrap5.min.css">
@@ -50,42 +50,10 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" /> --}}
     {{-- end DataTables --}}
 
-    {{-- Select2 --}}
-    <link href="assets/select2/select2.min.css" rel="stylesheet" />
-    <link href="../assets/select2/select2.min.css" rel="stylesheet" />
-    <script src="assets/select2/select2.min.js"></script>
-    <script src="../assets/select2/select2.min.js"></script>
-    {{-- <link rel="stylesheet" href="assets/dselect-main/source/css/dselect.scss"> --}}
-    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
-    {{-- end Select2 --}}
-
-    {{-- Dropzone --}}
-    <script src="assets/dropzone/min/dropzone.min.js"></script>
-    <script src="../assets/dropzone/min/dropzone.min.js"></script>
-    <link rel="stylesheet" href="assets/dropzone/min/dropzone.min.css" type="text/css" />
-    <link rel="stylesheet" href="../assets/dropzone/min/dropzone.min.css" type="text/css" />
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.js"
-    integrity="sha512-9e9rr82F9BPzG81+6UrwWLFj8ZLf59jnuIA/tIf8dEGoQVu7l5qvr02G/BiAabsFOYrIUTMslVN+iDYuszftVQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css"
-    integrity="sha512-jU/7UFiaW5UBGODEopEqnbIAHOI8fO6T99m7Tsmqs2gkdujByJfkCbbfPSN4Wlqlb9TGnsuC0YgUgWkRBK7B9A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
-    {{-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> --}}
-    {{-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" /> --}}
-    {{-- end Dropzone --}}
-
     {{-- Style --}}
     <link rel="stylesheet" href="assets/css/sidebar.css">
     {{-- end Style --}}
 
-
-
-
-
-    {{-- <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500&display=swap" rel="stylesheet"> --}}
     <style>
         @import url('https://rsms.me/inter/inter.css');
 
@@ -176,13 +144,6 @@
     {{-- <script src="assets/js/jquery-3.7.1.min.js"></script> --}}
     {{-- end JQuery --}}
 
-    {{-- Bootstrap --}}
-    <script src="assets/Bootstrap/js/bootstrap.min.js"></script>
-    <script src="../assets/Bootstrap/js/bootstrap.min.js"></script>
-    {{-- <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../assets/bootstrap/js/bootstrap.min.js"></script> --}}
-    {{-- end Bootstrap --}}
-
     {{-- DataTables --}}
     <script src="assets/DataTables/jquery.dataTables.min.js"></script>
     <script src="../assets/DataTables/jquery.dataTables.min.js"></script>
@@ -258,7 +219,13 @@
 
             }
         }
+
+        $(document).ready(function() {
+            $('#data-tables').DataTable(
+            );
+        });
     </script>
+
 
 </body>
 
