@@ -4,7 +4,7 @@
     <div class="card p-4" style="font-size: 14px;">
         <button onclick="ShowModal1()" type="button" class="btn btn-primary btn-sm mt-2 mb-2" data-bs-toggle="modal"
             data-bs-target="#adddata">
-            Tambah Data
+            ++ Tambah Data
         </button>
         @if (session()->has('success'))
             <div class="alert alert-success mt-1 mb-3" role="alert">
@@ -68,7 +68,7 @@
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size: 14px;">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
                         Cancel
                     </button>
                     <button type="submit" class="btn btn-primary" style="font-size: 14px;">Create Data</button>
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="font-size: 14px;">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
                         Cancel
                     </button>
                     <button type="submit" class="btn btn-primary" style="font-size: 14px;">Edit Data</button>
@@ -137,7 +137,7 @@
                         <path d="M12 17h.01" />
                     </svg>
                     <h6>Are you sure?</h6>
-                    <div class="text-muted">Yakin? Anda akan menghapus data ini (Nama Kategori: **{{ $ktgr_brng->nama_kategori }}**)...</div>
+                    <div class="text-muted">Yakin? Anda akan menghapus data ini <br> (Nama Kategori: *<b>{{ $ktgr_brng->nama_kategori }}</b>)...</div>
                 </div>
                 <div class="modal-footer">
                     <div class="w-100">

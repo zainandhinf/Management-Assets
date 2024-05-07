@@ -110,6 +110,8 @@
                         <li class="breadcrumb-item">{{ $title }}</li>
                     </ol>
 
+
+
                 </nav>
                 <div class="d-flex justify-content-between">
                     <h3>{{ $title }}</h3>
@@ -124,6 +126,8 @@
 
         </div>
     </div>
+
+
 
     {{-- JQuery --}}
     <script src="assets/jquery/jquery-3.7.1.min.js"></script>
