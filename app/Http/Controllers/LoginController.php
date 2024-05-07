@@ -28,7 +28,7 @@ class LoginController extends Controller
 
 
 
-                $request->session()->regenerate();
+                // $request->session()->regenerate();
 
 
                 Alert::toast('Login Success!','success');
@@ -41,7 +41,7 @@ class LoginController extends Controller
 
 
 
-                $request->session()->regenerate();
+                // $request->session()->regenerate();
                 return redirect()->intended('/welcome');
             }
 

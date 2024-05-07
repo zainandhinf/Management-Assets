@@ -1,0 +1,16 @@
+.card__avatar {
+    position: absolute;
+    width: 114px;
+    height: 114px;
+    background: var(--bg-color);
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: calc(50% - 57px);
+}
+
+.card__avatar svg {
+    width: 100px;
+    height: 100px;
+}

@@ -49,13 +49,13 @@
                     </button>
                     <ul id="dataDropdown3" class="ms-2">
                         <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
-                            <a href="/admin-officer" class="{{ $title === 'Officer' ? 'active' : '' }}">
+                            <a href="/kategori-barang" class="{{ $title === 'Data Kategori Barang' ? 'active' : '' }}">
                                 <i class="fa-solid fa-dolly"></i>
                                 Kategori Barang
                             </a>
                         </li>
                         <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
-                            <a href="/admin-user" class="{{ $title === 'User' ? 'active' : '' }}">
+                            <a href="/tipe-ruangan" class="{{ $title === 'Data Tipe Ruangan' ? 'active' : '' }}">
                                 <i class="fa-solid fa-tags"></i>
                                 Tipe Ruangan
                             </a>
@@ -93,12 +93,12 @@
     </ul>
     <hr class="mt-0 hr-custom">
     <div class="d-flex user-custom mb-0">
-        <a href="#">
+        <a href="/profile">
             <img src="assets/image/user.png" class="img-fluid rounded me-2"
             style="width: 50px; height: 50px; margin-top: 4px" alt="">
         </a>
             <span style="margin-top: 4px">
-                <h6 class="mt-1 mb-0">User</h6>
+                <h6 class="mt-1 mb-0">{{ auth()->user()->username }}</h6>
                 <small>Super User</small>
             </span>
         <div class="logout" style="margin-bottom: 100px">

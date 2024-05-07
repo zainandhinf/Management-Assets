@@ -29,4 +29,19 @@ Route::get('/dashboard', [SUController::class, 'index']);
 Route::get('/petugas', [SUController::class, 'goPetugas']);
 Route::get('/pegawai', [SUController::class, 'goPegawai']);
 Route::get('/barang', [SUController::class, 'goBarang']);
+Route::get('/kategori-barang', [SUController::class, 'goKBarang']);
 Route::get('/ruangan', [SUController::class, 'goRuangan']);
+Route::get('/tipe-ruangan', [SUController::class, 'goTRuangan']);
+Route::get('/profile', [SUController::class, 'goProfile']);
+
+//crud super user
+Route::post('/addkategori', [SUController::class, 'addKategori']);
+Route::put('/editkategori', [SUController::class, 'editKategori']);
+Route::delete('/deletekategori', [SUController::class, 'deleteKategori']);
+
+Route::post('/addtipe', [SUController::class, 'addTipe']);
+Route::put('/edittipe', [SUController::class, 'editTipe']);
+Route::delete('/deletetipe', [SUController::class, 'deleteTipe']);
+
+Route::put('/editprofile', [SUController::class, 'editProfile']);
+Route::put('/editpassword', [SUController::class, 'editPassword']);

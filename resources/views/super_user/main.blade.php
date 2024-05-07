@@ -52,6 +52,7 @@
 
     {{-- Style --}}
     <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="assets/css/profile.css">
     {{-- end Style --}}
 
     <style>
@@ -206,6 +207,7 @@
                 dataDropdown2.style.display = 'none';
             }
         }
+
         function toggleDataDropdown3() {
             // console.log("berhasil");
             var dataDropdown3 = document.getElementById('dataDropdown3');
@@ -221,8 +223,16 @@
         }
 
         $(document).ready(function() {
-            $('#data-tables').DataTable(
-            );
+            $('#data-tables').DataTable();
+        });
+
+        $(document).ready(function() {
+            if ($(".alert-success").length > 0) {
+                setTimeout(function() {
+                    $(".alert-success").fadeOut(
+                    500); // Ubah nilai 500 dengan durasi fade out yang diinginkan (dalam milidetik)
+                }, 3000); // Ubah nilai 3000 dengan waktu tunda sebelum fade out (dalam milidetik)
+            }
         });
     </script>
 
