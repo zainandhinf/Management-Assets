@@ -14,3 +14,41 @@
     width: 100px;
     height: 100px;
 }
+
+.custom-file-upload {
+    height: 55px;
+    width: 200px;
+    gap: 20px;
+    cursor: pointer;
+    border: 2px dashed #e8e8e8;
+    background-color: #0d3b66;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 48px 35px -48px #e8e8e8;
+}
+
+.custom-file-upload .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-file-upload .icon{
+    margin-top: -15px;
+}
+
+.custom-file-upload .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-file-upload .text span {
+    font-weight: 400;
+    color: #e8e8e8;
+    font-size: 12px;
+}
+
+  .custom-file-upload input {
+    display: none;
+  }

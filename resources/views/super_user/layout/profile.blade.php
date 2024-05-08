@@ -1,7 +1,7 @@
 @extends('super_user.main')
 
 @section('content')
-    @if (session()->has('success'))
+    {{-- @if (session()->has('success'))
         <div class="alert alert-success mt-5 me-5 position-absolute end-0 top-0" role="alert">
             {{ session('success') }}
         </div>
@@ -9,12 +9,32 @@
         <div class="alert alert-danger mt-5 me-5 position-absolute end-0 top-0" role="alert">
             {{ session('error') }}
         </div>
-    @endif
+    @endif --}}
     <div class="d-flex mb-5">
         <div class="card p-4 flex-row" style="width: 750px;">
-            <div class="">
-                <img src="assets/image/user.png" class="img-fluid rounded me-2" style="width: 200px; height: 200px;"
-                    alt="">
+            <div class="profile-right col-4">
+                @if (auth()->user()->foto == null)
+                <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2 ms-3" style="width: 200px; height: 200px;"
+                alt="">
+                @else
+                <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-fluid rounded rounded-circle me-2 ms-3" style="width: 200px; height: 200px;"
+                alt="">
+                @endif
+                <label for="file" class="custom-file-upload ms-3 mt-2">
+                    <form action="/uploadprofile" method="POST" enctype="multipart/form-data" id="uploadprofile">
+                        @csrf
+                        @method('PUT')
+                        <input type="text" name="oldPic" value="{{ auth()->user()->foto }}">
+                        <div class="icon">
+                            <i class="fa-solid fa-camera-rotate text-white fs-5"></i>
+                        </div>
+                        <div class="text">
+                            <span>Ubah foto profil</span>
+                        </div>
+                        <input id="file" type="file" onchange="handleFileChange()" name="foto">
+                    </form>
+                </label>
+
             </div>
             <div class="ms-3" style="width: 70%">
                 <div class="form-group">
@@ -30,7 +50,9 @@
                 <div class="form-group">
                     <label for="name" class="col-form-label">Jenis Kelamin :</label>
                     <input style="font-size: 14px;" type="text" class="form-control" id="name"
-                        value="{{ auth()->user()->jenis_kelamin }}" disabled>
+                        value="@if (auth()->user()->jenis_kelamin == 'l') Laki-Laki
+                        @else Perempuan @endif"
+                        disabled>
                 </div>
                 <div class="form-group">
                     <label for="name" class="col-form-label">Alamat :</label>
@@ -88,7 +110,8 @@
                                 class="form-control @error('nik') fs-6
                         is-invalid
                         @enderror"
-                                placeholder="NIK.." id="name" name="nik" value="{{ auth()->user()->nik }}">
+                                placeholder="NIK.." id="name" name="nik" value="{{ auth()->user()->nik }}"
+                                required>
                             @error('nik')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -102,7 +125,7 @@
                         is-invalid
                         @enderror"
                                 placeholder="Nama.." id="name" name="nama_user"
-                                value="{{ auth()->user()->nama_user }}">
+                                value="{{ auth()->user()->nama_user }}" required>
                             @error('nama_user')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -111,26 +134,29 @@
                         </div>
                         <div class="form-group">
                             <label for="name" class="col-form-label">Jenis Kelamin :</label>
-                            <input style="font-size: 14px;" type="text"
-                                class="form-control @error('jenis_kelamin') fs-6
-                        is-invalid
-                        @enderror"
-                                placeholder="Jenis Kelamin.." id="name" name="jenis_kelamin"
-                                value="{{ auth()->user()->jenis_kelamin }}">
-                            @error('jenis_kelamin')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
+                            <div class="input-group">
+                                <select style="font-size: 14px;"
+                                    class="form-select @error('jenis_kelamin')
+                                is-invalid
+                            @enderror"
+                                    name="jenis_kelamin">
+                                    @if (auth()->user()->jenis_kelamin == 'l')
+                                        <option value="l">Laki-Laki</option>
+                                        <option value="p">Perempuan</option>
+                                    @elseif(auth()->user()->jenis_kelamin == 'p')
+                                        <option value="p">Perempuan</option>
+                                        <option value="l">Laki-Laki</option>
+                                    @endif
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="name" class="col-form-label">Alamat :</label>
-                            <input style="font-size: 14px;" type="text"
+                            <textarea style="font-size: 14px;" type="text"
                                 class="form-control @error('alamat') fs-6
                         is-invalid
                         @enderror"
-                                placeholder="Alamat.." id="name" name="alamat"
-                                value="{{ auth()->user()->alamat }}">
+                                placeholder="Alamat.." id="name" name="alamat">{{ auth()->user()->alamat }}</textarea>
                             @error('alamat')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -158,7 +184,7 @@
                         is-invalid
                         @enderror"
                                 placeholder="Username.." id="name" name="username"
-                                value="{{ auth()->user()->username }}">
+                                value="{{ auth()->user()->username }}" required>
                             @error('username')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -231,4 +257,10 @@
         </div>
     </div>
     {{-- end modal edit profile --}}
+    <script>
+        function handleFileChange() {
+            var form = document.getElementById('uploadprofile');
+            form.submit();
+        }
+    </script>
 @endsection

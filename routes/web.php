@@ -45,3 +45,9 @@ Route::delete('/deletetipe', [SUController::class, 'deleteTipe']);
 
 Route::put('/editprofile', [SUController::class, 'editProfile']);
 Route::put('/editpassword', [SUController::class, 'editPassword']);
+
+Route::post('/addpetugas', [SUController::class, 'addPetugas']);
+Route::put('/editpetugas', [SUController::class, 'editPetugas']);
+Route::delete('/deletepetugas', [SUController::class, 'deletePetugas']);
+
+Route::put('/uploadprofile', [SUController::class, 'editProfileImage']);

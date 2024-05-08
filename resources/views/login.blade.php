@@ -150,7 +150,7 @@ body {
 
 
           <div id="create-account-wrap">
-            <p style="color: black;">Belum Memiliki Akun ? <a href=register/register-siswa.php?page=dash>Daftar disini</a><p>
+            {{-- <p style="color: black;">Belum Memiliki Akun ? <a href=register/register-siswa.php?page=dash>Daftar disini</a><p> --}}
           </div>
         </div>
 

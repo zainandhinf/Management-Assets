@@ -4,13 +4,8 @@
     <div class="card p-4" style="font-size: 14px;">
         <button onclick="ShowModal1()" type="button" class="btn btn-primary btn-sm mt-2 mb-2" data-bs-toggle="modal"
             data-bs-target="#adddata">
-            ++ Tambah Data
+            <i class="fa-solid fa-folder-plus me-1"></i> Tambah Data
         </button>
-        @if (session()->has('success'))
-            <div class="alert alert-success mt-1 mb-3" role="alert">
-                {{ session('success') }}
-            </div>
-        @endif
         <table class="table table-striped" id="data-tables" style="font-size: 14px;">
             <thead>
                 <tr>

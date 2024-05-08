@@ -115,6 +115,15 @@
                 </nav>
                 <div class="d-flex justify-content-between">
                     <h3>{{ $title }}</h3>
+                    @if (session()->has('success'))
+                        <div class="alert alert-success position-absolute end-0 me-5" role="alert" style="margin-top: -10px;">
+                            {{ session('success') }}
+                        </div>
+                    @elseif (session()->has('error'))
+                        <div class="alert alert-warning position-absolute end-0 me-5" role="alert" style="margin-top: -10px;">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                 </div>
                 <hr>
                 <div class="row">
@@ -234,7 +243,15 @@
             if ($(".alert-success").length > 0) {
                 setTimeout(function() {
                     $(".alert-success").fadeOut(
-                    500); // Ubah nilai 500 dengan durasi fade out yang diinginkan (dalam milidetik)
+                        500); // Ubah nilai 500 dengan durasi fade out yang diinginkan (dalam milidetik)
+                }, 3000); // Ubah nilai 3000 dengan waktu tunda sebelum fade out (dalam milidetik)
+            }
+        });
+        $(document).ready(function() {
+            if ($(".alert-danger").length > 0) {
+                setTimeout(function() {
+                    $(".alert-warning").fadeOut(
+                        500); // Ubah nilai 500 dengan durasi fade out yang diinginkan (dalam milidetik)
                 }, 3000); // Ubah nilai 3000 dengan waktu tunda sebelum fade out (dalam milidetik)
             }
         });

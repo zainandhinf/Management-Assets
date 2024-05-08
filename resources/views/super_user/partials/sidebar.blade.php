@@ -94,8 +94,13 @@
     <hr class="mt-0 hr-custom">
     <div class="d-flex user-custom mb-0">
         <a href="/profile">
-            <img src="assets/image/user.png" class="img-fluid rounded me-2"
-            style="width: 50px; height: 50px; margin-top: 4px" alt="">
+            @if (auth()->user()->foto == null)
+            <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2" style="width: 50px; height: 50px; margin-top: 4px;"
+            alt="">
+            @else
+            <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-fluid rounded rounded-circle me-2" style="width: 50px; height: 50px; margin-top: 4px;"
+            alt="">
+            @endif
         </a>
             <span style="margin-top: 4px">
                 <h6 class="mt-1 mb-0">{{ auth()->user()->username }}</h6>

@@ -28,7 +28,8 @@ class SUController extends Controller
     {
         return view('super_user.layout.petugas')->with([
             'title' => 'Data Petugas',
-            'active' => 'z'
+            'active' => 'z',
+            'petugass' => User::all(),
 
         ]);
     }
@@ -85,7 +86,24 @@ class SUController extends Controller
     //end route view
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     //crud
+
+
+
+
 
     //kategori barang
     public function addKategori(Request $request)
@@ -131,6 +149,10 @@ class SUController extends Controller
     }
     //
 
+
+
+
+
     //tipe ruangan
     public function addTipe(Request $request)
     {
@@ -169,13 +191,84 @@ class SUController extends Controller
 
         DB::table('tipe_ruangans')->where('id', $request->input('id_tipe'))->delete();
 
-        $pesanFlash = "Tipe ruangan (Nama Tipe: **{$nama_tipe[0]->nama_tipe}** ) telah berhasil dihapus!";
+        $pesanFlash = "Tipe ruangan (Nama Tipe: *{$nama_tipe[0]->nama_tipe} ) telah berhasil dihapus!";
 
         $request->session()->flash('success', $pesanFlash);
 
         return redirect('/tipe-ruangan');
     }
     //
+
+
+
+
+
+    //petugas
+    public function addPetugas(Request $request)
+    {
+        $validatedData = $request->validate([
+            'nik' => 'required|max:16',
+            'nama_user' => 'required|max:255',
+            'jenis_kelamin' => 'required',
+            'alamat' => 'required|max:255',
+            'no_telepon' => 'required|max:12',
+            'username' => 'required|max:255',
+            'password' => 'required|max:8',
+            'role' => 'required',
+        ]);
+        
+        $validateData['password'] = Hash::make($request->input('password'));
+
+        
+
+        User::create($validatedData);
+
+        $request->session()->flash('success', 'Petugas baru telah ditambahkan!');
+
+        return redirect('/petugas');
+    }
+    public function editPetugas(Request $request, User $user)
+    {
+        // dd($request);
+        $validatedData = $request->validate([
+            'nik' => 'max:16',
+            'nama_user' => 'max:255',
+            'jenis_kelaminn' => '',
+            'alamat' => 'max:255',
+            'no_telepon' => 'max:12',
+            'username' => 'max:255',
+            'role' => '',
+        ]);
+
+
+        DB::table('users')
+            ->where('id', $request->input('id_user'))
+            ->update($validatedData);
+
+        $request->session()->flash('success', 'Petugas telah berhasil diedit!');
+
+        return redirect('/petugas');
+    }
+    public function deletePetugas(Request $request, kategori_barang $kategori_barangs)
+    {
+        $nama_petugas = DB::table('users')
+            ->select('nama_user')
+            ->where('id', '=', $request->input('id_user'))
+            ->get();
+
+        DB::table('users')->where('id', $request->input('id_user'))->delete();
+
+        $pesanFlash = "Petugas (Nama Petugas: *{$nama_petugas[0]->nama_user} ) telah berhasil dihapus!";
+
+        $request->session()->flash('success', $pesanFlash);
+
+        return redirect('/petugas');
+    }
+    //
+
+
+
+
 
     // profile
     public function editProfile(Request $request, User $user)
@@ -227,6 +320,24 @@ class SUController extends Controller
             return redirect('/profile');
         }
 
+    }
+    public function editProfileImage(Request $request, User $user)
+    {
+        $foto_profil = $request->file('foto')->store('photoprofile');
+
+        DB::table('users')
+            ->where('id', auth()->user()->id)
+            ->update([
+                'foto' => $foto_profil
+            ]);
+
+            // if ($request->oldPic) {
+            //     Storage::delete($request->oldPic);
+            // }
+
+        $request->session()->flash('success', 'Foto profil telah berhasil diubah!');
+
+        return redirect('/profile');
     }
     //
 
