@@ -53,6 +53,7 @@
     {{-- Style --}}
     <link rel="stylesheet" href="assets/css/sidebar.css">
     <link rel="stylesheet" href="assets/css/profile.css">
+    <link rel="stylesheet" href="assets/css/ruangan.css">
     {{-- end Style --}}
 
     <style>
@@ -248,7 +249,7 @@
             }
         });
         $(document).ready(function() {
-            if ($(".alert-danger").length > 0) {
+            if ($(".alert-warning").length > 0) {
                 setTimeout(function() {
                     $(".alert-warning").fadeOut(
                         500); // Ubah nilai 500 dengan durasi fade out yang diinginkan (dalam milidetik)

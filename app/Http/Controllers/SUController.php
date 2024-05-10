@@ -7,7 +7,9 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\kategori_barang;
+use App\Models\ruangan;
 use App\Models\tipe_ruangan;
+use App\Models\image_ruangan;
 use Illuminate\Support\Facades\Hash;
 
 class SUController extends Controller
@@ -62,8 +64,8 @@ class SUController extends Controller
     {
         return view('super_user.layout.ruangan')->with([
             'title' => 'Data Ruangan',
-            'active' => 'z'
-
+            'active' => 'z',
+            'ruangans' => ruangan::all(),
         ]);
     }
     public function goTRuangan()
@@ -143,7 +145,7 @@ class SUController extends Controller
 
         $pesanFlash = "Kategori barang (Nama Kategori: **{$nama_kategori[0]->nama_kategori}** ) telah berhasil dihapus!";
 
-        $request->session()->flash('success', $pesanFlash);
+        $request->session()->flash('error', $pesanFlash);
 
         return redirect('/kategori-barang');
     }
@@ -193,7 +195,7 @@ class SUController extends Controller
 
         $pesanFlash = "Tipe ruangan (Nama Tipe: *{$nama_tipe[0]->nama_tipe} ) telah berhasil dihapus!";
 
-        $request->session()->flash('success', $pesanFlash);
+        $request->session()->flash('error', $pesanFlash);
 
         return redirect('/tipe-ruangan');
     }
@@ -216,10 +218,10 @@ class SUController extends Controller
             'password' => 'required|max:8',
             'role' => 'required',
         ]);
-        
+
         $validateData['password'] = Hash::make($request->input('password'));
 
-        
+
 
         User::create($validatedData);
 
@@ -260,7 +262,7 @@ class SUController extends Controller
 
         $pesanFlash = "Petugas (Nama Petugas: *{$nama_petugas[0]->nama_user} ) telah berhasil dihapus!";
 
-        $request->session()->flash('success', $pesanFlash);
+        $request->session()->flash('error', $pesanFlash);
 
         return redirect('/petugas');
     }
@@ -331,13 +333,91 @@ class SUController extends Controller
                 'foto' => $foto_profil
             ]);
 
-            // if ($request->oldPic) {
-            //     Storage::delete($request->oldPic);
-            // }
+        // if ($request->oldPic) {
+        //     Storage::delete($request->oldPic);
+        // }
 
         $request->session()->flash('success', 'Foto profil telah berhasil diubah!');
 
         return redirect('/profile');
+    }
+    //
+
+
+
+
+    //ruangan
+    public function addRuangan(Request $request)
+    {
+        // ddd($request);
+        $validatedData = $request->validate([
+            'no_ruangan' => 'required|max:16',
+            'ruangan' => 'required|max:255',
+            'lokasi' => 'required',
+            'kapasitas' => 'required|numeric',
+            'tipe_ruangan' => 'required',
+        ]);
+
+        $last_id = DB::table('ruangans')
+            ->select('id')
+            ->orderByDesc('id')
+            ->get();
+
+        if ($last_id->isEmpty()) {
+            $last_id = 1;
+        } else {
+            $last_id = $last_id->first()->id + 1;
+        }
+
+        foreach ($request->file('foto') as $file) {
+            $fileLocation = $file->store('fotoruangan');
+
+            image_ruangan::create([
+                'image' => $fileLocation,
+                'id_ruangan' => $last_id
+            ]);
+        }
+
+        ruangan::create($validatedData);
+
+        $request->session()->flash('success', 'Ruangan baru telah ditambahkan!');
+
+        return redirect('/ruangan');
+    }
+    public function editRuangan(Request $request, User $user)
+    {
+        $validatedData = $request->validate([
+            'no_ruangan' => 'required|max:16',
+            'ruangan' => 'required|max:255',
+            'lokasi' => 'required',
+            'kapasitas' => 'required|numeric',
+            'tipe_ruangan' => 'required',
+        ]);
+
+
+        DB::table('ruangans')
+            ->where('id', $request->input('id_ruangan'))
+            ->update($validatedData);
+
+        $request->session()->flash('success', 'Ruangan telah berhasil diedit!');
+
+        return redirect('/ruangan');
+    }
+    public function deleteRuangan(Request $request, kategori_barang $kategori_barangs)
+    {
+        $nama_ruangan = DB::table('ruangans')
+            ->select('ruangan')
+            ->where('id', '=', $request->input('id_ruangan'))
+            ->get();
+
+        DB::table('ruangans')->where('id', $request->input('id_ruangan'))->delete();
+        DB::table('image_ruangans')->where('id_ruangan', $request->input('id_ruangan'))->delete();
+
+        $pesanFlash = "Ruangan (Nama Ruangan: *{$nama_ruangan[0]->ruangan} ) telah berhasil dihapus!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/ruangan');
     }
     //
 

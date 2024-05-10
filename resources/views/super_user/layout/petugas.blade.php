@@ -35,11 +35,13 @@
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     <td>{{ $petugas->username }}</td>
-                    <td>@if ($petugas->role == 'super_user')
-                        Super User
+                    <td>
+                        @if ($petugas->role == 'super_user')
+                            Super User
                         @else
-                        Koordinator
-                    @endif</td>
+                            Koordinator
+                        @endif
+                    </td>
                     <td>
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
                             style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
@@ -241,7 +243,7 @@
                                                 @if ($petugas->jenis_kelamin == 'l')
                                                     <option value="l">Laki-Laki</option>
                                                     <option value="p">Perempuan</option>
-                                                    @elseif($petugas->jenis_kelamin == 'p')
+                                                @elseif($petugas->jenis_kelamin == 'p')
                                                     <option value="p">Perempuan</option>
                                                     <option value="l">Laki-Laki</option>
                                                 @endif

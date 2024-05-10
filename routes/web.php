@@ -51,3 +51,7 @@ Route::put('/editpetugas', [SUController::class, 'editPetugas']);
 Route::delete('/deletepetugas', [SUController::class, 'deletePetugas']);
 
 Route::put('/uploadprofile', [SUController::class, 'editProfileImage']);
+
+Route::post('/addruangan', [SUController::class, 'addRuangan']);
+Route::put('/editruangan', [SUController::class, 'editRuangan']);
+Route::delete('/deleteruangan', [SUController::class, 'deleteRuangan']);
