@@ -50,7 +50,7 @@
                 <div class="form-group">
                     <label for="name" class="col-form-label">Jenis Kelamin :</label>
                     <input style="font-size: 14px;" type="text" class="form-control" id="name"
-                        value="@if (auth()->user()->jenis_kelamin == 'l') Laki-Laki
+                        value="@if (auth()->user()->jenis_kelamin == 'L') Laki-Laki
                         @else Perempuan @endif"
                         disabled>
                 </div>
@@ -140,12 +140,12 @@
                                 is-invalid
                             @enderror"
                                     name="jenis_kelamin">
-                                    @if (auth()->user()->jenis_kelamin == 'l')
-                                        <option value="l">Laki-Laki</option>
-                                        <option value="p">Perempuan</option>
-                                    @elseif(auth()->user()->jenis_kelamin == 'p')
-                                        <option value="p">Perempuan</option>
-                                        <option value="l">Laki-Laki</option>
+                                    @if (auth()->user()->jenis_kelamin == 'L')
+                                        <option value="L">Laki-Laki</option>
+                                        <option value="P">Perempuan</option>
+                                    @elseif(auth()->user()->jenis_kelamin == 'P')
+                                        <option value="P">Perempuan</option>
+                                        <option value="L">Laki-Laki</option>
                                     @endif
                                 </select>
                             </div>

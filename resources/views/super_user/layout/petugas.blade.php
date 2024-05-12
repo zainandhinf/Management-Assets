@@ -242,13 +242,17 @@
                                         <label for="name" class="col-form-label">Jenis Kelamin :</label>
                                         <div class="input-group">
 
-                                                @if ($petugas->jenis_kelamin == 'l')
-                                                    <option value="l">Laki-Laki</option>
-                                                    <option value="p">Perempuan</option>
-                                                    @elseif($petugas->jenis_kelamin == 'p')
-                                                    <option value="p">Perempuan</option>
-                                                    <option value="l">Laki-Laki</option>
+                                                <select style="font-size: 14px;"
+                                                class="form-select @error('jenis_kelamin') is-invalid @enderror"
+                                                name="jenis_kelamin">
+                                                @if ($petugas->jenis_kelamin == 'L')
+                                                    <option value="L">Laki-Laki</option>
+                                                    <option value="P">Perempuan</option>
+                                                    @elseif($petugas->jenis_kelamin == 'P')
+                                                    <option value="P">Perempuan</option>
+                                                    <option value="L">Laki-Laki</option>
                                                 @endif
+                                                </select>
                                         </div>
                                         @error('jenis_kelamin')
                                             <div class="invalid-feedback">
