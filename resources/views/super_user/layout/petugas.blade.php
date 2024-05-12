@@ -241,24 +241,13 @@
                                         @enderror
                                         <label for="name" class="col-form-label">Jenis Kelamin :</label>
                                         <div class="input-group">
-                                            @if ($petugas->jenis_kelamin === 'L')
-                                            <select style="font-size: 14px;"
-                                                class="form-select @error('jenis_kelamin') is-invalid @enderror"
-                                                name="jenis_kelamin">
 
-                                                    <option value="L" selected><b>Laki-Laki</b></option>
-                                                    <option value="P">Perempuan</option>
-
-                                                </select>
-                                                @elseif($petugas->jenis_kelamin === 'P')
-                                                <select style="font-size: 14px;"
-                                                class="form-select @error('jenis_kelamin') is-invalid @enderror"
-                                                name="jenis_kelamin">
-
-                                                    <option value="P" selected><b>Perempuan</b></option>
-                                                    <option value="L">Laki-Laki</option>
-
-                                                </select>
+                                                @if ($petugas->jenis_kelamin == 'l')
+                                                    <option value="l">Laki-Laki</option>
+                                                    <option value="p">Perempuan</option>
+                                                    @elseif($petugas->jenis_kelamin == 'p')
+                                                    <option value="p">Perempuan</option>
+                                                    <option value="l">Laki-Laki</option>
                                                 @endif
                                         </div>
                                         @error('jenis_kelamin')
