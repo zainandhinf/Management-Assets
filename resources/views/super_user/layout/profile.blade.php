@@ -24,7 +24,7 @@
                     <form action="/uploadprofile" method="POST" enctype="multipart/form-data" id="uploadprofile">
                         @csrf
                         @method('PUT')
-                        <input type="text" name="oldPic" value="{{ auth()->user()->foto }}">
+                        <input type="hidden" name="oldPic" value="{{ auth()->user()->foto }}">
                         <div class="icon">
                             <i class="fa-solid fa-camera-rotate text-white fs-5"></i>
                         </div>

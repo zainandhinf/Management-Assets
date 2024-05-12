@@ -55,3 +55,5 @@ Route::put('/uploadprofile', [SUController::class, 'editProfileImage']);
 Route::post('/addruangan', [SUController::class, 'addRuangan']);
 Route::put('/editruangan', [SUController::class, 'editRuangan']);
 Route::delete('/deleteruangan', [SUController::class, 'deleteRuangan']);
+Route::post('/addimgruangan', [SUController::class, 'addimgRuangan']);
+Route::delete('/deleteimgruangan', [SUController::class, 'deleteimgRuangan']);

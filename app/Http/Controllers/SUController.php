@@ -11,6 +11,7 @@ use App\Models\ruangan;
 use App\Models\tipe_ruangan;
 use App\Models\image_ruangan;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class SUController extends Controller
 {
@@ -325,6 +326,8 @@ class SUController extends Controller
     }
     public function editProfileImage(Request $request, User $user)
     {
+        Storage::delete($request->oldPic);
+
         $foto_profil = $request->file('foto')->store('photoprofile');
 
         DB::table('users')
@@ -333,13 +336,15 @@ class SUController extends Controller
                 'foto' => $foto_profil
             ]);
 
+        $request->session()->flash('success', 'Foto profil telah berhasil diubah!');
+
+        return redirect('/profile');
+
+
         // if ($request->oldPic) {
         //     Storage::delete($request->oldPic);
         // }
 
-        $request->session()->flash('success', 'Foto profil telah berhasil diubah!');
-
-        return redirect('/profile');
     }
     //
 
@@ -384,7 +389,7 @@ class SUController extends Controller
 
         return redirect('/ruangan');
     }
-    public function editRuangan(Request $request, User $user)
+    public function editRuangan(Request $request, ruangan $ruangan)
     {
         $validatedData = $request->validate([
             'no_ruangan' => 'required|max:16',
@@ -403,12 +408,21 @@ class SUController extends Controller
 
         return redirect('/ruangan');
     }
-    public function deleteRuangan(Request $request, kategori_barang $kategori_barangs)
+    public function deleteRuangan(Request $request, ruangan $ruangan)
     {
         $nama_ruangan = DB::table('ruangans')
             ->select('ruangan')
             ->where('id', '=', $request->input('id_ruangan'))
             ->get();
+
+        $images = DB::table('image_ruangans')
+            ->select('id')
+            ->where('id_ruangan', '=', $request->input('id_ruangan'))
+            ->get();
+
+        foreach ($images as $image) {
+            Storage::delete($image->image);
+        }
 
         DB::table('ruangans')->where('id', $request->input('id_ruangan'))->delete();
         DB::table('image_ruangans')->where('id_ruangan', $request->input('id_ruangan'))->delete();
@@ -416,6 +430,31 @@ class SUController extends Controller
         $pesanFlash = "Ruangan (Nama Ruangan: *{$nama_ruangan[0]->ruangan} ) telah berhasil dihapus!";
 
         $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/ruangan');
+    }
+    public function addimgRuangan(Request $request, image_ruangan $iamge_ruangan)
+    {
+        foreach ($request->file('foto') as $file) {
+            $fileLocation = $file->store('fotoruangan');
+
+            image_ruangan::create([
+                'image' => $fileLocation,
+                'id_ruangan' => $request->input('id_ruangan')
+            ]);
+        }
+
+        $request->session()->flash('success', 'Foto ruangan telah berhasil ditambah!');
+
+        return redirect('/ruangan');
+    }
+    public function deleteimgRuangan(Request $request, image_ruangan $image_ruangan)
+    {
+        Storage::delete($request->input('image'));
+
+        DB::table('image_ruangans')->where('id', $request->input('id_image'))->delete();
+
+        $request->session()->flash('error', 'Foto ruangan telah berhasil dihapus!');
 
         return redirect('/ruangan');
     }
