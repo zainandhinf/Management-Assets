@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $title }}</title>
+    <title>MALc | {{ $title }}</title>
 
     {{-- JQuery --}}
     <script src="assets/jquery/jquery-3.7.1.min.js"></script>
@@ -80,10 +80,31 @@
 
             /* Tambahkan format-font lain jika Anda menyertakan format lainnya */
         }
+         /* ANIMASI MASUK */
+         @keyframes transitionIn {
+    from{
+        opacity: 0;
+        /* transform: rotateX(-10deg); */
+        margin-left: 20px;
+    }
+
+    to{
+        opacity: 1;
+        /* transform: rotateX(0); */
+        margin-left: 0px;
+    }
+
+  }
+
+
 
         body {
             font-feature-settings: "cv03", "cv04", "cv11";
             font-family: 'Inter';
+        }
+        .page-content{
+            animation: transitionIn 0.55s;
+
         }
     </style>
 
@@ -127,7 +148,7 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col">
+                    <div class="col page-content">
                         @yield('content')
                     </div>
                 </div>

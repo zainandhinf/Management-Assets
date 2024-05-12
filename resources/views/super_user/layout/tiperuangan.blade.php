@@ -9,7 +9,7 @@
         <table class="table table-striped" id="data-tables" style="font-size: 14px;">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th>#</th>
                     <th>Nama Tipe</th>
                     <th>Keterangan</th>
                     <th data-searchable="false">Action</th>

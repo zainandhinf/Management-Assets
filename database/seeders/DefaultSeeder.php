@@ -19,7 +19,7 @@ class DefaultSeeder extends Seeder
         DB::table('users')->insert([
             'nik' =>'50977',
             'nama_user' =>'User',
-            'jenis_kelamin' =>'l',
+            'jenis_kelamin' =>'L',
             'alamat' =>'',
             'no_telepon' =>'',
             'foto' =>'',

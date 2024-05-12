@@ -9,7 +9,7 @@
     <table class="table table-striped" id="data-tables">
         <thead>
             <tr>
-                <th>No</th>
+                <th>#</th>
                 <th>Name</th>
                 <th>Desc</th>
                 <th data-searchable="false">Action</th>

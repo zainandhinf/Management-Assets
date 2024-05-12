@@ -9,11 +9,11 @@
         <table class="table table-striped" id="data-tables">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th>#</th>
                     {{-- <th>Foto Profil</th> --}}
                     <th>NIK</th>
                     <th>Nama</th>
-                    {{-- <th>Jenis Kelamin</th> --}}
+                    <th>Gender</th>
                     {{-- <th>Alamat</th> --}}
                     {{-- <th>No Telepon</th> --}}
                     <th>Username</th>
@@ -31,23 +31,33 @@
                     {{-- <td>lorem</td> --}}
                     <td>{{ $petugas->nik }}</td>
                     <td>{{ $petugas->nama_user }}</td>
-                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
+                    <td>
+                        @if($petugas->jenis_kelamin === 'L')
+                            Laki-Laki
+                        @else
+                            Perempuan
+                        @endif
+                    </td>
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     <td>{{ $petugas->username }}</td>
-                    <td>@if ($petugas->role == 'super_user')
-                        Super User
-                        @else
-                        Koordinator
-                    @endif</td>
                     <td>
+                        @if ($petugas->role == 'super_user')
+                            Super User
+                        @else
+                            Koordinator
+                        @endif
+                    </td>
+                    <td>
+                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
+                            style="margin-right: 10px" class="btn btn-primary mr-2"><i class="fa-regular fa-eye"></i></button>
+
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
                             style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
                         <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $petugas->id }}"
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>
-
                     </td>
                 </tr>
             @endforeach
@@ -66,6 +76,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="/addpetugas" method="post">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             @csrf
@@ -100,8 +111,8 @@
                                     is-invalid
                                 @enderror"
                                             name="jenis_kelamin">
-                                            <option value="l">Laki-Laki</option>
-                                            <option value="p">Perempuan</option>
+                                            <option value="L">Laki-Laki</option>
+                                            <option value="P">Perempuan</option>
                                         </select>
                                     </div>
                                     @error('jenis_kelamin')
@@ -200,6 +211,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/editpetugas" method="post">
+                        @csrf
                         <div class="modal-body">
                             <div class="row">
                                 @csrf
@@ -209,9 +221,7 @@
                                     <div class="form-group">
                                         <label for="name" class="col-form-label">NIK :</label>
                                         <input style="font-size: 14px;" type="text"
-                                            class="form-control @error('nik')
-              is-invalid
-          @enderror"
+                                            class="form-control @error('nik') is-invalid @enderror"
                                             placeholder="NIK.." id="name" name="nik"
                                             value="{{ $petugas->nik }}" required>
                                         @error('nik')
@@ -221,9 +231,7 @@
                                         @enderror
                                         <label for="name" class="col-form-label">Nama Petugas :</label>
                                         <input style="font-size: 14px;" type="text"
-                                            class="form-control @error('nama_user')
-              is-invalid
-          @enderror"
+                                            class="form-control @error('nama_user') is-invalid @enderror"
                                             placeholder="Nama petugas.." id="name" name="nama_user"
                                             value="{{ $petugas->nama_user }}" required>
                                         @error('nama_user')
@@ -233,19 +241,25 @@
                                         @enderror
                                         <label for="name" class="col-form-label">Jenis Kelamin :</label>
                                         <div class="input-group">
+                                            @if ($petugas->jenis_kelamin === 'L')
                                             <select style="font-size: 14px;"
-                                                class="form-select @error('jenis_kelamin')
-                                is-invalid
-                            @enderror"
+                                                class="form-select @error('jenis_kelamin') is-invalid @enderror"
                                                 name="jenis_kelamin">
-                                                @if ($petugas->jenis_kelamin == 'l')
-                                                    <option value="l">Laki-Laki</option>
-                                                    <option value="p">Perempuan</option>
-                                                    @elseif($petugas->jenis_kelamin == 'p')
-                                                    <option value="p">Perempuan</option>
-                                                    <option value="l">Laki-Laki</option>
+
+                                                    <option value="L" selected><b>Laki-Laki</b></option>
+                                                    <option value="P">Perempuan</option>
+
+                                                </select>
+                                                @elseif($petugas->jenis_kelamin === 'P')
+                                                <select style="font-size: 14px;"
+                                                class="form-select @error('jenis_kelamin') is-invalid @enderror"
+                                                name="jenis_kelamin">
+
+                                                    <option value="P" selected><b>Perempuan</b></option>
+                                                    <option value="L">Laki-Laki</option>
+
+                                                </select>
                                                 @endif
-                                            </select>
                                         </div>
                                         @error('jenis_kelamin')
                                             <div class="invalid-feedback">
@@ -296,7 +310,7 @@
                                             class="form-select @error('role')
                                 is-invalid
                             @enderror"
-                                            id="inputGroupSelect01" name="role">
+                                         name="role">
                                             {{-- <option value="{{ $petugas->role }}" selected>{{ $petugas->role }}
                                             </option>
                                             <option value="super_user">Super User</option>
