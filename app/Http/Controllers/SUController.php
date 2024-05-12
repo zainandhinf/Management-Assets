@@ -59,8 +59,8 @@ class SUController extends Controller
 
 
         $kategori_barang = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
-        ->select('barangs.*', 'kategori_barangs.nama_kategori')
-        ->get();
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
 
         // dd($kategori_barang);
 
@@ -84,10 +84,14 @@ class SUController extends Controller
     }
     public function goRuangan()
     {
+        $cekTipe = DB::table('tipe_ruangans')->count();
+
         return view('super_user.layout.ruangan')->with([
             'title' => 'Data Ruangan',
             'active' => 'z',
+            'cek' => $cekTipe,
             'ruangans' => ruangan::all(),
+
         ]);
     }
     public function goTRuangan()

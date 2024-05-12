@@ -2,73 +2,82 @@
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
-        <button onclick="ShowModal1()" type="button" class="btn btn-primary btn-sm mt-2 mb-2" data-bs-toggle="modal"
-            data-bs-target="#adddata">
-            <i class="fa-solid fa-folder-plus me-1"></i> Tambah Data
-        </button>
-        <table class="table table-striped" id="data-tables">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>No Ruangan</th>
-                    <th>Ruangan</th>
-                    <th>Lokasi</th>
-                    <th>Kapasitas</th>
-                    <th>Foto Ruangan</th>
-                    <th>Tipe Ruangan</th>
-                    <th data-searchable="false">Action</th>
-                </tr>
-            </thead>
-            @php
-                $no = 1;
-            @endphp
-            @foreach ($ruangans as $ruangan)
+        @if ($cek > 0)
+            <button onclick="ShowModal1()" type="button" class="btn btn-primary btn-sm mt-2 mb-2" data-bs-toggle="modal"
+                data-bs-target="#adddata">
+                <i class="fa-solid fa-folder-plus me-1"></i> Tambah Data
+            </button>
+            <table class="table table-striped" id="data-tables">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>No Ruangan</th>
+                        <th>Ruangan</th>
+                        <th>Lokasi</th>
+                        <th>Kapasitas</th>
+                        <th>Foto Ruangan</th>
+                        <th>Tipe Ruangan</th>
+                        <th data-searchable="false">Action</th>
+                    </tr>
+                </thead>
                 @php
-                    $tipe_ruangan = DB::table('tipe_ruangans')
-                        ->select('nama_tipe')
-                        ->where('id', '=', $ruangan->tipe_ruangan)
-                        ->get();
-                    $image_ruangans = DB::table('image_ruangans')
-                        ->select('image')
-                        ->where('id_ruangan', '=', $ruangan->id)
-                        ->get();
+                    $no = 1;
                 @endphp
-                <tr>
-                    <td>{{ $no++ }}</td>
-                    {{-- <td>{{ $city->id }}</td> --}}
-                    <td>{{ $ruangan->no_ruangan }}</td>
-                    <td>{{ $ruangan->ruangan }}</td>
-                    <td>{{ $ruangan->lokasi }}</td>
-                    <td>{{ $ruangan->kapasitas }}</td>
-                    <td>
-                        <div class="d-flex flex-column image-ruangan">
-                            @foreach ($image_ruangans as $image_ruangan)
-                                <img src="{{ asset('storage/' . $image_ruangan->image) }}" alt="" width="100px"
-                                    class="mb-1">
-                            @endforeach
-                            <button class="btn btn-primary view-button btn-lg" data-bs-toggle="modal"
-                                data-bs-target="#viewimg{{ $ruangan->id }}">
-                                <i class="fa-solid fa-eye "></i>
+                @foreach ($ruangans as $ruangan)
+                    @php
+                        $tipe_ruangan = DB::table('tipe_ruangans')
+                            ->select('nama_tipe')
+                            ->where('id', '=', $ruangan->tipe_ruangan)
+                            ->get();
+                        $image_ruangans = DB::table('image_ruangans')
+                            ->select('image')
+                            ->where('id_ruangan', '=', $ruangan->id)
+                            ->get();
+                    @endphp
+                    <tr>
+                        <td>{{ $no++ }}</td>
+                        {{-- <td>{{ $city->id }}</td> --}}
+                        <td>{{ $ruangan->no_ruangan }}</td>
+                        <td>{{ $ruangan->ruangan }}</td>
+                        <td>{{ $ruangan->lokasi }}</td>
+                        <td>{{ $ruangan->kapasitas }}</td>
+                        <td>
+                            <div class="d-flex flex-column image-ruangan">
+                                @foreach ($image_ruangans as $image_ruangan)
+                                    <img src="{{ asset('storage/' . $image_ruangan->image) }}" alt="" width="100px"
+                                        class="mb-1">
+                                @endforeach
+                                <button class="btn btn-primary view-button btn-lg" data-bs-toggle="modal"
+                                    data-bs-target="#viewimg{{ $ruangan->id }}">
+                                    <i class="fa-solid fa-eye "></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td>{{ $tipe_ruangan[0]->nama_tipe }}</td>
+                        <td>
+                            <button data-bs-toggle="modal" data-bs-target="#editdata{{ $ruangan->id }}"
+                                style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
+
+
+                            <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $ruangan->id }}"
+                                class="btn btn-danger mt-1">
+                                <i class="fa fa-trash"></i>
                             </button>
-                        </div>
-                    </td>
-                    <td>{{ $tipe_ruangan[0]->nama_tipe }}</td>
-                    <td>
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $ruangan->id }}"
-                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
 
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+        @else
+            <b>
+                <h5>
+                    *Note: Data Ruangan hanya bisa dibuat ketika kamu sudah mengisi <a href="/tipe-ruangan">Data Tipe
+                        Ruangan</a> terlebih dahulu !
+                </h5>
+            </b>
+        @endif
 
-                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $ruangan->id }}"
-                            class="btn btn-danger mt-1">
-                            <i class="fa fa-trash"></i>
-                        </button>
-
-                    </td>
-                </tr>
-            @endforeach
-        </table>
     </div>
-
 
 
     {{-- modal --}}
