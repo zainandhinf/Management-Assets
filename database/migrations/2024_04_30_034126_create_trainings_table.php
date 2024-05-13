@@ -14,7 +14,14 @@ return new class extends Migration
         Schema::create('trainings', function (Blueprint $table) {
             $table->id();
             $table->string('nama_training');
-            $table->date('tanggal_training');
+            $table->date('tanggal_mulai');
+            $table->date('tanggal_selesai')->nullable();
+            $table->time('waktu_mulai');
+            $table->time('waktu_selesai');
+            $table->string('no_ruangan');
+            $table->integer('total_peserta');
+            $table->string('instruktur');
+            $table->string('id_petugas');
             $table->text('keterangan');
             $table->timestamps();
         });

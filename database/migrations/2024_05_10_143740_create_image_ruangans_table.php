@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('image_ruangans', function (Blueprint $table) {
             $table->id();
             $table->text('image');
-            $table->foreignId('id_ruangan');
+            $table->string('no_ruangan');
             $table->timestamps();
         });
     }

@@ -12,6 +12,7 @@ use App\Models\ruangan;
 use App\Models\tipe_ruangan;
 use App\Models\barang;
 use App\Models\image_ruangan;
+use App\Models\training;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -100,6 +101,15 @@ class SUController extends Controller
             'title' => 'Data Tipe Ruangan',
             'active' => 'z',
             'tipe_ruangans' => tipe_ruangan::all(),
+
+        ]);
+    }
+    public function goTraining()
+    {
+        return view('super_user.layout.training')->with([
+            'title' => 'Data Training',
+            'active' => 'z',
+            'trainings' => training::all(),
 
         ]);
     }
@@ -199,7 +209,7 @@ class SUController extends Controller
     {
         $validatedData = $request->validate([
             'nama_tipe' => 'required|max:255',
-            'keterangan' => 'required|max:255'
+            'keterangan' => 'required'
         ]);
 
         DB::table('tipe_ruangans')
@@ -508,30 +518,31 @@ class SUController extends Controller
     {
         // ddd($request);
         $validatedData = $request->validate([
-            'no_ruangan' => 'required|max:16',
+            'no_ruangan' => 'required|max:16|unique:ruangans',
             'ruangan' => 'required|max:255',
             'lokasi' => 'required',
             'kapasitas' => 'required|numeric',
             'tipe_ruangan' => 'required',
         ]);
 
-        $last_id = DB::table('ruangans')
-            ->select('id')
-            ->orderByDesc('id')
-            ->get();
+        // $last_id = DB::table('ruangans')
+        //     ->select('id')
+        //     ->orderByDesc('id')
+        //     ->get();
 
-        if ($last_id->isEmpty()) {
-            $last_id = 1;
-        } else {
-            $last_id = $last_id->first()->id + 1;
-        }
+
+        // if ($last_id->isEmpty()) {
+        //     $last_id = 1;
+        // } else {
+        // $last_id = $last_id->first()->id + 1;
+        // }
 
         foreach ($request->file('foto') as $file) {
             $fileLocation = $file->store('fotoruangan');
 
             image_ruangan::create([
                 'image' => $fileLocation,
-                'id_ruangan' => $last_id
+                'no_ruangan' => $request->input('no_ruangan')
             ]);
         }
 
@@ -568,16 +579,17 @@ class SUController extends Controller
             ->get();
 
         $images = DB::table('image_ruangans')
-            ->select('id')
-            ->where('id_ruangan', '=', $request->input('id_ruangan'))
+            ->select('*')
+            ->where('no_ruangan', '=', $request->input('no_ruangan'))
             ->get();
 
         foreach ($images as $image) {
             Storage::delete($image->image);
         }
 
+
         DB::table('ruangans')->where('id', $request->input('id_ruangan'))->delete();
-        DB::table('image_ruangans')->where('id_ruangan', $request->input('id_ruangan'))->delete();
+        DB::table('image_ruangans')->where('no_ruangan', $request->input('no_ruangan'))->delete();
 
         $pesanFlash = "Ruangan (Nama Ruangan: *{$nama_ruangan[0]->ruangan} ) telah berhasil dihapus!";
 
@@ -609,6 +621,205 @@ class SUController extends Controller
         $request->session()->flash('error', 'Foto ruangan telah berhasil dihapus!');
 
         return redirect('/ruangan');
+    }
+    //
+
+
+
+    //training
+    public function addTraining(Request $request)
+    {
+
+        // dd($request);
+
+        // $cek = DB::table('trainings')
+        //     ->select('trainings.*', 'ruangans.ruangan')
+        //     ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
+        //     ->where('trainings.no_ruangan', '=', $request->no_ruangan)
+        //     ->whereBetween('trainings.tanggal_mulai', [$request->input('tanggal_mulai'), $request->input('tanggal_selesai')])
+        //     ->whereBetween('trainings.tanggal_selesai', [$request->input('tanggal_mulai'), $request->input('tanggal_selesai')])
+        //     ->get();
+        // $cek = DB::table('trainings')
+        // ->select('trainings.*', 'ruangans.ruangan')
+        // ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
+        // ->where('trainings.no_ruangan', '=', $request->no_ruangan)
+        // ->where(function($query) use ($request) {
+        //     $query->orWhere(function($subquery) use ($request) {
+        //         $subquery->where('trainings.tanggal_mulai', '>=', $request->input('tanggal_mulai'))
+        //                 ->where('trainings.tanggal_mulai', '<=', $request->input('tanggal_selesai'));
+        //     })->orWhere(function($subquery) use ($request) {
+        //         $subquery->where('trainings.tanggal_selesai', '>=', $request->input('tanggal_mulai'))
+        //                 ->where('trainings.tanggal_selesai', '<=', $request->input('tanggal_selesai'));
+        //     });
+        // })
+        // ->get();
+
+        // WOrk tapi ga ngerti... 
+
+        $cek = DB::table('trainings')
+            ->select('trainings.*', 'ruangans.ruangan')
+            ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
+            ->where('trainings.no_ruangan', '=', $request->no_ruangan)
+            ->where(function ($query) use ($request) {
+                $query->where(function ($subquery) use ($request) {
+                    $subquery->where('trainings.tanggal_mulai', '>=', $request->input('tanggal_mulai'))
+                        ->where('trainings.tanggal_mulai', '<=', $request->input('tanggal_selesai'));
+                })
+                    ->orWhere(function ($subquery) use ($request) {
+                        $subquery->where('trainings.tanggal_selesai', '>=', $request->input('tanggal_mulai'))
+                            ->where('trainings.tanggal_selesai', '<=', $request->input('tanggal_selesai'));
+                    })
+                    ->orWhere(function ($subquery) use ($request) {
+                        $subquery->where('trainings.tanggal_mulai', '<=', $request->input('tanggal_mulai'))
+                            ->where('trainings.tanggal_selesai', '>=', $request->input('tanggal_selesai'));
+                    });
+            })
+            ->get();
+
+
+
+        // dd($cek);
+
+
+        if ($cek->isEmpty()) {
+
+
+            $validatedData = $request->validate([
+                'nama_training' => '',
+                'tanggal_mulai' => '',
+                'tanggal_selesai' => 'nullable',
+                'waktu_mulai' => '',
+                'waktu_selesai' => '',
+                'no_ruangan' => '',
+                'total_peserta' => '',
+                'instruktur' => '',
+                'id_petugas' => '',
+                'keterangan' => ''
+            ]);
+
+
+            $validatedData['total_peserta'] = 0;
+
+
+
+            if ($request->tanggal_selesai) {
+                $validatedData['tanggal_selesai'] = $request->input('tanggal_selesai');
+            } else {
+                $validatedData['tanggal_selesai'] = $request->input('tanggal_mulai');
+            }
+
+            // dd($validatedData);
+            training::create($validatedData);
+
+            $request->session()->flash('success', 'Training baru telah ditambahkan!');
+
+            return redirect('/training');
+
+
+
+
+
+        } else {
+            $request->session()->flash('error', 'Ruangan Terpakai Pada Tanggal Tersebut !');
+
+            return redirect('/training');
+        }
+
+
+
+
+
+
+
+
+    }
+    public function editTraining(Request $request, training $training)
+    {
+        $cek = DB::table('trainings')
+            ->select('trainings.*', 'ruangans.ruangan')
+            ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
+            ->where('trainings.no_ruangan', '=', $request->no_ruangan)
+            ->where(function ($query) use ($request) {
+                $query->where(function ($subquery) use ($request) {
+                    $subquery->where('trainings.tanggal_mulai', '>=', $request->input('tanggal_mulai'))
+                        ->where('trainings.tanggal_mulai', '<=', $request->input('tanggal_selesai'));
+                })
+                    ->orWhere(function ($subquery) use ($request) {
+                        $subquery->where('trainings.tanggal_selesai', '>=', $request->input('tanggal_mulai'))
+                            ->where('trainings.tanggal_selesai', '<=', $request->input('tanggal_selesai'));
+                    })
+                    ->orWhere(function ($subquery) use ($request) {
+                        $subquery->where('trainings.tanggal_mulai', '<=', $request->input('tanggal_mulai'))
+                            ->where('trainings.tanggal_selesai', '>=', $request->input('tanggal_selesai'));
+                    });
+            })
+            ->get();
+
+
+
+        // dd($cek);
+
+
+        if ($cek->isEmpty()) {
+
+
+            $validatedData = $request->validate([
+                'nama_training' => '',
+                'tanggal_mulai' => '',
+                'tanggal_selesai' => 'nullable',
+                'waktu_mulai' => '',
+                'waktu_selesai' => '',
+                'no_ruangan' => '',
+                'total_peserta' => '',
+                'instruktur' => '',
+                'id_petugas' => '',
+                'keterangan' => ''
+            ]);
+
+
+            $validatedData['total_peserta'] = 0;
+
+
+
+            if ($request->tanggal_selesai) {
+                $validatedData['tanggal_selesai'] = $request->input('tanggal_selesai');
+            } else {
+                $validatedData['tanggal_selesai'] = $request->input('tanggal_mulai');
+            }
+
+            // dd($validatedData);
+            DB::table('trainings')
+            ->where('id', $request->input('id_training'))
+            ->update($validatedData);
+
+            $request->session()->flash('success', 'Training telah diedit!');
+
+            return redirect('/training');
+
+
+
+
+
+        } else {
+            $request->session()->flash('error', 'Ruangan Terpakai Pada Tanggal Tersebut !');
+
+            return redirect('/training');
+        }
+    }
+    public function deleteTraining(Request $request, training $training)
+    {
+        $nama = DB::table('trainings')
+            ->select('nama_training')
+            ->where('id', '=', $request->input('id_training'))
+            ->get();
+
+        DB::table('trainings')->where('id', $request->input('id_training'))->delete();
+
+        $pesanFlash = "Kategori barang (Nama Kategori: **{$nama[0]->nama_training}** ) telah berhasil dihapus!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/training');
     }
     //
 

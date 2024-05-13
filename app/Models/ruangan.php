@@ -16,4 +16,22 @@ class ruangan extends Model
         'kapasitas',
         'tipe_ruangan',
     ];
+
+    public function checkAvailability($tanggalMulai, $tanggalSelesai)
+    {
+        // Lakukan logika untuk memeriksa ketersediaan ruangan
+        // Misalnya, periksa apakah ada reservasi pada rentang tanggal tersebut
+
+        $reservations = $this->reservations()->where(function ($query) use ($tanggalMulai, $tanggalSelesai) {
+            $query->whereBetween('tanggal_mulai', [$tanggalMulai, $tanggalSelesai])
+                ->orWhereBetween('tanggal_selesai', [$tanggalMulai, $tanggalSelesai])
+                ->orWhere(function ($query) use ($tanggalMulai, $tanggalSelesai) {
+                    $query->where('tanggal_mulai', '<=', $tanggalMulai)
+                        ->where('tanggal_selesai', '>=', $tanggalSelesai);
+                });
+        })->count();
+
+        return $reservations == 0;
+    }
+
 }

@@ -11,6 +11,6 @@ class image_ruangan extends Model
 
     protected $fillable = [
         'image',
-        'id_ruangan',
+        'no_ruangan',
     ];
 }

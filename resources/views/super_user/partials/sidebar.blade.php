@@ -79,7 +79,7 @@
             </ul>
         </li>
         <li class="nav-item mb-1">
-            <a href="/admin-transactions" class="{{ $title === 'Transaction' ? 'active' : '' }}">
+            <a href="/training" class="{{ $title === 'Data Training' ? 'active' : '' }}">
                 <i class="fa-solid fa-chalkboard-user"></i>
                 Training / Programs
             </a>

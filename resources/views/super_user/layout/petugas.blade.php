@@ -79,7 +79,6 @@
                     @csrf
                     <div class="modal-body">
                         <div class="row">
-                            @csrf
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name" class="col-form-label">NIK :</label>
@@ -211,7 +210,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/editpetugas" method="post">
-                        @csrf
                         <div class="modal-body">
                             <div class="row">
                                 @csrf

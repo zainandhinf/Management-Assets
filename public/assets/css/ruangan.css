@@ -93,6 +93,10 @@
     padding: 1.5rem;
     border-radius: 10px;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    /* position: relative;
+    right: 50px; */
 }
 
 .custom-file-upload-view-img-ruangan .icon i{
@@ -100,15 +104,15 @@
     align-items: center;
     justify-content: center;
     font-size: 200px;
-    margin-left: 150px;
-    margin-top: 50px;
+    /* margin-left: 150px; */
+    /* margin-top: 50px; */
 }
 
 .custom-file-upload-view-img-ruangan .text span {
     font-weight: 400;
     color: #e8e8e8;
     font-size: 50px;
-    margin-left: 150px;
+    /* margin-left: 150px; */
 }
 
 .custom-file-upload-view-img-ruangan input {

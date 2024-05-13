@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SUController;
+use App\Models\ruangan;
+use Illuminate\Http\Request;
 
 
 /*
@@ -32,6 +34,7 @@ Route::get('/barang', [SUController::class, 'goBarang']);
 Route::get('/kategori-barang', [SUController::class, 'goKBarang']);
 Route::get('/ruangan', [SUController::class, 'goRuangan']);
 Route::get('/tipe-ruangan', [SUController::class, 'goTRuangan']);
+Route::get('/training', [SUController::class, 'goTraining']);
 Route::get('/profile', [SUController::class, 'goProfile']);
 
 //crud super user//
@@ -49,6 +52,7 @@ Route::delete('/deletetipe', [SUController::class, 'deleteTipe']);
 Route::put('/editprofile', [SUController::class, 'editProfile']);
 Route::put('/editpassword', [SUController::class, 'editPassword']);
 Route::put('/uploadprofile', [SUController::class, 'editProfileImage']);
+Route::put('/uploadprofile', [SUController::class, 'editProfileImage']);
 
 //petugas/koordinator
 Route::post('/addpetugas', [SUController::class, 'addPetugas']);
@@ -65,12 +69,30 @@ Route::post('/addbarang', [SUController::class, 'addBarang']);
 Route::put('/editbarang', [SUController::class, 'editBarang']);
 Route::delete('/deletebarang', [SUController::class, 'deleteBarang']);
 
-
-// end end crud super user
-Route::put('/uploadprofile', [SUController::class, 'editProfileImage']);
-
+//ruangan
 Route::post('/addruangan', [SUController::class, 'addRuangan']);
 Route::put('/editruangan', [SUController::class, 'editRuangan']);
 Route::delete('/deleteruangan', [SUController::class, 'deleteRuangan']);
 Route::post('/addimgruangan', [SUController::class, 'addimgRuangan']);
 Route::delete('/deleteimgruangan', [SUController::class, 'deleteimgRuangan']);
+
+//barang-properti
+Route::post('/addtraining', [SUController::class, 'addTraining']);
+Route::put('/edittraining', [SUController::class, 'editTraining']);
+Route::delete('/deletetraining', [SUController::class, 'deleteTraining']);
+// <!-- Route::get('/check-room-availability', function (Request $request) {
+//     $tanggalMulai = $request->input('tanggal_mulai');
+//     $tanggalSelesai = $request->input('tanggal_selesai');
+//     $idRuangan = $request->input('id_ruangan');
+
+//     // Lakukan logika untuk memeriksa ketersediaan ruangan
+//     // Misalnya, dapatkan daftar reservasi ruangan pada tanggal tersebut
+
+//     $ruangan = ruangan::findOrFail($idRuangan);
+
+//     $available = $ruangan->checkAvailability($tanggalMulai, $tanggalSelesai);
+
+//     return response()->json(['available' => $available]);
+// }); -->
+
+// end end crud super user //

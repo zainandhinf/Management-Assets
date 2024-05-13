@@ -31,7 +31,7 @@
                             ->get();
                         $image_ruangans = DB::table('image_ruangans')
                             ->select('image')
-                            ->where('id_ruangan', '=', $ruangan->id)
+                            ->where('no_ruangan', '=', $ruangan->no_ruangan)
                             ->get();
                     @endphp
                     <tr>
@@ -338,6 +338,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <input type="hidden" name="id_ruangan" value="{{ $ruangan->id }}">
+                                    <input type="hidden" name="no_ruangan" value="{{ $ruangan->no_ruangan }}">
                                     <button class="btn btn-danger w-100">
                                         Yakin
                                     </button>
@@ -361,15 +362,16 @@
                         @php
                             $images_view = DB::table('image_ruangans')
                                 ->select('*')
-                                ->where('id_ruangan', '=', $ruangan->id)
+                                ->where('no_ruangan', '=', $ruangan->no_ruangan)
                                 ->get();
                             $image_view = DB::table('image_ruangans')
                                 ->select('*')
-                                ->where('id_ruangan', '=', $ruangan->id)
+                                ->where('no_ruangan', '=', $ruangan->no_ruangan)
                                 ->limit(1)
                                 ->get();
                             $no = 2;
                             $no1 = 1;
+                            // dd($image_view);
                         @endphp
                         <div id="carouselExample{{ $ruangan->id }}" class="carousel slide">
                             <div class="carousel-inner">
