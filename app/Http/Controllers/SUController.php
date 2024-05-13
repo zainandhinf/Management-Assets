@@ -13,6 +13,7 @@ use App\Models\tipe_ruangan;
 use App\Models\barang;
 use App\Models\image_ruangan;
 use App\Models\training;
+use App\Models\peserta_training;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -110,6 +111,14 @@ class SUController extends Controller
             'title' => 'Data Training',
             'active' => 'z',
             'trainings' => training::all(),
+        ]);
+    }
+    public function goPeserta()
+    {
+        return view('super_user.layout.peserta')->with([
+            'title' => 'Data Peserta Training',
+            'active' => 'z',
+            'pesertas' => peserta_training::all(),
 
         ]);
     }
@@ -288,7 +297,7 @@ class SUController extends Controller
 
         return redirect('/petugas');
     }
-    public function deletePetugas(Request $request, kategori_barang $kategori_barangs)
+    public function deletePetugas(Request $request, User $user)
     {
         $nama_petugas = DB::table('users')
             ->select('nama_user')
@@ -789,8 +798,8 @@ class SUController extends Controller
 
             // dd($validatedData);
             DB::table('trainings')
-            ->where('id', $request->input('id_training'))
-            ->update($validatedData);
+                ->where('id', $request->input('id_training'))
+                ->update($validatedData);
 
             $request->session()->flash('success', 'Training telah diedit!');
 
@@ -822,6 +831,92 @@ class SUController extends Controller
         return redirect('/training');
     }
     //
+
+    //peserta training
+    public function addPeserta(Request $request)
+    {
+        $validatedData = $request->validate([
+            'nama' => 'required|max:255',
+            'jenis_kelamin' => 'required',
+            'nbpt' => 'required|max:255',
+            'tempat_lahir' => 'nullable|required',
+            'tanggal_lahir' => 'nullable|required',
+            'id_training' => 'required',
+        ]);
+
+        peserta_training::create($validatedData);
+
+        $jumlah_peserta = DB::table('peserta_trainings')
+            ->select('*')
+            ->where('id_training', '=', $request->input('id_training'))
+            ->count();
+
+        if ($jumlah_peserta == 0) {
+            DB::table('trainings')
+                ->where('id', $request->input('id_training'))
+                ->update([
+                    'total_peserta' => 1,
+                ]);
+        } else {
+            DB::table('trainings')
+                ->where('id', $request->input('id_training'))
+                ->update([
+                    'total_peserta' => $jumlah_peserta,
+                ]);
+
+        }
+
+        $request->session()->flash('success', 'Data peserta baru telah ditambahkan!');
+
+        return redirect('/peserta-training');
+    }
+    public function editPeserta(Request $request, peserta_training $peserta_training)
+    {
+        $validatedData = $request->validate([
+            'nama' => 'required|max:255',
+            'jenis_kelamin' => 'required',
+            'nbpt' => 'required|max:255',
+            'tempat_lahir' => 'nullable|required',
+            'tanggal_lahir' => 'nullable|required',
+            'id_training' => 'required',
+        ]);
+
+        DB::table('peserta_trainings')
+            ->where('id', $request->input('id_peserta'))
+            ->update($validatedData);
+
+        $request->session()->flash('success', 'Data Peserta telah berhasil diedit!');
+
+        return redirect('/peserta-training');
+    }
+    public function deletePeserta(Request $request, peserta_training $peserta_training)
+    {
+        $nama_peserta = DB::table('peserta_trainings')
+            ->select('nama')
+            ->where('id', '=', $request->input('id_peserta'))
+            ->get();
+
+        DB::table('peserta_trainings')->where('id', $request->input('id_peserta'))->delete();
+
+        $jumlah_peserta = DB::table('peserta_trainings')
+            ->select('*')
+            ->where('id_training', '=', $request->input('id_training'))
+            ->count();
+
+        DB::table('trainings')
+            ->where('id', $request->input('id_training'))
+            ->update([
+                'total_peserta' => $jumlah_peserta,
+            ]);
+
+
+        $pesanFlash = "Data Peserta (Nama Peserta: *{$nama_peserta[0]->nama} ) telah berhasil dihapus!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/peserta-training');
+    }
+    // end end peserta training
 
     //end crud
 }

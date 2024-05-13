@@ -35,6 +35,7 @@ Route::get('/kategori-barang', [SUController::class, 'goKBarang']);
 Route::get('/ruangan', [SUController::class, 'goRuangan']);
 Route::get('/tipe-ruangan', [SUController::class, 'goTRuangan']);
 Route::get('/training', [SUController::class, 'goTraining']);
+Route::get('/peserta-training', [SUController::class, 'goPeserta']);
 Route::get('/profile', [SUController::class, 'goProfile']);
 
 //crud super user//
@@ -76,10 +77,15 @@ Route::delete('/deleteruangan', [SUController::class, 'deleteRuangan']);
 Route::post('/addimgruangan', [SUController::class, 'addimgRuangan']);
 Route::delete('/deleteimgruangan', [SUController::class, 'deleteimgRuangan']);
 
-//barang-properti
+//training
 Route::post('/addtraining', [SUController::class, 'addTraining']);
 Route::put('/edittraining', [SUController::class, 'editTraining']);
 Route::delete('/deletetraining', [SUController::class, 'deleteTraining']);
+
+//peserta training
+Route::post('/addpeserta', [SUController::class, 'addPeserta']);
+Route::put('/editpeserta', [SUController::class, 'editPeserta']);
+Route::delete('/deletepeserta', [SUController::class, 'deletePeserta']);
 // <!-- Route::get('/check-room-availability', function (Request $request) {
 //     $tanggalMulai = $request->input('tanggal_mulai');
 //     $tanggalSelesai = $request->input('tanggal_selesai');

@@ -4,10 +4,10 @@
     <div class="card p-4" style="font-size: 14px;">
         <div class="d-flex">
 
-            <a onclick="ShowModal1()" type="button" class="btn border-warning btn-warning btn-sm w-100 me-1">
+            <a href="#" onclick="ShowModal1()" type="button" class="btn border-warning btn-warning btn-sm w-100 me-1">
                 Training
             </a>
-            <a onclick="ShowModal1()" type="button" class="btn border-warning btn-sm w-100 ms-1">
+            <a href="/peserta-training" onclick="ShowModal1()" type="button" class="btn border-warning btn-sm w-100 ms-1">
                 Peserta
             </a>
         </div>
@@ -32,9 +32,11 @@
                     <th data-searchable="false">Action</th>
                 </tr>
             </thead>
+            @php
+                $no = 1;
+            @endphp
             @foreach ($trainings as $training)
                 @php
-                    $no = 1;
                     $tempat = DB::table('ruangans')
                         ->select('*')
                         ->where('no_ruangan', '=', $training->no_ruangan)
@@ -51,21 +53,19 @@
                     <td>{{ $training->nama_training }} <br> ({{ $training->keterangan }})</td>
                     <td>{{ $training->tanggal_mulai }} - {{ $training->tanggal_selesai }}</td>
                     <td>{{ $training->waktu_mulai }} - {{ $training->waktu_selesai }}<br> {{ $tempat[0]->ruangan }}</td>
-                    <td>{{ $training->total_peserta }}</td>
+                    <td>{{ $training->total_peserta }}
+                        <a data-bs-toggle="modal" data-bs-target="#viewpeserta{{ $training->id }}"
+                            style="margin-right: 10px" class="border-none mr-2"><i class="fa fa-eye"></i></a>
+                    </td>
                     <td>{{ $training->instruktur }}</td>
                     <td>{{ $nama_petugas[0]->nama_user }}</td>
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-
                     <td>
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $training->id }}"
-                            style="" class="btn btn-primary"><i
-                                class="fa-regular fa-eye"></i></button>
-
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $training->id }}"
-                            style="" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
                         <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $training->id }}"
-                            class="btn btn-danger">
+                            class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -245,7 +245,7 @@
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title fs-6">Tambah {{ $title }}</h5>
+                        <h5 class="modal-title fs-6">Edit {{ $title }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/edittraining" method="post">
@@ -413,9 +413,7 @@
                         </div>
                     </form>
                 </div>
-
             </div>
-        </div>
         </div>
     @endforeach
     {{-- end modal edit data --}}
@@ -465,9 +463,63 @@
     @endforeach
     {{-- end modal delete data --}}
 
+    {{-- modal view data peserta training --}}
+    @foreach ($trainings as $training)
+        <div class="modal modal-blur fade" id="viewpeserta{{ $training->id }}" tabindex="-1" role="dialog"
+            aria-hidden="true" style="font-size: 14px;">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <table class="table table-striped" id="data-tables-peserta">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>NBPT</th>
+                                    <th>Tempat, Tanggal Lahir</th>
+                                    <th>Training</th>
+                                </tr>
+                            </thead>
+                            @php
+                                $no = 1;
+                                $pesertas = DB::table('peserta_trainings')
+                                    ->select('*')
+                                    ->where('id_training', '=', $training->id)
+                                    ->get();
+                            @endphp
+                            @foreach ($pesertas as $peserta)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    {{-- <td>{{ $city->id }}</td> --}}
+                                    {{-- <td>lorem</td> --}}
+                                    <td>{{ $peserta->nama }}</td>
+                                    <td>
+                                        @if ($peserta->jenis_kelamin === 'L')
+                                            Laki-Laki
+                                        @else
+                                            Perempuan
+                                        @endif
+                                    </td>
+                                    <td>{{ $peserta->nbpt }}</td>
+                                    <td>{{ $peserta->tempat_lahir }}, {{ $peserta->tanggal_lahir }}</td>
+                                    <td>{{ $training->nama_training }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+    {{-- end modal view data peserta training --}}
+
     {{-- end modal --}}
 
     <script>
+        $(document).ready(function() {
+            $('#data-tables-peserta').DataTable();
+        });
         // document.addEventListener("DOMContentLoaded", function() {
         //     const cekKetersediaanBtn = document.querySelector('#cek-ketersediaan-btn');
         //     const feedbackMessage = document.querySelector('#feedback-message');
