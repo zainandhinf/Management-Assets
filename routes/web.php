@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SUController;
+use App\Http\Controllers\PController;
 use App\Models\ruangan;
 use Illuminate\Http\Request;
 
@@ -102,3 +103,17 @@ Route::delete('/deletepeserta', [SUController::class, 'deletePeserta']);
 // }); -->
 
 // end end crud super user //
+
+//petugas
+Route::get('/dashboard-koordinator', [PController::class, 'index']);
+Route::get('/petugas-koordinator', [PController::class, 'goPetugas']);
+Route::get('/pegawai-koordinator', [PController::class, 'goPegawai']);
+Route::get('/barang-koordinator', [PController::class, 'goBarang']);
+Route::get('/kategori-barang-koordinator', [PController::class, 'goKBarang']);
+Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
+Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
+// Route::get('/training-koordinator', [PController::class, 'goTraining']);
+// Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
+Route::get('/pengadaan', [PController::class, 'goPengadaan']);
+Route::get('/pengadaan-tambah', [PController::class, 'goPengadaanTambah']);
+Route::get('/profile-koordinator', [PController::class, 'goProfile']);

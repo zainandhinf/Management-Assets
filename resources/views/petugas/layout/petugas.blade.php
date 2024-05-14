@@ -1,4 +1,4 @@
-@extends('super_user.main')
+@extends('petugas.main')
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
@@ -18,7 +18,7 @@
                     {{-- <th>No Telepon</th> --}}
                     <th>Username</th>
                     <th>Role</th>
-                    <th data-searchable="false">Action</th>
+                    {{-- <th data-searchable="false">Action</th> --}}
                 </tr>
             </thead>
             @php
@@ -48,7 +48,7 @@
                             Koordinator
                         @endif
                     </td>
-                    <td>
+                    {{-- <td>
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
                             style="margin-right: 10px" class="btn btn-primary mr-2"><i
                                 class="fa-regular fa-eye"></i></button>
@@ -59,7 +59,7 @@
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>
-                    </td>
+                    </td> --}}
                 </tr>
             @endforeach
         </table>
@@ -175,7 +175,7 @@
                                 @enderror"
                                         id="inputGroupSelect01" name="role">
                                         <option value="super_user">Super User</option>
-                                        <option value="petugas">Koordinator</option>
+                                        <option value="petugas">Petugas</option>
                                     </select>
                                     @error('role')
                                         <div class="invalid-feedback">

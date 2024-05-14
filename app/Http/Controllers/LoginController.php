@@ -42,7 +42,7 @@ class LoginController extends Controller
 
 
                 $request->session()->regenerate();
-                return redirect()->intended('/welcome');
+                return redirect()->intended('/dashboard-koordinator');
             }
 
         }else {

@@ -9,13 +9,13 @@
     <hr class="mb-1">
     <ul class="mynav nav nav-pills flex-column mb-auto mt-3">
         <li class="nav-item mb-1">
-            <a href="/dashboard" class="{{ $title === 'Dashboard' ? 'active' : '' }}">
+            <a href="/dashboard-koordinator" class="{{ $title === 'Dashboard' ? 'active' : '' }}">
                 <i class="fa-solid fa-gauge"></i>
                 Dashboard
             </a>
         </li>
         <li
-            class="nav-item active mb-0 dropdown-custom @if (
+            class="nav-item active dropdown-custom @if (
                 $active == 'Data Petugas' &&
                     'Data Pegawai' &&
                     'Kategori Barang' &&
@@ -27,7 +27,7 @@
 
             <button onclick="toggleDataDropdown()" href="">
                 <div class="customtoogle">
-                    <i class="fa-solid fa-database button-icon"></i>
+                    <i class="fa-solid fa-database button-icon mt-1"></i>
                     Data
                 </div>
                 <i class="fa-solid fa-chevron-down down mt-1"></i>
@@ -36,13 +36,13 @@
 
             <ul class="ms-2" id="dataDropdown">
                 <li class="nav-item mb-1">
-                    <a href="/petugas" class="{{ $title === 'Data Petugas' ? 'active' : '' }}">
+                    <a href="/petugas-koordinator" class="{{ $title === 'Data Petugas' ? 'active' : '' }}">
                         <i class="fa-solid fa-user-gear"></i>
                         Petugas
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/pegawai" class="{{ $title === 'Data Pegawai' ? 'active' : '' }}">
+                    <a href="/pegawai-koordinator" class="{{ $title === 'Data Pegawai' ? 'active' : '' }}">
                         <i class="fa-solid fa-users"></i>
                         Pegawai
                     </a>
@@ -52,20 +52,22 @@
                     <button onclick="toggleDataDropdown3()" href=""
                         class="{{ $active === 'data' ? 'active-custom' : '' }}">
                         <div class="customtoogle">
-                            <i class="fa-solid fa-share-from-square"></i>
+                            <i class="fa-solid fa-share-from-square ms-1"></i>
                             Kategori {{-- Jangan Panjang Panhjang ntar rusak --}}
                         </div>
                         <i class="fa-solid fa-chevron-down down mt-1"></i>
                     </button>
                     <ul id="dataDropdown3" class="ms-2">
                         <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
-                            <a href="/kategori-barang" class="{{ $title === 'Data Kategori Barang' ? 'active' : '' }}">
+                            <a href="/kategori-barang-koordinator"
+                                class="{{ $title === 'Data Kategori Barang' ? 'active' : '' }}">
                                 <i class="fa-solid fa-dolly"></i>
                                 Kategori Barang
                             </a>
                         </li>
                         <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
-                            <a href="/tipe-ruangan" class="{{ $title === 'Data Tipe Ruangan' ? 'active' : '' }}">
+                            <a href="/tipe-ruangan-koordinator"
+                                class="{{ $title === 'Data Tipe Ruangan' ? 'active' : '' }}">
                                 <i class="fa-solid fa-tags"></i>
                                 Tipe Ruangan
                             </a>
@@ -76,20 +78,102 @@
                     </ul>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/barang" class="{{ $title === 'Data Barang' ? 'active' : '' }}">
+                    <a href="/barang-koordinator" class="{{ $title === 'Data Barang' ? 'active' : '' }}">
                         <i class="fa-solid fa-computer"></i>
                         Barang - Properti
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/ruangan" class="{{ $title === 'Data Ruangan' ? 'active' : '' }}">
+                    <a href="/ruangan-koordinator" class="{{ $title === 'Data Ruangan' ? 'active' : '' }}">
                         <i class="fa-solid fa-door-closed"></i>Ruangan
                     </a>
                 </li>
             </ul>
         </li>
+
+
+
+
+
+
+
+
+        <li
+            class="nav-item active dropdown-custom @if (
+                $active == 'Data Petugas' &&
+                    'Data Pegawai' &&
+                    'Kategori Barang' &&
+                    'Tipe Ruangan' &&
+                    'Data Barang' &&
+                    'Data Ruangan') dropdown-active-custom @endif
+    {{-- {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '' }} --}}
+    ">
+
+            <button onclick="toggleDataDropdown4()" href="" class="mt-1">
+                <div class="customtoogle">
+                    <i class="fa-solid fa-network-wired"></i>
+                    Transaksi
+                </div>
+                <i class="fa-solid fa-chevron-down down mt-1"></i>
+            </button>
+
+
+            <ul class="ms-2" id="dataDropdown4">
+                <li class="nav-item mb-1">
+                    <a href="/pengadaan" class="{{ $title === 'Pengadaan' ? 'active' : '' }}">
+                        <i class="fa-solid fa-cart-plus"></i>
+                        Pengadaan
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="/penempatan" class="{{ $title === 'Penempatan' ? 'active' : '' }}">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        Penempatan
+                    </a>
+                </li>
+
+                <li class="nav-item mb-1">
+                    <a href="/mutasi" class="{{ $title === 'Mutasi' ? 'active' : '' }}">
+                        <i class="fa-solid fa-building-circle-arrow-right"></i>
+                        Mutasi
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="/peminjaman" class="{{ $title === 'Peminjaman' ? 'active' : '' }}">
+                        <i class="fa-solid fa-handshake"></i>Peminjaman
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="/pemeliharaan" class="{{ $title === 'Pemeliharaan' ? 'active' : '' }}">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>Maintenance
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="/penghapusan" class="{{ $title === 'Penghapusan' ? 'active' : '' }}">
+                        <i class="fa-solid fa-ban"></i>Peghapusan
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <li class="nav-item mb-1 mt-1">
-            <a href="/training" class="{{ $title === 'Data Training' ? 'active' : '' }}">
+            <a href="/training-koordinator" class="{{ $title === 'Data Training' ? 'active' : '' }}">
                 <i class="fa-solid fa-chalkboard-user"></i>
                 Training / Programs
             </a>
@@ -114,7 +198,7 @@
         </a>
         <span style="margin-top: 4px">
             <h6 class="mt-1 mb-0">{{ auth()->user()->username }}</h6>
-            <small>Super User</small>
+            <small>Koordinator</small>
         </span>
         <div class="logout" style="margin-bottom: 100px">
             <button class="btn" style="background: #0d3b66" data-bs-toggle="modal" data-bs-target="#logout">

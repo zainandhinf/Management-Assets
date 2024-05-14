@@ -1,4 +1,4 @@
-@extends('super_user.main')
+@extends('petugas.main')
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
@@ -25,7 +25,7 @@
                         <th>NBPT</th>
                         <th>Tempat, Tanggal Lahir</th>
                         <th>Training</th>
-                        <th data-searchable="false">Action</th>
+                        {{-- <th data-searchable="false">Action</th> --}}
                     </tr>
                 </thead>
                 @php
@@ -53,16 +53,15 @@
                         <td>{{ $peserta->nbpt }}</td>
                         <td>{{ $peserta->tempat_lahir }}, {{ $peserta->tanggal_lahir }}</td>
                         <td>{{ $training[0]->nama_training }}</td>
-                        <td>
-                            {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id }}" style=""
-                        class="btn btn-primary"><i class="fa-regular fa-eye"></i></button> --}}
+                        {{-- <td>
+
                             <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id }}" style=""
                                 class="btn btn-warning mt-1"><i class="fa fa-edit"></i></button>
                             <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $peserta->id }}"
                                 class="btn btn-danger">
                                 <i class="fa fa-trash"></i>
                             </button>
-                        </td>
+                        </td> --}}
                     </tr>
                 @endforeach
             </table>

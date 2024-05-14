@@ -23,13 +23,20 @@ class DefaultSeeder extends Seeder
             'alamat' =>'',
             'no_telepon' =>'',
             'foto' =>'',
-            'jenis_kelamin' =>'l',
-            'alamat' =>"",
-            'no_telepon' =>"",
-            'foto' =>"",
             'username' =>'user',
             'password' => Hash::make('111'),
             'role' =>'super_user',
+        ]);
+        DB::table('users')->insert([
+            'nik' =>'50977',
+            'nama_user' =>'Koordinator',
+            'jenis_kelamin' =>'L',
+            'alamat' =>'',
+            'no_telepon' =>'',
+            'foto' =>'',
+            'username' =>'koor',
+            'password' => Hash::make('111'),
+            'role' =>'petugas',
         ]);
     }
 }

@@ -1,4 +1,4 @@
-@extends('super_user.main')
+@extends('petugas.main')
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
@@ -17,7 +17,7 @@
                         <th>Kapasitas</th>
                         <th>Foto Ruangan</th>
                         <th>Tipe Ruangan</th>
-                        <th data-searchable="false">Action</th>
+                        {{-- <th data-searchable="false">Action</th> --}}
                     </tr>
                 </thead>
                 @php
@@ -54,7 +54,7 @@
                             </div>
                         </td>
                         <td>{{ $tipe_ruangan[0]->nama_tipe }}</td>
-                        <td>
+                        {{-- <td>
                             <button data-bs-toggle="modal" data-bs-target="#editdata{{ $ruangan->id }}"
                                 style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
 
@@ -64,7 +64,7 @@
                                 <i class="fa fa-trash"></i>
                             </button>
 
-                        </td>
+                        </td> --}}
                     </tr>
                 @endforeach
             </table>

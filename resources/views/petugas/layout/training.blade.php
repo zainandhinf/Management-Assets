@@ -1,4 +1,4 @@
-@extends('super_user.main')
+@extends('petugas.main')
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
@@ -31,7 +31,7 @@
                         {{-- <th>Keterangan</th> --}}
                         {{-- <th>Alamat</th> --}}
                         {{-- <th>No Telepon</th> --}}
-                        <th data-searchable="false">Action</th>
+                        {{-- <th data-searchable="false">Action</th> --}}
                     </tr>
                 </thead>
                 @php
@@ -63,14 +63,14 @@
                         <td>{{ $nama_petugas[0]->nama_user }}</td>
                         {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                         {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                        <td>
+                        {{-- <td>
                             <button data-bs-toggle="modal" data-bs-target="#editdata{{ $training->id }}"
                                 style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
                             <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $training->id }}"
                                 class="btn btn-danger mt-1">
                                 <i class="fa fa-trash"></i>
                             </button>
-                        </td>
+                        </td> --}}
                     </tr>
                 @endforeach
             </table>

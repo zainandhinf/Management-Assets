@@ -26,7 +26,7 @@ class SUController extends Controller
             'super_user.layout.dashboard',
             [
                 "title" => "Dashboard",
-                "active" => "z"
+                "active" => "Dashboard"
             ]
         );
     }
@@ -35,7 +35,7 @@ class SUController extends Controller
     {
         return view('super_user.layout.petugas')->with([
             'title' => 'Data Petugas',
-            'active' => 'z',
+            'active' => 'Data Petugas',
             'petugass' => User::all(),
 
         ]);
@@ -45,7 +45,7 @@ class SUController extends Controller
     {
         return view('super_user.layout.pegawai')->with([
             'title' => 'Data Pegawai',
-            'active' => 'z',
+            'active' => 'Data Pegawai',
             'pegawais' => pegawai::all(),
 
         ]);
@@ -68,7 +68,7 @@ class SUController extends Controller
 
         return view('super_user.layout.barang')->with([
             'title' => 'Data Barang',
-            'active' => 'z',
+            'active' => 'Data Barang',
             'cek' => $cekKategori,
             'barangs' => $kategori_barang,
             'kategoris' => $kategoris,
@@ -80,7 +80,7 @@ class SUController extends Controller
     {
         return view('super_user.layout.kategoribrg')->with([
             'title' => 'Data Kategori Barang',
-            'active' => 'z',
+            'active' => 'Data Kategori Barang',
             'ktgr_brngs' => kategori_barang::all(),
         ]);
     }
@@ -90,7 +90,7 @@ class SUController extends Controller
 
         return view('super_user.layout.ruangan')->with([
             'title' => 'Data Ruangan',
-            'active' => 'z',
+            'active' => 'Data Ruangan',
             'cek' => $cekTipe,
             'ruangans' => ruangan::all(),
 
@@ -100,33 +100,38 @@ class SUController extends Controller
     {
         return view('super_user.layout.tiperuangan')->with([
             'title' => 'Data Tipe Ruangan',
-            'active' => 'z',
+            'active' => 'Data Tipe Ruangan',
             'tipe_ruangans' => tipe_ruangan::all(),
 
         ]);
     }
     public function goTraining()
     {
+        $cek1 = DB::table('users')->where('role', '=', 'petugas')->count();
+        $cek2 = DB::table('ruangans')->count();
         return view('super_user.layout.training')->with([
             'title' => 'Data Training',
-            'active' => 'z',
+            'active' => 'Data Training',
             'trainings' => training::all(),
+            'cek1'=> $cek1,
+            'cek2'=> $cek2,
         ]);
     }
     public function goPeserta()
     {
+        $cek = DB::table('trainings')->count();
         return view('super_user.layout.peserta')->with([
             'title' => 'Data Peserta Training',
-            'active' => 'z',
+            'active' => 'Data Peserta Training',
             'pesertas' => peserta_training::all(),
-
+            'cek'=> $cek,
         ]);
     }
     public function goProfile()
     {
         return view('super_user.layout.profile')->with([
             'title' => 'Profile',
-            'active' => 'z',
+            'active' => 'Profile',
 
         ]);
     }
@@ -264,7 +269,7 @@ class SUController extends Controller
             'role' => 'required',
         ]);
 
-        $validateData['password'] = Hash::make($request->input('password'));
+        $validatedData['password'] = Hash::make($request->input('password'));
 
 
 
@@ -663,7 +668,7 @@ class SUController extends Controller
         // })
         // ->get();
 
-        // WOrk tapi ga ngerti... 
+        // WOrk tapi ga ngerti...
 
         $cek = DB::table('trainings')
             ->select('trainings.*', 'ruangans.ruangan')
