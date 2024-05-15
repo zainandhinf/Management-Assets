@@ -52,6 +52,7 @@
 
     {{-- Style --}}
     <link rel="stylesheet" href="assets/css/sidebar.css">
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
     <link rel="stylesheet" href="assets/css/profile.css">
     <link rel="stylesheet" href="assets/css/ruangan.css">
     {{-- end Style --}}
@@ -213,6 +214,19 @@
     {{-- Masknumber --}}
     <script src="assets/js/jquery.masknumber.js"></script>
     <script src="../assets/js/jquery.masknumber.js"></script>
+
+    {{-- Untuk SELECT BARANG PENGADAAN --}}
+    <script>
+        document.querySelectorAll('.select-barang').forEach(button => {
+            button.addEventListener('click', function() {
+                const noBarang = this.getAttribute('data-no-barang');
+                document.getElementById('input-no-barang').value = noBarang;
+                document.getElementById('form-pengadaan').submit();
+            });
+        });
+    </script>
+    {{-- Untuk SELECT BARANG PENGADAAN --}}
+
     {{-- end Masknumber --}}
     <script>
         function toggleDataDropdown() {

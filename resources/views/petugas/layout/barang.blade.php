@@ -3,17 +3,14 @@
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
         @if ($cek > 0)
-        <button onclick="ShowModal1()" type="button" class="btn btn-primary btn-sm mt-2 mb-2" data-bs-toggle="modal"
-            data-bs-target="#adddata">
-            <i class="fa-solid fa-folder-plus me-1"></i> Tambah Data
-        </button>
+
 
 
         <table class="table table-striped" id="data-tables" style="font-size: 14px;">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Kode Aktiva</th>
+                    {{-- <th>Kode Aktiva</th> --}}
                     <th>Nama</th>
                     <th>Kategori</th>
                     <th>Qty</th>
@@ -27,7 +24,7 @@
                 <tr>
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
-                    <td>{{ $barang->kode_aktiva }}</td>
+                    {{-- <td>{{ $barang->kode_aktiva }}</td> --}}
                     <td>{{ $barang->nama_barang }}</td>
                     <td>{{ $barang->nama_kategori }}</td>
                     <td>{{ $barang->qty }}</td>
@@ -51,7 +48,7 @@
         @else
         <b>
             <h5>
-                *Note: Data Barang hanya bisa dibuat ketika kamu sudah mengisi <a href="/kategori-barang">Data Kategori Barang</a> terlebih dahulu !
+                *Note: Barang tidak tersedia dikarenakan Kategori Barang belum diisi data apapun, beritahukan kepada yang berwenang untuk mengisi data
             </h5>
         </b>
         @endif
@@ -85,18 +82,6 @@
                                 </div>
                             @enderror
 
-                            <label for="kode_aktiva" class="col-form-label">Kode Aktiva :</label>
-                            <input style="font-size: 14px;" type="text"
-                                class="form-control @error('kode_aktiva')
-                                is-invalid
-                                @enderror"
-                                placeholder="Kode Aktiva.." id="name" name="kode_aktiva">
-                            @error('kode_aktiva')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
                             <label for="nama_barang" class="col-form-label">Nama Barang :</label>
                             <input style="font-size: 14px;" type="text"
                                 class="form-control @error('nama_barang')
@@ -104,6 +89,18 @@
                                 @enderror"
                                 placeholder="Nama Barang.." id="name" name="nama_barang">
                             @error('nama_barang')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            <label for="kode_awal" class="col-form-label">Kode Unik(Untuk No. asset) :</label>
+                            <input style="font-size: 14px;" type="text"
+                                class="form-control @error('kode_awal')
+                                is-invalid
+                                @enderror"
+                                placeholder="Masukan kode unik untuk no. asset(KL atau MS atau LP).." id="name" name="kode_awal">
+                            @error('kode_awal')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -128,8 +125,8 @@
                             @enderror
 
 
-                            <label for="qty" class="col-form-label">Kuantitas(angka) :</label>
-                            <input style="font-size: 14px;" type="number"
+                            {{-- <label for="qty" class="col-form-label">Kuantitas(angka) :</label> --}}
+                            <input style="font-size: 14px;" type="hidden"
                                 class="form-control @error('qty')
                   is-invalid
               @enderror"
@@ -179,16 +176,6 @@
                                  </div>
                              @enderror
 
-                             <label for="name" class="col-form-label">Kode Aktiva :</label>
-                             <input name="kode_aktiva" style="font-size: 14px;" type="text"
-                                 class="form-control @error('kode_aktiva') fs-6 is-invalid @enderror" placeholder="Kode Aktiva.." id="name"
-                                 value="{{ $barang->kode_aktiva }}" required>
-                             @error('kode_aktiva')
-                                 <div class="invalid-feedback">
-                                     {{ $message }}
-                                 </div>
-                             @enderror
-
                              <label for="name" class="col-form-label">Nama Barang :</label>
                              <input name="nama_barang" style="font-size: 14px;" type="text"
                                  class="form-control @error('kode_aktiva') fs-6 is-invalid @enderror" placeholder="Nama Barang.." id="name"
@@ -198,6 +185,18 @@
                                      {{ $message }}
                                  </div>
                              @enderror
+
+                            <label for="kode_awal" class="col-form-label">Kode Unik(Untuk No. asset) :</label>
+                            <input style="font-size: 14px;" type="text" value="{{$barang->kode_Awal}}"
+                                class="form-control @error('kode_awal')
+                                is-invalid
+                                @enderror"
+                                placeholder="Masukan kode unik untuk no. asset(KL atau MS atau LP).." id="name" name="kode_awal">
+                            @error('kode_awal')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
 
                              <label for="name" class="col-form-label">Nama Kategori :</label>
                              <select style="font-size: 14px;" class="form-select @error('id_kategori') is-invalid @enderror"
@@ -216,8 +215,8 @@
                                  </div>
                              @enderror
 
-                             <label for="name" class="col-form-label">Kuantitas(angka) :</label>
-                             <input name="qty" style="font-size: 14px;" type="number"
+                             {{-- <label for="name" class="col-form-label">Kuantitas(angka) :</label> --}}
+                             <input name="qty" style="font-size: 14px;" type="hidden"
                                  class="form-control @error('kode_aktiva') fs-6 is-invalid @enderror" placeholder="Nama Barang.." id="name"
                                  value="{{ $barang->qty }}" required>
                              @error('qty')

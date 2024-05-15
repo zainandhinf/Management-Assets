@@ -17,6 +17,8 @@ use App\Models\peserta_training;
 use App\Models\detail_barang;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+
 
 class PController extends Controller
 {
@@ -147,13 +149,53 @@ class PController extends Controller
     }
     public function goPengadaanTambah()
     {
+
+        $noPengadaan = "PA-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+        $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
+        ->select('barangs.*', 'kategori_barangs.nama_kategori')
+        ->get();
+        $today = date('Y-m-d');
+
         return view('petugas.layout.transaksi.pengadaan-tambah')->with([
             'title' => 'Buat Pengadaan',
             'active' => 'Pengadaan',
-            'barangs' => detail_barang::all(),
+            'detail_barangs' => detail_barang::all(),
+            'barangs' => $barangAll,
+            'noPengadaan' => $noPengadaan,
+            'today' => $today
 
         ]);
     }
     //end route view
+
+    public function select(Request $request) {
+
+        $id = $request->input('no_barang');
+
+
+
+        $data_barang = DB::table('barangs')->select('*')->where('no_barang' ,'=', $id)->first();
+
+        $kode_barcode =  $noPengadaan = "$data_barang->kode_awal" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+
+        // dd($kode_barcode);
+
+        $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
+        ->select('barangs.*', 'kategori_barangs.nama_kategori')
+        ->get();
+
+        return view('petugas.layout.transaksi.pengadaan-tambah-data')->with([
+            'title' => 'Buat Pengadaan',
+            'active' => 'Pengadaan',
+            'data_barang' => $data_barang,
+            'barangs' => $barangAll,
+            'kode_barcode' => $kode_barcode,
+        ]);
+
+
+    }
+
+    // Transaksi PENGADAAN
+    // End End Transaksi PENGADAAN
 
 }

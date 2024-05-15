@@ -87,24 +87,10 @@ Route::delete('/deletetraining', [SUController::class, 'deleteTraining']);
 Route::post('/addpeserta', [SUController::class, 'addPeserta']);
 Route::put('/editpeserta', [SUController::class, 'editPeserta']);
 Route::delete('/deletepeserta', [SUController::class, 'deletePeserta']);
-// <!-- Route::get('/check-room-availability', function (Request $request) {
-//     $tanggalMulai = $request->input('tanggal_mulai');
-//     $tanggalSelesai = $request->input('tanggal_selesai');
-//     $idRuangan = $request->input('id_ruangan');
-
-//     // Lakukan logika untuk memeriksa ketersediaan ruangan
-//     // Misalnya, dapatkan daftar reservasi ruangan pada tanggal tersebut
-
-//     $ruangan = ruangan::findOrFail($idRuangan);
-
-//     $available = $ruangan->checkAvailability($tanggalMulai, $tanggalSelesai);
-
-//     return response()->json(['available' => $available]);
-// }); -->
 
 // end end crud super user //
 
-//petugas
+//petugas - Koordinator
 Route::get('/dashboard-koordinator', [PController::class, 'index']);
 Route::get('/petugas-koordinator', [PController::class, 'goPetugas']);
 Route::get('/pegawai-koordinator', [PController::class, 'goPegawai']);
@@ -112,8 +98,11 @@ Route::get('/barang-koordinator', [PController::class, 'goBarang']);
 Route::get('/kategori-barang-koordinator', [PController::class, 'goKBarang']);
 Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
-// Route::get('/training-koordinator', [PController::class, 'goTraining']);
-// Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
+Route::get('/training-koordinator', [PController::class, 'goTraining']);
+Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
 Route::get('/pengadaan', [PController::class, 'goPengadaan']);
 Route::get('/pengadaan-tambah', [PController::class, 'goPengadaanTambah']);
+Route::post('/pengadaan-tambah-barang', [PController::class, 'select']);
 Route::get('/profile-koordinator', [PController::class, 'goProfile']);
+//END END petugas - Koordinator
+

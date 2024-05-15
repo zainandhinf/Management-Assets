@@ -11,8 +11,8 @@ class barang extends Model
 
     protected $fillable = [
         'no_barang',
-        'kode_aktiva',
         'nama_barang',
+        'kode_awal',
         'id_kategori',
         'qty',
     ];
