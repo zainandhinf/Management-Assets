@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
-        @if ($cek1 > 0 && $cek2 >0)
+        @if ($cek1 > 0 && $cek2 > 0)
             <div class="d-flex">
 
                 <a href="#" onclick="ShowModal1()" type="button"
-                    class="btn border-warning btn-warning btn-sm w-100 me-1">
+                    class="btn border-warning btn-sm w-100 me-1">
                     Training
                 </a>
-                <a href="/peserta-training" onclick="ShowModal1()" type="button" class="btn border-warning btn-sm w-100 ms-1">
+                <a href="/peserta-training" onclick="ShowModal1()" type="button" class="btn  btn-warning border-warning btn-sm w-100 ms-1">
                     Peserta
                 </a>
             </div>
@@ -482,29 +482,53 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <table class="table table-striped" id="data-tables-peserta">
+                            @php
+                                $no = 1;
+                                $pesertas = DB::table('peserta_trainings')
+                                    ->select(
+                                        'pegawais.foto',
+                                        'pegawais.nik',
+                                        'pegawais.nama_user',
+                                        'pegawais.jenis_kelamin',
+                                        'pegawais.no_telepon',
+                                        'pegawais.organisasi',
+                                        'peserta_trainings.id as id_peserta',
+                                        'trainings.nama_training',
+                                        'trainings.id as id_training',
+                                    )
+                                    ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
+                                    ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
+                                    ->get();
+                            @endphp
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Foto</th>
+                                    <th>NIK</th>
                                     <th>Nama</th>
-                                    <th>Jenis Kelamin</th>
-                                    <th>NBPT</th>
-                                    <th>Tempat, Tanggal Lahir</th>
+                                    <th>Gender</th>
+                                    <th>No Telepon</th>
                                     <th>Training</th>
                                 </tr>
                             </thead>
                             @php
                                 $no = 1;
-                                $pesertas = DB::table('peserta_trainings')
-                                    ->select('*')
-                                    ->where('id_training', '=', $training->id)
-                                    ->get();
                             @endphp
                             @foreach ($pesertas as $peserta)
+                                @php
+                                    $training = DB::table('trainings')
+                                        ->select('*')
+                                        ->where('id', '=', $peserta->id_training)
+                                        ->get();
+                                @endphp
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     {{-- <td>{{ $city->id }}</td> --}}
                                     {{-- <td>lorem</td> --}}
-                                    <td>{{ $peserta->nama }}</td>
+                                    <td><img src="{{ asset('storage/' . $peserta->foto) }}" class="rounded rounded-circle"
+                                            style="width: 50px;" alt=""></td>
+                                    <td>{{ $peserta->nik }}</td>
+                                    <td>{{ $peserta->nama_user }}</td>
                                     <td>
                                         @if ($peserta->jenis_kelamin === 'L')
                                             Laki-Laki
@@ -512,12 +536,12 @@
                                             Perempuan
                                         @endif
                                     </td>
-                                    <td>{{ $peserta->nbpt }}</td>
-                                    <td>{{ $peserta->tempat_lahir }}, {{ $peserta->tanggal_lahir }}</td>
-                                    <td>{{ $training->nama_training }}</td>
+                                    <td>{{ $peserta->no_telepon }}</td>
+                                    <td>{{ $training[0]->nama_training }}</td>
                                 </tr>
-                            @endforeach
+                                @endforeach
                         </table>
+                        
                     </div>
                 </div>
             </div>

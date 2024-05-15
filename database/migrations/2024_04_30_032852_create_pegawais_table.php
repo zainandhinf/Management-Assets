@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('alamat')->nullable();
             $table->string('no_telepon')->nullable();
             $table->string('foto')->nullable();
+            $table->string('organisasi');
             $table->timestamps();
         });
     }

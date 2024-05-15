@@ -87,6 +87,7 @@ Route::delete('/deletetraining', [SUController::class, 'deleteTraining']);
 Route::post('/addpeserta', [SUController::class, 'addPeserta']);
 Route::put('/editpeserta', [SUController::class, 'editPeserta']);
 Route::delete('/deletepeserta', [SUController::class, 'deletePeserta']);
+Route::get('/getUserByNik', [SUController::class, 'getUserByNik']);
 // <!-- Route::get('/check-room-availability', function (Request $request) {
 //     $tanggalMulai = $request->input('tanggal_mulai');
 //     $tanggalSelesai = $request->input('tanggal_selesai');

@@ -13,11 +13,7 @@ return new class extends Migration
     {
         Schema::create('peserta_trainings', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('jenis_kelamin');
-            $table->string('nbpt');
-            $table->string('tempat_lahir')->nullable();
-            $table->string('tanggal_lahir')->nullable();
+            $table->string('nik');
             $table->string('id_training');
             $table->timestamps();
         });

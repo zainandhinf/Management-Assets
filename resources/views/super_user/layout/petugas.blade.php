@@ -11,6 +11,7 @@
                 <tr>
                     <th>#</th>
                     {{-- <th>Foto Profil</th> --}}
+                    <th>Foto</th>
                     <th>NIK</th>
                     <th>Nama</th>
                     <th>Gender</th>
@@ -29,6 +30,8 @@
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
+                    <td><img src="{{ asset('storage/' . $petugas->foto) }}" class="rounded rounded-circle"
+                            style="width: 50px;" alt=""></td>
                     <td>{{ $petugas->nik }}</td>
                     <td>{{ $petugas->nama_user }}</td>
                     <td>
@@ -76,12 +79,12 @@
                     <h5 class="modal-title fs-6">Tambah {{ $title }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="/addpetugas" method="post">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <form action="/addpetugas" method="post" enctype="multipart/form-data">
+                                    @csrf
                                     <label for="name" class="col-form-label">NIK :</label>
                                     <input style="font-size: 14px;" type="text"
                                         class="form-control @error('nik')
@@ -131,10 +134,6 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <label for="name" class="col-form-label">No Telepon :</label>
                                     <input style="font-size: 14px;" type="text"
                                         class="form-control @error('no_telepon')
@@ -146,52 +145,70 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <label for="name" class="col-form-label">Username :</label>
-                                    <input style="font-size: 14px;" type="text"
-                                        class="form-control @error('username')
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+                                <label for="name" class="col-form-label">Username :</label>
+                                <input style="font-size: 14px;" type="text"
+                                    class="form-control @error('username')
                   is-invalid
               @enderror"
-                                        placeholder="Username.." id="name" name="username">
-                                    @error('username')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                    <label for="name" class="col-form-label">Password :</label>
-                                    <input style="font-size: 14px;" type="password"
-                                        class="form-control @error('password')
+                                    placeholder="Username.." id="name" name="username">
+                                @error('username')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <label for="name" class="col-form-label">Password :</label>
+                                <input style="font-size: 14px;" type="password"
+                                    class="form-control @error('password')
                   is-invalid
               @enderror"
-                                        placeholder="Password.." id="name" name="password">
-                                    @error('password')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                    <label for="name" class="col-form-label">Role :</label>
-                                    <select style="font-size: 14px;"
-                                        class="form-select @error('role')
+                                    placeholder="Password.." id="name" name="password">
+                                @error('password')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <label for="name" class="col-form-label">Role :</label>
+                                <select style="font-size: 14px;"
+                                    class="form-select @error('role')
                                     is-invalid
                                 @enderror"
-                                        id="inputGroupSelect01" name="role">
-                                        <option value="super_user">Super User</option>
-                                        <option value="petugas">Koordinator</option>
-                                    </select>
-                                    @error('role')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
+                                    id="inputGroupSelect01" name="role">
+                                    <option value="super_user">Super User</option>
+                                    <option value="petugas">Koordinator</option>
+                                </select>
+                                @error('role')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <label for="name" class="col-form-label">Foto :</label>
+                                <br>
+                                <input style="font-size: 14px;" type="file"
+                                    class="form-control mb-3 @error('foto') is-invalid @enderror"
+                                    placeholder="Choose Photo.." id="foto" name="foto"
+                                    onchange="previewImage()">
+                                @error('foto')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                <img class="img-preview img-fluid col-3 rounded rounded-circle"
+                                            style="display: none;" id="img-preview">
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
-                            Cancel
-                        </button>
-                        <button type="submit" class="btn btn-primary" style="font-size: 14px;">Create Data</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" style="font-size: 14px;">Create Data</button>
+                </div>
                 </form>
             </div>
 
@@ -210,8 +227,8 @@
                         <h5 class="modal-title fs-6">Tambah {{ $title }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="/editpetugas" method="post">
-                        <div class="modal-body">
+                    <div class="modal-body">
+                            <form action="/editpetugas" method="post" enctype="multipart/form-data">
                             <div class="row">
                                 @csrf
                                 @method('PUT')
@@ -319,6 +336,22 @@
                                                 {{ $message }}
                                             </div>
                                         @enderror
+                                        <label for="name" class="col-form-label">Foto :</label>
+                                        <br>
+                                        <img class="img-preview img-fluid col-3 rounded rounded-circle"
+                                        id="img-preview-edit" src="{{ asset('storage/' . $petugas->foto) }}">
+                                        <br>
+                                        <label for="name" class="col-form-label">New Foto :</label>
+                                        <input style="font-size: 14px;" type="file"
+                                            class="form-control mb-3 @error('foto') is-invalid @enderror"
+                                            placeholder="Choose Photo.." id="foto-edit" name="foto"
+                                            onchange="previewImageedit()">
+                                        @error('foto')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -371,6 +404,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <input type="hidden" name="id_user" value="{{ $petugas->id }}">
+                                    <input type="hidden" name="foto" value="{{ $petugas->foto }}">
                                     <button class="btn btn-danger w-100">
                                         Yakin
                                     </button>
@@ -385,4 +419,37 @@
     {{-- end modal delete data --}}
 
     {{-- end modal --}}
+
+
+
+    <script>
+        function previewImage() {
+            const image = document.getElementById("foto")
+            console.log(image);
+            const imgPreview = document.getElementById('img-preview');
+
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
+        function previewImageedit() {
+            const imageedit = document.getElementById("foto-edit")
+            console.log(imageedit);
+            const imgPreviewedit = document.getElementById('img-preview-edit');
+
+            imgPreviewedit.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(imageedit.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreviewedit.src = oFREvent.target.result;
+            }
+        }
+    </script>
 @endsection

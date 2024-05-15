@@ -113,18 +113,23 @@ class SUController extends Controller
             'title' => 'Data Training',
             'active' => 'Data Training',
             'trainings' => training::all(),
-            'cek1'=> $cek1,
-            'cek2'=> $cek2,
+            'cek1' => $cek1,
+            'cek2' => $cek2,
         ]);
     }
     public function goPeserta()
     {
         $cek = DB::table('trainings')->count();
+        $pesertas = DB::table('peserta_trainings')
+            ->select('pegawais.foto', 'pegawais.nik', 'pegawais.nama_user', 'pegawais.jenis_kelamin', 'pegawais.no_telepon', 'pegawais.organisasi', 'peserta_trainings.id as id_peserta', 'trainings.nama_training', 'trainings.id as id_training')
+            ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
+            ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
+            ->get();
         return view('super_user.layout.peserta')->with([
             'title' => 'Data Peserta Training',
             'active' => 'Data Peserta Training',
-            'pesertas' => peserta_training::all(),
-            'cek'=> $cek,
+            'pesertas' => $pesertas,
+            'cek' => $cek,
         ]);
     }
     public function goProfile()
@@ -270,7 +275,7 @@ class SUController extends Controller
         ]);
 
         $validatedData['password'] = Hash::make($request->input('password'));
-
+        $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
 
 
         User::create($validatedData);
@@ -293,7 +298,9 @@ class SUController extends Controller
         ]);
 
         // dd($validatedData);
-
+        if ($request->file('foto')) {
+            $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
+        }
         DB::table('users')
             ->where('id', $request->input('id_user'))
             ->update($validatedData);
@@ -308,6 +315,8 @@ class SUController extends Controller
             ->select('nama_user')
             ->where('id', '=', $request->input('id_user'))
             ->get();
+
+        Storage::delete($request->input('foto'));
 
         DB::table('users')->where('id', $request->input('id_user'))->delete();
 
@@ -326,11 +335,14 @@ class SUController extends Controller
             'nik' => 'required|max:16',
             'nama_user' => 'required|max:255',
             'jenis_kelamin' => 'required',
-            'alamat' => 'nullable|max:255',
             'no_telepon' => 'nullable|max:12',
-            'foto' => 'nullable',
+            'alamat' => 'nullable|max:255',
+            'organisasi' => 'required',
+            'foto' => 'required|file'
         ]);
 
+        // dd($request);    
+        $validatedData['foto'] = $request->file('foto')->store('fotopegawai');
 
         pegawai::create($validatedData);
 
@@ -352,6 +364,9 @@ class SUController extends Controller
         ]);
 
         // dd($validatedData);
+        if ($request->file('foto')) {
+            $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
+        }
 
         DB::table('pegawais')
             ->where('id', $request->input('id_user'))
@@ -368,6 +383,8 @@ class SUController extends Controller
             ->select('nama_user')
             ->where('id', '=', $request->input('id_user'))
             ->get();
+
+        Storage::delete($request->input('foto'));
 
         DB::table('pegawais')->where('id', $request->input('id_user'))->delete();
 
@@ -688,6 +705,20 @@ class SUController extends Controller
                             ->where('trainings.tanggal_selesai', '>=', $request->input('tanggal_selesai'));
                     });
             })
+            ->where(function ($query) use ($request) {
+                $query->where(function ($subquery) use ($request) {
+                    $subquery->where('trainings.waktu_mulai', '>=', $request->input('waktu_mulai'))
+                        ->where('trainings.waktu_mulai', '<=', $request->input('waktu_selesai'));
+                })
+                    ->orWhere(function ($subquery) use ($request) {
+                        $subquery->where('trainings.waktu_selesai', '>=', $request->input('waktu_mulai'))
+                            ->where('trainings.waktu_selesai', '<=', $request->input('waktu_selesai'));
+                    })
+                    ->orWhere(function ($subquery) use ($request) {
+                        $subquery->where('trainings.waktu_mulai', '<=', $request->input('waktu_mulai'))
+                            ->where('trainings.waktu_selesai', '>=', $request->input('waktu_selesai'));
+                    });
+            })
             ->get();
 
 
@@ -840,40 +871,49 @@ class SUController extends Controller
     //peserta training
     public function addPeserta(Request $request)
     {
-        $validatedData = $request->validate([
-            'nama' => 'required|max:255',
-            'jenis_kelamin' => 'required',
-            'nbpt' => 'required|max:255',
-            'tempat_lahir' => 'nullable|required',
-            'tanggal_lahir' => 'nullable|required',
-            'id_training' => 'required',
-        ]);
-
-        peserta_training::create($validatedData);
-
-        $jumlah_peserta = DB::table('peserta_trainings')
+        $training = DB::table('trainings')->select('*')->where('id', '=', $request->input('id_training'))->get();
+        $kapasitas = DB::table('ruangans')->select('*')->where('no_ruangan', '=', $training[0]->no_ruangan)->get();
+        $jumlah_peserta_seluruh = DB::table('peserta_trainings')
             ->select('*')
             ->where('id_training', '=', $request->input('id_training'))
             ->count();
+        if ($kapasitas[0]->kapasitas == $jumlah_peserta_seluruh) {
+            $request->session()->flash('error', 'Data peserta baru gagal ditambahkan! Kapasitas ruangan sudah maksimal!');
 
-        if ($jumlah_peserta == 0) {
-            DB::table('trainings')
-                ->where('id', $request->input('id_training'))
-                ->update([
-                    'total_peserta' => 1,
-                ]);
+            return redirect('/peserta-training');
         } else {
-            DB::table('trainings')
-                ->where('id', $request->input('id_training'))
-                ->update([
-                    'total_peserta' => $jumlah_peserta,
-                ]);
+            $validatedData = $request->validate([
+                'nik' => 'required',
+                'id_training' => 'required',
+            ]);
 
+            peserta_training::create($validatedData);
+
+            $jumlah_peserta = DB::table('peserta_trainings')
+                ->select('*')
+                ->where('id_training', '=', $request->input('id_training'))
+                ->count();
+
+            if ($jumlah_peserta == 0) {
+                DB::table('trainings')
+                    ->where('id', $request->input('id_training'))
+                    ->update([
+                        'total_peserta' => 1,
+                    ]);
+            } else {
+                DB::table('trainings')
+                    ->where('id', $request->input('id_training'))
+                    ->update([
+                        'total_peserta' => $jumlah_peserta,
+                    ]);
+
+            }
+
+            $request->session()->flash('success', 'Data peserta baru telah ditambahkan!');
+
+            return redirect('/peserta-training');
         }
 
-        $request->session()->flash('success', 'Data peserta baru telah ditambahkan!');
-
-        return redirect('/peserta-training');
     }
     public function editPeserta(Request $request, peserta_training $peserta_training)
     {
@@ -897,8 +937,20 @@ class SUController extends Controller
     public function deletePeserta(Request $request, peserta_training $peserta_training)
     {
         $nama_peserta = DB::table('peserta_trainings')
-            ->select('nama')
-            ->where('id', '=', $request->input('id_peserta'))
+            ->select(
+                'pegawais.foto',
+                'pegawais.nik',
+                'pegawais.nama_user',
+                'pegawais.jenis_kelamin',
+                'pegawais.no_telepon',
+                'pegawais.organisasi',
+                'peserta_trainings.id as id_peserta',
+                'trainings.nama_training',
+                'trainings.id as id_training',
+            )
+            ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
+            ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
+            ->where('peserta_trainings.id','=',$request->input('id_peserta'))
             ->get();
 
         DB::table('peserta_trainings')->where('id', $request->input('id_peserta'))->delete();
@@ -915,11 +967,23 @@ class SUController extends Controller
             ]);
 
 
-        $pesanFlash = "Data Peserta (Nama Peserta: *{$nama_peserta[0]->nama} ) telah berhasil dihapus!";
+        $pesanFlash = "Data Peserta (Nama Peserta: *{$nama_peserta[0]->nama_user} ) telah berhasil dihapus!";
 
         $request->session()->flash('error', $pesanFlash);
 
         return redirect('/peserta-training');
+    }
+
+    public function getUserByNik(Request $request)
+    {
+        $nik = $request->input('nik');
+        $user = pegawai::where('nik', $nik)->first();
+
+        if ($user) {
+            return response()->json(['status' => 'success', 'data' => $user]);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
+        }
     }
     // end end peserta training
 

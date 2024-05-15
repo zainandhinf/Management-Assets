@@ -15,6 +15,7 @@ class pegawai extends Model
         'jenis_kelamin',
         'alamat',
         'no_telepon',
+        'organisasi',
         'foto'
     ];
 
