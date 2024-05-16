@@ -105,7 +105,7 @@ Route::get('/getUserByNik', [SUController::class, 'getUserByNik']);
 
 // end end crud super user //
 
-//petugas
+//petugas - Koordinator
 Route::get('/dashboard-koordinator', [PController::class, 'index']);
 Route::get('/petugas-koordinator', [PController::class, 'goPetugas']);
 Route::get('/pegawai-koordinator', [PController::class, 'goPegawai']);
@@ -113,8 +113,11 @@ Route::get('/barang-koordinator', [PController::class, 'goBarang']);
 Route::get('/kategori-barang-koordinator', [PController::class, 'goKBarang']);
 Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
-// Route::get('/training-koordinator', [PController::class, 'goTraining']);
-// Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
+Route::get('/training-koordinator', [PController::class, 'goTraining']);
+Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
 Route::get('/pengadaan', [PController::class, 'goPengadaan']);
 Route::get('/pengadaan-tambah', [PController::class, 'goPengadaanTambah']);
+Route::post('/pengadaan-tambah-barang', [PController::class, 'select']);
 Route::get('/profile-koordinator', [PController::class, 'goProfile']);
+//END END petugas - Koordinator
+

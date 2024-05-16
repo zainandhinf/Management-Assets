@@ -403,12 +403,15 @@ class SUController extends Controller
         // dd($request);
         $validatedData = $request->validate([
             'no_barang' => 'required|max:30',
-            'kode_aktiva' => 'required|max:30',
             'nama_barang' => 'required|max:60',
+            'kode_awal' => 'required|max:30',
             'id_kategori' => 'required',
             'qty' => 'required',
         ]);
         // dd($validatedData);
+
+        // $validatedData['kode_awal'] = $request->input('kode_awal') . '-';
+
 
 
 
@@ -425,8 +428,8 @@ class SUController extends Controller
         // dd($request);
         $validatedData = $request->validate([
             'no_barang' => 'required|max:30',
-            'kode_aktiva' => 'required|max:30',
             'nama_barang' => 'required|max:60',
+            'kode_awal' => 'required|max:30',
             'id_kategori' => 'required',
             'qty' => 'required',
         ]);
