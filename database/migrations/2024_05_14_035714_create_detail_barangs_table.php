@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('kode_barcode'); // Otomatis / Kode auto
             $table->string('no_asset'); // Diisikan oleh penginput dengan format ('KL'-'Input Sendiri'-'Input Sendiri')
             $table->string('merk'); // Barang nya Laptop Merek nya Acer jadi Laptop Acer
-            $table->date('tanggal_pengadaan'); // Pertama Kali barang ini ditempatkan dari status awalnya 'Belum Ditempatkan'
+            // $table->date('tanggal_pengadaan'); // Pertama Kali barang ini ditempatkan dari status awalnya 'Belum Ditempatkan'
             $table->string('jenis_pengadaan'); // Pembelian - Donasi - Sumbangan - Hibah
             $table->string('spesifikasi'); // Intel Core i7 Ram 16 SSD
             $table->string('kondisi'); // Baik - Rusak

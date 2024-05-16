@@ -115,9 +115,18 @@ Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
 Route::get('/training-koordinator', [PController::class, 'goTraining']);
 Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
+
 Route::get('/pengadaan', [PController::class, 'goPengadaan']);
 Route::get('/pengadaan-tambah', [PController::class, 'goPengadaanTambah']);
+
+Route::get('/penempatan', [PController::class, 'goPenempatan']);
+
 Route::post('/pengadaan-tambah-barang', [PController::class, 'select']);
+Route::post('/addkeranjang', [PController::class, 'addKeranjang']);
+Route::delete('/deletekeranjang', [PController::class, 'deleteKeranjang']);
+Route::post('/addpengadaan', [PController::class, 'addPengadaan']);
+Route::delete('/deletedetail', [PController::class, 'deleteDetail']);
+
 Route::get('/profile-koordinator', [PController::class, 'goProfile']);
 //END END petugas - Koordinator
 

@@ -24,13 +24,18 @@
                 $no = 1;
             @endphp
             @foreach ($barangs as $barang)
+            @php
+                $qty = DB::table('detail_barangs')
+                ->where('no_barang', '=', $barang->no_barang)
+                ->count()
+            @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>{{ $barang->kode_aktiva }}</td> --}}
                     <td>{{ $barang->nama_barang }}</td>
                     <td>{{ $barang->nama_kategori }}</td>
-                    <td>{{ $barang->qty }}</td>
+                    <td>{{ $qty }}</td>
                     <td>
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $barang->id }}" style="margin-right: 10px"
                             class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>

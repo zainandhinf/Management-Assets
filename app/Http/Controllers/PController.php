@@ -15,6 +15,8 @@ use App\Models\image_ruangan;
 use App\Models\training;
 use App\Models\peserta_training;
 use App\Models\detail_barang;
+use App\Models\keranjang_pengadaan;
+use App\Models\pengadaan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -116,8 +118,8 @@ class PController extends Controller
             'title' => 'Data Training',
             'active' => 'Data Training',
             'trainings' => training::all(),
-            'cek1'=> $cek1,
-            'cek2'=> $cek2,
+            'cek1' => $cek1,
+            'cek2' => $cek2,
         ]);
     }
     public function goPeserta()
@@ -127,7 +129,7 @@ class PController extends Controller
             'title' => 'Data Peserta Training',
             'active' => 'Data Peserta Training',
             'pesertas' => peserta_training::all(),
-            'cek'=> $cek,
+            'cek' => $cek,
         ]);
     }
     public function goProfile()
@@ -140,10 +142,21 @@ class PController extends Controller
     }
     public function goPengadaan()
     {
+        $keranjang = DB::table('keranjang_pengadaans')->select('*')->get();
+
+        $detail_barang = DB::table('detail_barangs')
+            ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+            ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
+            ->get();
+
+        // dd($keranjang);
+
+
         return view('petugas.layout.transaksi.pengadaan')->with([
             'title' => 'Pengadaan',
             'active' => 'Pengadaan',
-            'barangs' => detail_barang::all(),
+            'barangs' => $detail_barang,
+            'keranjangs' => keranjang_pengadaan::all(),
 
         ]);
     }
@@ -152,8 +165,8 @@ class PController extends Controller
 
         $noPengadaan = "PA-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
         $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
-        ->select('barangs.*', 'kategori_barangs.nama_kategori')
-        ->get();
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
         $today = date('Y-m-d');
 
         return view('petugas.layout.transaksi.pengadaan-tambah')->with([
@@ -166,23 +179,40 @@ class PController extends Controller
 
         ]);
     }
+    public function goPenempatan()
+    {
+        $detail_barang = DB::table('detail_barangs')
+            ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+            ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
+            ->get();
+
+        // dd($keranjang);
+
+
+        return view('petugas.layout.transaksi.penempatan')->with([
+            'title' => 'Penempatan',
+            'active' => 'Penempatan',
+            'barangs' => $detail_barang,
+        ]);
+    }
     //end route view
 
-    public function select(Request $request) {
+    public function select(Request $request)
+    {
 
         $id = $request->input('no_barang');
 
 
 
-        $data_barang = DB::table('barangs')->select('*')->where('no_barang' ,'=', $id)->first();
+        $data_barang = DB::table('barangs')->select('*')->where('no_barang', '=', $id)->first();
 
-        $kode_barcode =  $noPengadaan = "$data_barang->kode_awal" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+        $kode_barcode = $noPengadaan = "$data_barang->kode_awal" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
 
         // dd($kode_barcode);
 
         $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
-        ->select('barangs.*', 'kategori_barangs.nama_kategori')
-        ->get();
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
 
         return view('petugas.layout.transaksi.pengadaan-tambah-data')->with([
             'title' => 'Buat Pengadaan',
@@ -193,6 +223,139 @@ class PController extends Controller
         ]);
 
 
+    }
+    public function addKeranjang(Request $request)
+    {
+        $validatedData = $request->validate([
+            // 'no_pengadaan' => 'required',
+            'no_barang' => 'required',
+            'kode_barcode' => 'required',
+            'no_asset' => 'required',
+            'merk' => 'required|max:255',
+            'jenis_pengadaan' => 'required',
+            'spesifikasi' => 'required|max:255',
+            'kondisi' => 'required',
+            'status' => 'required',
+            'harga' => 'required|numeric',
+            'keterangan' => 'required|max:255',
+        ]);
+
+        // $validatedData['tanggal_pengadaan'] = now()->format('Y-m-d');
+
+        keranjang_pengadaan::create($validatedData);
+
+        $request->session()->flash('success', 'Data telah berhasil dimasukkan!');
+
+        return redirect('/pengadaan');
+    }
+    public function deleteKeranjang(Request $request)
+    {
+
+        $nama_barang = DB::table('keranjang_pengadaans')
+            ->select('nama_user')
+            ->where('id', '=', $request->input('id_keranjang'))
+            ->get();
+
+        DB::table('users')->where('id', $request->input('id_user'))->delete();
+
+        $pesanFlash = "Barang (Merk: *{$nama_barang[0]->merk} ) telah berhasil dihapus!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/pengadaan');
+    }
+    public function addPengadaan(Request $request)
+    {
+
+
+        $keranjangs = DB::table('keranjang_pengadaans')
+            ->select('*')
+            ->get();
+
+        // foreach ($keranjangs as $keranjang) {
+        //     $validatedData['no_pengadaan'] = $request->no_pengadaan;
+        //     $validatedData['no_barang'] = $keranjang->no_barang;
+        //     $validatedData['kode_barcode'] = $keranjang->kode_barcode;
+        //     $validatedData['no_asset'] = $keranjang->no_asset;
+        //     $validatedData['merk'] = $keranjang->merk;
+        //     $validatedData['jenis_pengadaan'] = $keranjang->jenis_pengadaan;
+        //     $validatedData['spesifikasi'] = $keranjang->spesifikasi;
+        //     $validatedData['kondisi'] = $keranjang->kondisi;
+        //     $validatedData['status'] = $keranjang->status;
+        //     $validatedData['harga'] = $keranjang->harga;
+        //     $validatedData['keterangan'] = $keranjang->keterangan;
+        //     $validatedData['tanggal_pengadaan'] = now()->format('Y-m-d');
+
+        //     detail_barang::create($validatedData);
+        // }
+
+        // pengadaan::create($validatedDataPengadaan);
+        // DB::table('keranjang_pengadaans')->truncate();
+
+        $datenow = now()->format('Y-m-d');
+
+        // $no_last = DB::table('keranjang_pengadaans')->select('*')->orderByDesc('no_pengadaan')->first();
+        $no_last = DB::table('pengadaans')
+            ->select(DB::raw('RIGHT(no_pengadaan, 4) + 1 as noUrut'))
+            ->orderBy('no_pengadaan', 'DESC')
+            ->limit(1)
+            ->get();
+
+        // $no_count = DB::table('keranjang_pengadaans')->select('*')->count();
+        // dd($no_last);
+
+        if (!$no_last->isEmpty()) {
+            $noUrut = $no_last[0]->noUrut;
+            $floatValue = floatval($noUrut);
+        }
+        if ($no_last->isEmpty()) {
+            $no_pengadaan_last = '0001';
+        } else {
+            if ($noUrut < 10) {
+                $no_pengadaan_last = '000' . $noUrut;
+            } elseif ($noUrut < 100) {
+                $no_pengadaan_last = '00' . $noUrut;
+            } elseif ($noUrut < 1000) {
+                $no_pengadaan_last = '0' . $noUrut;
+            } elseif ($noUrut < 10000) {
+                $no_pengadaan_last = $noUrut;
+            } else {
+                $no_pengadaan_last = '0001';
+            }
+        }
+
+        $no_pengadaan =
+            'P' . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') . $no_pengadaan_last;
+
+        $headPengadaan = new pengadaan();
+        $headPengadaan->no_pengadaan = $no_pengadaan;
+        $headPengadaan->tanggal_pengadaan = $request->input('tanggal_pengadaan');
+        $headPengadaan->save();
+
+        DB::statement("INSERT INTO detail_barangs (no_pengadaan, no_barang, kode_barcode, no_asset, merk, jenis_pengadaan, spesifikasi, kondisi, status, harga, keterangan)
+         SELECT '$no_pengadaan', no_barang, kode_barcode, no_asset, merk, jenis_pengadaan, spesifikasi, kondisi, status, harga, keterangan FROM keranjang_pengadaans");
+
+        DB::table('keranjang_pengadaans')->truncate();
+
+        $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
+
+        return redirect('/pengadaan');
+    }
+    public function deleteDetail(Request $request)
+    {
+
+        $nama_barang = DB::table('detail_barangs')
+            ->select('merk')
+            ->where('id', '=', $request->input('id_detail'))
+            ->get();
+
+        DB::table('detail_barangs')->where('id', $request->input('id_detail'))->delete();
+
+        $pesanFlash = "Barang (Merk: *{$nama_barang[0]->merk} ) telah berhasil dihapus!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/pengadaan');
     }
 
     // Transaksi PENGADAAN

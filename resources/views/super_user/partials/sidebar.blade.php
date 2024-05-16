@@ -16,11 +16,11 @@
         </li>
         <li
             class="nav-item active mb-0 dropdown-custom @if (
-                $active == 'Data Petugas' &&
-                    'Data Pegawai' &&
-                    'Kategori Barang' &&
-                    'Tipe Ruangan' &&
-                    'Data Barang' &&
+                $active == 'Data Petugas' ||
+                    'Data Pegawai' ||
+                    'DataKategori Barang' ||
+                    'Data Tipe Ruangan' ||
+                    'Data Barang' ||
                     'Data Ruangan') dropdown-active-custom @endif
         {{-- {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '' }} --}}
         ">
@@ -50,7 +50,7 @@
                 <li
                     class="nav-item mb-0 dropdown-custom-child {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
                     <button onclick="toggleDataDropdown3()" href=""
-                        class="{{ $active === 'data' ? 'active-custom' : '' }}">
+                        class="{{ $active === 'data' ? '' : '' }}">
                         <div class="customtoogle">
                             <i class="fa-solid fa-share-from-square"></i>
                             Kategori {{-- Jangan Panjang Panhjang ntar rusak --}}

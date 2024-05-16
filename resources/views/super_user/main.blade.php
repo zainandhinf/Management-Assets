@@ -218,30 +218,30 @@
         function toggleDataDropdown() {
             // console.log("berhasil");
             var dataDropdown = document.getElementById('dataDropdown');
-            var dataDropdown2 = document.getElementById('dataDropdown2');
+            var dataDropdown3 = document.getElementById('dataDropdown3');
 
             // Toggle display dari <ul> ketika tautan diklik
             if (dataDropdown.style.display === 'block') {
                 dataDropdown.style.display = 'none';
             } else {
                 dataDropdown.style.display = 'block';
-                dataDropdown2.style.display = 'none';
+                dataDropdown3.style.display = 'none';
             }
         }
 
-        function toggleDataDropdown2() {
-            // console.log("berhasil");
-            var dataDropdown = document.getElementById('dataDropdown2');
-            var dataDropdown2 = document.getElementById('dataDropdown');
+        // function toggleDataDropdown2() {
+        //     // console.log("berhasil");
+        //     var dataDropdown = document.getElementById('dataDropdown2');
+        //     var dataDropdown2 = document.getElementById('dataDropdown');
 
-            // Toggle display dari <ul> ketika tautan diklik
-            if (dataDropdown.style.display === 'block') {
-                dataDropdown.style.display = 'none';
-            } else {
-                dataDropdown.style.display = 'block';
-                dataDropdown2.style.display = 'none';
-            }
-        }
+        //     // Toggle display dari <ul> ketika tautan diklik
+        //     if (dataDropdown.style.display === 'block') {
+        //         dataDropdown.style.display = 'none';
+        //     } else {
+        //         dataDropdown.style.display = 'block';
+        //         dataDropdown2.style.display = 'none';
+        //     }
+        // }
 
         function toggleDataDropdown3() {
             // console.log("berhasil");
