@@ -44,8 +44,18 @@
                         <td>
                             <div class="d-flex flex-column image-ruangan">
                                 {{-- @foreach ($image_ruangans as $image_ruangan) --}}
-                                    <img src="{{ asset('storage/' . $image_ruangan->image) }}" alt="" width="100px"
-                                        class="mb-1">
+
+                                @if($image_ruangan)
+
+                                <img src="{{ asset('storage/' . $image_ruangan->image) }}" alt="" width="100px"
+                                    class="mb-1">
+                                @else
+
+                                <img src="/lol" alt="No Png" width="100px"
+                                class="mb-1">
+
+
+                                @endif
                                 {{-- @endforeach --}}
                                 <button class="btn btn-primary view-button btn-lg" data-bs-toggle="modal"
                                     data-bs-target="#viewimg{{ $ruangan->id }}">
@@ -368,7 +378,7 @@
                                 ->select('*')
                                 ->where('no_ruangan', '=', $ruangan->no_ruangan)
                                 ->limit(1)
-                                ->get();
+                                ->first();
                             $no = 2;
                             $no1 = 1;
                             // dd($image_view);
@@ -376,22 +386,31 @@
                         <div id="carouselExample{{ $ruangan->id }}" class="carousel slide">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
+                                    @if($image_view)
+
                                     <div class="img-ruangan">
-                                        <img src="{{ asset('storage/' . $image_view[0]->image) }}"
+                                        <img src="{{ asset('storage/' . $image_view->image) }}"
                                             class="d-block img-fluid" alt="...">
                                         <div class="delete-button-img-ruangan">
                                             <a class="btn btn-primary btn-lg text-deco  ration-none"
-                                                href="http://127.0.0.1:8000{{ asset('storage/' . $image_view[0]->image) }}"
+                                                href="http://127.0.0.1:8000{{ asset('storage/' . $image_view->image) }}"
                                                 target="blank">
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>
 
                                             <button class="btn btn-danger btn-lg" data-bs-toggle="modal"
-                                                data-bs-target="#deleteimg{{ $image_view[0]->id }}">
+                                                data-bs-target="#deleteimg{{ $image_view->id }}">
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </div>
                                     </div>
+
+                                    @else
+
+                                    No Png
+
+                                    @endif
+
                                 </div>
                                 @foreach ($images_view->skip(1) as $image)
                                     <div class="carousel-item">
@@ -418,7 +437,8 @@
                                             <form action="/addimgruangan" method="POST" enctype="multipart/form-data"
                                                 id="uploadimgruangan">
                                                 @csrf
-                                                <input type="hidden" name="id_ruangan" value="{{ $ruangan->id }}">
+                                                <input type="hidden" name="no_ruangan" value="{{ $ruangan->no_ruangan }}">
+
                                                 <div class="icon">
                                                     <i class="fa-solid fa-camera text-white"></i>
                                                 </div>

@@ -17,6 +17,18 @@ class barang extends Model
         'qty',
     ];
 
+    public static function generateKode()
+    {
+        $latestProduct = self::orderBy('id', 'desc')->first();
+        if (!$latestProduct) {
+            $number = 1;
+        } else {
+            $number = intval(substr($latestProduct->kode, 3)) + 1;
+        }
+
+        return 'BRG' . str_pad($number, 4, '0', STR_PAD_LEFT);
+    }
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 }

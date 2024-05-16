@@ -83,7 +83,7 @@
                                 class="form-control @error('no_barang')
                   is-invalid
               @enderror"
-                                placeholder="No Barang.." id="name" name="no_barang">
+                                placeholder="No Barang.." id="name" name="no_barang" value="{{ $kode_barang }}" readonly>
                             @error('nobarang')
                                 <div class="invalid-feedback">
                                     {{ $message }}
