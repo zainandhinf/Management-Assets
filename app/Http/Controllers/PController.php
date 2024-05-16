@@ -142,7 +142,14 @@ class PController extends Controller
     }
     public function goPengadaan()
     {
-        $keranjang = DB::table('keranjang_pengadaans')->select('*')->get();
+        $keranjangs = DB::table('keranjang_pengadaans')
+                    ->join('barangs', 'keranjang_pengadaans.no_barang', '=', 'barangs.no_barang')
+                    ->select('keranjang_pengadaans.*', 'barangs.nama_barang')
+                    ->get();
+
+        $total_harga = DB::table('keranjang_pengadaans')
+        ->sum('harga');
+
 
         $detail_barang = DB::table('detail_barangs')
             ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
@@ -156,8 +163,8 @@ class PController extends Controller
             'title' => 'Pengadaan',
             'active' => 'Pengadaan',
             'barangs' => $detail_barang,
-            'keranjangs' => keranjang_pengadaan::all(),
-
+            'keranjangs' => $keranjangs,
+            'total_harga' => $total_harga
         ]);
     }
     public function goPengadaanTambah()
@@ -240,11 +247,11 @@ class PController extends Controller
             'keterangan' => 'required|max:255',
         ]);
 
-        // $validatedData['tanggal_pengadaan'] = now()->format('Y-m-d');
+        $validatedData['no_asset'] = $request->input('kode_awal') .'-' . $request->input('no_asset').'-LC';
 
         keranjang_pengadaan::create($validatedData);
 
-        $request->session()->flash('success', 'Data telah berhasil dimasukkan!');
+        $request->session()->flash('success', 'Barang masuk kedalam List Pengadaan!');
 
         return redirect('/pengadaan');
     }
@@ -252,11 +259,12 @@ class PController extends Controller
     {
 
         $nama_barang = DB::table('keranjang_pengadaans')
-            ->select('nama_user')
+            ->select('*')
             ->where('id', '=', $request->input('id_keranjang'))
             ->get();
 
-        DB::table('users')->where('id', $request->input('id_user'))->delete();
+        DB::table('keranjang_pengadaans')
+                    ->where('id', $request->input('id_keranjang'))->delete();
 
         $pesanFlash = "Barang (Merk: *{$nama_barang[0]->merk} ) telah berhasil dihapus!";
 
@@ -300,6 +308,8 @@ class PController extends Controller
             ->orderBy('no_pengadaan', 'DESC')
             ->limit(1)
             ->get();
+
+
 
         // $no_count = DB::table('keranjang_pengadaans')->select('*')->count();
         // dd($no_last);

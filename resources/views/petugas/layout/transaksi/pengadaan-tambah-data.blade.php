@@ -69,6 +69,7 @@
                     <div class="input-group">
                         <span class="input-group-text" style="font-size: 14px; height: 38px;"
                             id="basic-addon1">{{ $data_barang->kode_awal }}-</span>
+                            <input type="hidden" value="{{ $data_barang->kode_awal }}" name="kode_awal">
                         <input type="text" placeholder="No asset.." name="no_asset" class="form-control mb-2"
                             value="" required>
                     </div>
@@ -78,7 +79,7 @@
                         required>
 
                     <label for="">Spesifikasi</label><br>
-                    <textarea class="form-control" name="spesifikasi" cols="15" rows="10"
+                    <textarea class="form-control" name="spesifikasi" cols="10" rows="3"
                         placeholder="*Contoh pengisian: Intel Core i7 Gen 13 Ram 2 dst.." required></textarea>
 
                     <label for="">Kondisi</label><br>
@@ -109,9 +110,9 @@
                     </select>
 
                     <label for="">Keterangan</label><br>
-                    <textarea class="form-control" name="keterangan" cols="15" rows="10" placeholder="Keterangan.." required></textarea>
+                    <textarea class="form-control mb-4" name="keterangan" cols="10" rows="3" placeholder="Keterangan.." required></textarea>
 
-                    <button type="submit" class="btn btn-primary mt-2 w-100" style="font-size: 14px;">Tambah Data</button>
+                    <button type="submit" class="btn btn-primary mt-2 w-100" style="font-size: 14px;"><i class="fa fa-list me-2"></i>+ Tambah ke List</button>
                 </form>
 
             </div>

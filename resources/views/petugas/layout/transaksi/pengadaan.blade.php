@@ -114,10 +114,33 @@
                             $no_pengadaan =
                                 'P' . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') . $no_pengadaan_last;
                         @endphp
-                        <label style="font-size: 16px;"><b>No. Pengadaan</b></label><br>
-                        <input class="form-control w-50" type="text" value="{{ $no_pengadaan }}" name="no_pengadaan" style="background: #eee" readonly>
-                        <label style="font-size: 16px;"><b>Tanggal Pengadaan</b></label><br>
-                        <input class="form-control w-50 mb-3" type="date" value="{{ now()->format('Y-m-d') }}" name="tanggal_pengadaan" style="background: #eee" readonly>
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <label style="font-size: 16px;"><b>No. Pengadaan</b></label><br>
+                                <input class="form-control mb-2" type="text" value="{{ $no_pengadaan }}" name="no_pengadaan" style="background: #eee" readonly>
+
+                                <label style="font-size: 16px;">Tanggal Pengadaan</label><br>
+                                <input class="form-control mb-2" type="date" value="{{ now()->format('Y-m-d') }}" name="tanggal_pengadaan" style="background: #eee" readonly>
+
+                            </div>
+                            <div class="col-md-6">
+
+                                <label style="font-size: 16px;">Pemeriksa</label><br>
+                                <input class="form-control mb-2" type="text" value="[{{ auth()->user()->nik }}] {{  auth()->user()->nama_user }}" name="no_pengadaan" style="background: #eee" readonly>
+
+                                <label style="font-size: 16px;">Total Harga (Rp.)</label><br>
+                                <input class="form-control mb-2" type="text" value="Rp. {{ number_format($total_harga) }}" name="total_harga" style="background: #eee" readonly>
+
+                            </div>
+                            <strong>*Harap kembali periksa dengan teliti...</strong>
+                        </div>
+
+
+
+                        <hr>
+
                         <table class="table table-striped" id="data-tables-keranjang">
                             <thead>
                                 <tr>
@@ -126,11 +149,12 @@
                                     {{-- <th>Alamat</th> --}}
                                     {{-- <th>No Telepon</th> --}}
                                     <th>Kode</th>
+                                    <th>Nama Barang</th>
                                     <th>Merk</th>
                                     {{-- <th>Tanggal Pengadaan</th> --}}
                                     <th>Jenis Pengadaan</th>
                                     <th>Kondisi</th>
-                                    <th>Status</th>
+                                    {{-- <th>Status</th> --}}
                                     <th>Harga</th>
                                     <th>Keterangan</th>
                                     <th data-searchable="false">Action</th>
@@ -148,11 +172,12 @@
                                         <b>{{ $keranjang->kode_barcode }}</b> <br>No Asset:
                                         <b>{{ $keranjang->no_asset }}</b>
                                     </td>
+                                    <td>{{ $keranjang->nama_barang }}</td>
                                     <td>{{ $keranjang->merk }}, {{ $keranjang->spesifikasi }}</td>
                                     {{-- <td>{{ $keranjang->tanggal_pengadaan }}</td> --}}
                                     <td>{{ $keranjang->jenis_pengadaan }}</td>
                                     <td>{{ $keranjang->kondisi }}</td>
-                                    <td>{{ $keranjang->status }}</td>
+                                    {{-- <td>{{ $keranjang->status }}</td> --}}
                                     <td>Rp. {{ number_format($keranjang->harga) }}</td>
                                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
@@ -171,7 +196,7 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
                         Cancel
                     </button>
-                    <button type="submit" class="btn btn-primary" style="font-size: 14px;">Create Data</button>
+                    <button type="submit" class="btn btn-success" style="font-size: 14px;">Checkout!</button>
                 </div>
                 </form>
             </div>
@@ -230,7 +255,7 @@
         </div>
     @endforeach
     {{-- end modal delete data keranjang --}}
-    
+
     {{-- modal delete data detail --}}
     @foreach ($barangs as $barang)
         <div class="modal modal-blur fade" id="deletedata{{ $barang->id }}" tabindex="-1" role="dialog"

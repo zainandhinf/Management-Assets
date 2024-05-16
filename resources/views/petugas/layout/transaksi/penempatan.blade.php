@@ -2,65 +2,67 @@
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
-        {{-- <div class="row">
-            <div class="col-md-4"> <button onclick="ShowModal1()" type="button" class="btn btn-warning btn-sm mt-2 mb-2 w-100"
-                    data-bs-toggle="modal" data-bs-target="#adddata">
-                    <i class="fa-solid fa-cart-flatbed"></i>
-                    List Pengadaan
-                </button></div>
-            <div class="col-md-8"> <a href="/pengadaan-tambah" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
-                    <i class="fa-solid fa-square-plus"></i>
-                    Tambah Pengadaan Baru
-                </a></div>
-        </div> --}}
 
-        <table class="table table-striped" id="data-tables">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    {{-- <th>Foto Profil</th> --}}
-                    <th>Kode</th>
-                    {{-- <th>Alamat</th> --}}
-                    {{-- <th>No Telepon</th> --}}
-                    <th>Merk</th>
-                    <th>Tanggal Pengadaan</th>
-                    {{-- <th>Jenis Pengadaan</th> --}}
-                    <th>Kondisi</th>
-                    {{-- <th>Status</th> --}}
-                    <th>Harga</th>
-                    {{-- <th>Keterangan</th> --}}
-                    <th data-searchable="false">Action</th>
+        <div class="bg-secondary ps-2 text-white w-30">
+            Informasi Penempatan
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-8">
+
+                <table class="w-100">
+
+                    <tr>
+                    <td>No. Penempatan</td>
+                    <td>: PNMPTN-11111</td>
                 </tr>
-            </thead>
-            @php
-                $no = 1;
-            @endphp
-            @foreach ($barangs as $barang)
                 <tr>
-                    <td>{{ $no++ }}</td>
-                    {{-- <td>{{ $city->id }}</td> --}}
-                    {{-- <td>lorem</td> --}}
-                    <td>No Barang: <b>{{ $barang->no_barang }}</b> <br>Barcode: <b>{{ $barang->kode_barcode }}</b> <br>No
-                        Asset: <b>{{ $barang->no_asset }}</b> </td>
-                    <td>{{ $barang->merk }}, {{ $barang->spesifikasi }}</td>
-                    <td>{{ $barang->tanggal_pengadaan }}</td>
-                    {{-- <td>{{ $barang->jenis_pengadaan }}</td> --}}
-                    <td>{{ $barang->kondisi }}</td>
-                    {{-- <td>{{ $barang->status }}</td> --}}
-                    <td>Rp. {{ number_format($barang->harga) }}</td>
-                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                    {{-- <td>{{ $barang->keterangan }}</td> --}}
+                    <td>Tgl Penempatan</td>
+                    <td>: Hari ini</td>
+                </tr>
+                <tr>
+                    <td>Lokasi Penempatan</td>
                     <td>
-                        {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $barang->id }}"
-                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button> --}}
-                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $barang->id }}"
-                            class="btn btn-danger mt-1">
-                            <i class="fa fa-trash"></i>
-                        </button>
+                        <select class="form-select" name="" id="">
+                            <option value="">Ruangan siksa</option>
+                        </select>
                     </td>
                 </tr>
-            @endforeach
+                <tr>
+                    <td>Keterangan</td>
+                    <td>
+                        <textarea class="form-control" name="" id="" cols="30" rows="5"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+            {{-- <label for="">No Penempatan</label> --}}
+        </div>
+        <div class="bg-secondary ps-2 text-white w-30">
+            Barang yang akan ditempatkan
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label for="">Scan Barcode / Kode Barang</label>
+                <input type="text" value="" class="form-control">
+            </div>
+        </div>
+
+        <hr>
+
+        <h5>
+            <strong>List Penempatan Barang</strong>
+        </h5>
+
+        <table border="1">
+            <tr>
+                <td>a</td>
+                <td>a</td>
+                <td>a</td>
+                <td>a</td>
+                <td>a</td>
+                <td>a   </td>
+            </tr>
         </table>
     </div>
 
