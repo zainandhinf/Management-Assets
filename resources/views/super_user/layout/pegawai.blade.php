@@ -27,7 +27,7 @@
             @foreach ($pegawais as $pegawai)
                 <tr>
                     <td>{{ $no++ }}</td>
-                    <td><img src="{{ asset('storage/' . $pegawai->foto) }}" class="rounded rounded-circle" style="width: 50px;"
+                    <td><img src="{{ asset('storage/' . $pegawai->foto) }}" class="rounded rounded-circle" style="width: 60px; height: 60px;"
                             alt=""></td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}

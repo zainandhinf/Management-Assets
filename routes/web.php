@@ -88,21 +88,6 @@ Route::post('/addpeserta', [SUController::class, 'addPeserta']);
 Route::put('/editpeserta', [SUController::class, 'editPeserta']);
 Route::delete('/deletepeserta', [SUController::class, 'deletePeserta']);
 Route::get('/getUserByNik', [SUController::class, 'getUserByNik']);
-// <!-- Route::get('/check-room-availability', function (Request $request) {
-//     $tanggalMulai = $request->input('tanggal_mulai');
-//     $tanggalSelesai = $request->input('tanggal_selesai');
-//     $idRuangan = $request->input('id_ruangan');
-
-//     // Lakukan logika untuk memeriksa ketersediaan ruangan
-//     // Misalnya, dapatkan daftar reservasi ruangan pada tanggal tersebut
-
-//     $ruangan = ruangan::findOrFail($idRuangan);
-
-//     $available = $ruangan->checkAvailability($tanggalMulai, $tanggalSelesai);
-
-//     return response()->json(['available' => $available]);
-// }); -->
-
 // end end crud super user //
 
 //petugas - Koordinator

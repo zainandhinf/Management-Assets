@@ -59,6 +59,8 @@ class SUController extends Controller
 
         $kategoris = kategori_barang::all();
 
+        $kode = barang::generateKode();
+
 
         $kategori_barang = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
@@ -70,6 +72,7 @@ class SUController extends Controller
             'title' => 'Data Barang',
             'active' => 'Data Barang',
             'cek' => $cekKategori,
+            'kode_barang' => $kode,
             'barangs' => $kategori_barang,
             'kategoris' => $kategoris,
             // 'kategori_barang' => $kategori_barang,
@@ -341,7 +344,7 @@ class SUController extends Controller
             'foto' => 'required|file'
         ]);
 
-        // dd($request);    
+        // dd($request);
         $validatedData['foto'] = $request->file('foto')->store('fotopegawai');
 
         pegawai::create($validatedData);
@@ -635,10 +638,11 @@ class SUController extends Controller
     {
         foreach ($request->file('foto') as $file) {
             $fileLocation = $file->store('fotoruangan');
+            $noRuangan = $request->input('no_ruangan');
 
             image_ruangan::create([
                 'image' => $fileLocation,
-                'id_ruangan' => $request->input('id_ruangan')
+                'no_ruangan' => $noRuangan,
             ]);
         }
 
@@ -861,6 +865,9 @@ class SUController extends Controller
             ->where('id', '=', $request->input('id_training'))
             ->get();
 
+        $data_peserta = DB::table('peserta_trainings')
+                            ->where('id_training',  $request->input('id_training'))->delete();
+
         DB::table('trainings')->where('id', $request->input('id_training'))->delete();
 
         $pesanFlash = "Kategori barang (Nama Kategori: **{$nama[0]->nama_training}** ) telah berhasil dihapus!";
@@ -880,15 +887,31 @@ class SUController extends Controller
             ->select('*')
             ->where('id_training', '=', $request->input('id_training'))
             ->count();
+        $cekPeserta = DB::table('peserta_trainings')
+                            ->join('trainings', 'peserta_trainings.id_training', '=', 'trainings.id')
+                            ->where('peserta_trainings.nik', '=', $request->input('nik'))
+                            ->select('nik')
+                            ->count();
+
+                            // dd($cekPeserta);
+
         if ($kapasitas[0]->kapasitas == $jumlah_peserta_seluruh) {
             $request->session()->flash('error', 'Data peserta baru gagal ditambahkan! Kapasitas ruangan sudah maksimal!');
 
             return redirect('/peserta-training');
-        } else {
+
+
+        } else if ($cekPeserta > 0) {
+            $request->session()->flash('error', 'Data peserta baru gagal ditambahkan! Pegawai sudah memiliki Judul Training!');
+
+            return redirect('/peserta-training');
+           }  else {
             $validatedData = $request->validate([
                 'nik' => 'required',
                 'id_training' => 'required',
             ]);
+
+            // dd($validatedData);
 
             peserta_training::create($validatedData);
 

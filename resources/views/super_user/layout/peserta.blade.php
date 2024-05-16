@@ -59,8 +59,8 @@
                         <td>
                             {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id }}" style=""
                         class="btn btn-primary"><i class="fa-regular fa-eye"></i></button> --}}
-                            <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id_peserta }}" style=""
-                                class="btn btn-warning mt-1"><i class="fa fa-edit"></i></button>
+                            <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id_peserta }}"
+                                style="" class="btn btn-warning mt-1"><i class="fa fa-edit"></i></button>
                             <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $peserta->id_peserta }}"
                                 class="btn btn-danger">
                                 <i class="fa fa-trash"></i>
@@ -95,11 +95,12 @@
                     <form action="/addpeserta" method="post">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-6">
                                 <div class="form-group">
+
                                     <label for="nik" class="col-form-label">NIK :</label>
                                     <input style="font-size: 14px;" type="text"
-                                        class="form-control @error('nik') is-invalid @enderror" placeholder="NIK.."
+                                        class="form-control @error('nik') is-invalid @enderror" placeholder="Tekan TAB setelah selesai input.."
                                         id="nik" required>
                                     {{-- @php
                                         $peserta_trainings = DB::table('pegawais')->select('*')->get();
@@ -117,12 +118,24 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <label for="foto" class="col-form-label">Foto :</label><br>
-                                    <img id="foto" src="" class="rounded rounded-circle" style="width: 50px;"><br>
+                                    {{-- <label for="foto" class="col-form-label">Foto :</label><br> --}}
                                     <label for="nama" class="col-form-label">Nama :</label>
                                     <input type="text" id="nama" class="form-control" disabled>
                                     <label for="jenis_kelamin" class="col-form-label">Jenis Kelamin :</label>
                                     <input type="text" id="jenis_kelamin" class="form-control" disabled>
+
+                                </div>
+                            </div>
+                            <div class="col-6" style="display: flex; align-items: center; justify-content: center;">
+
+                                <img id="foto" src="" class="rounded rounded-circle" width="230px" height="230px"><br>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
                                     <label for="alamat" class="col-form-label">Alamat :</label>
                                     <input type="text" id="alamat" class="form-control" disabled>
                                     <label for="no_telepon" class="col-form-label">No Telepon :</label>
@@ -132,28 +145,33 @@
                                     <input type="hidden" id="nik-2" name="nik" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="id_training" class="col-form-label">Training :</label>
-                                @php
-                                    $trainings = DB::table('trainings')->select('*')->get();
-                                @endphp
-                                <div class="input-group">
-                                    <select style="font-size: 14px;"
-                                        class="form-select @error('id_training') is-invalid @enderror" name="id_training">
-                                        @foreach ($trainings as $training)
-                                            <option value="{{ $training->id }}">{{ $training->nama_training }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('id_training')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
                         </div>
+                        <hr>
+
+                        <center><b>
+
+                            <label for="id_training" class="col-form-label "><h5>
+                                    Judul Training</h5></label>
+                        </b></center>
+                        @php
+                            $trainings = DB::table('trainings')->select('*')->get();
+                        @endphp
+                        <div class="input-group">
+                            <select style="font-size: 14px;"
+                                class="form-select @error('id_training') is-invalid @enderror" name="id_training">
+                                @foreach ($trainings as $training)
+                                    <option value="{{ $training->id }}">{{ $training->nama_training }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('id_training')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                 </div>
                 <div class="modal-footer">
+
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
                         Cancel
                     </button>
@@ -182,42 +200,42 @@
                             <input type="hidden" value="{{ $peserta->id_peserta }}" name="id_peserta">
                             <div class="row">
                                 {{-- <div class="col-md-6"> --}}
-                                    <div= class="form-group">
-                                        <label for="name" class="col-form-label">Nama Peserta :</label>
-                                        <input style="font-size: 14px;" type="text"
-                                            class="form-control @error('nama')
+                                <div= class="form-group">
+                                    <label for="name" class="col-form-label">Nama Peserta :</label>
+                                    <input style="font-size: 14px;" type="text"
+                                        class="form-control @error('nama')
                   is-invalid
               @enderror"
-                                            placeholder="Nama training.." id="name" name="nama"
-                                            value="{{ $peserta->nama_user }}" required>
-                                        @error('nama')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                        <label for="name" class="col-form-label">Jenis Kelamin :</label>
-                                        <div class="input-group">
-                                            <select style="font-size: 14px;"
-                                                class="form-select @error('jenis_kelamin')
+                                        placeholder="Nama training.." id="name" name="nama"
+                                        value="{{ $peserta->nama_user }}" required>
+                                    @error('nama')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <label for="name" class="col-form-label">Jenis Kelamin :</label>
+                                    <div class="input-group">
+                                        <select style="font-size: 14px;"
+                                            class="form-select @error('jenis_kelamin')
                                     is-invalid
                                 @enderror"
-                                                name="jenis_kelamin">
-                                                @if ($peserta->jenis_kelamin == 'L')
-                                                    <option value="L">Laki-Laki</option>
-                                                    <option value="P">Perempuan</option>
-                                                @elseif($peserta->jenis_kelamin == 'P')
-                                                    <option value="P">Perempuan</option>
-                                                    <option value="L">Laki-Laki</option>
-                                                @endif
-                                            </select>
-                                        </div>
-                                        @error('jenis_kelamin')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                            name="jenis_kelamin">
+                                            @if ($peserta->jenis_kelamin == 'L')
+                                                <option value="L">Laki-Laki</option>
+                                                <option value="P">Perempuan</option>
+                                            @elseif($peserta->jenis_kelamin == 'P')
+                                                <option value="P">Perempuan</option>
+                                                <option value="L">Laki-Laki</option>
+                                            @endif
+                                        </select>
                                     </div>
-                                        {{-- <label for="name" class="col-form-label">NBPT :</label>
+                                    @error('jenis_kelamin')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                            </div>
+                            {{-- <label for="name" class="col-form-label">NBPT :</label>
                                         <div class="input-group">
                                             <input style="font-size: 14px;" type="text"
                                                 class="form-control @error('nbpt')
@@ -288,17 +306,17 @@
                                         </div>
                                     @enderror
                                 </div> --}}
-                            </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
-                            Cancel
-                        </button>
-                        <button type="submit" class="btn btn-primary" style="font-size: 14px;">Edit Data</button>
-                    </div>
-                    </form>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" style="font-size: 14px;">Edit Data</button>
+                </div>
+                </form>
             </div>
+        </div>
 
         </div>
     @endforeach
@@ -361,7 +379,9 @@
                     $.ajax({
                         url: '/getUserByNik',
                         type: 'GET',
-                        data: { nik: nik },
+                        data: {
+                            nik: nik
+                        },
                         success: function(response) {
                             if (response.status === 'success') {
                                 var user = response.data;
