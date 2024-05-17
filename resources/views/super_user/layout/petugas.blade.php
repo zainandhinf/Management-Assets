@@ -14,7 +14,7 @@
                     <th>Foto</th>
                     <th>NIK</th>
                     <th>Nama</th>
-                    <th>Gender</th>
+                    <th>L/P</th>
                     {{-- <th>Alamat</th> --}}
                     {{-- <th>No Telepon</th> --}}
                     <th>Username</th>
@@ -351,7 +351,7 @@
                                                 {{ $message }}
                                             </div>
                                         @enderror
-                                        
+
                                     </div>
                                 </div>
                             </div>

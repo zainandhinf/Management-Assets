@@ -11,7 +11,7 @@
                 Peserta
             </a>
         </div>
-        @if ($cek > 0)
+        @if ($cek > 0 && $cek_pegawai > 0)
             <button onclick="ShowModal1()" type="button" class="btn btn-primary btn-sm mt-2 mb-2" data-bs-toggle="modal"
                 data-bs-target="#adddata">
                 <i class="fa-solid fa-folder-plus me-1"></i> Tambah Data
@@ -23,8 +23,8 @@
                         <th>Foto</th>
                         <th>NIK</th>
                         <th>Nama</th>
-                        <th>Gender</th>
-                        <th>No Telepon</th>
+                        <th>L/P</th>
+                        <th>Organisasi</th>
                         <th>Training</th>
                         <th data-searchable="false">Action</th>
                     </tr>
@@ -43,24 +43,24 @@
                         <td>{{ $no++ }}</td>
                         {{-- <td>{{ $city->id }}</td> --}}
                         {{-- <td>lorem</td> --}}
-                        <td><img src="{{ asset('storage/' . $peserta->foto) }}" class="rounded rounded-circle"
+                        <td><img src="{{ asset('storage/' . $peserta->foto) }}" style="width: 45px; height: 45px;" class="rounded rounded-circle"
                                 style="width: 50px;" alt=""></td>
                         <td>{{ $peserta->nik }}</td>
                         <td>{{ $peserta->nama_user }}</td>
                         <td>
                             @if ($peserta->jenis_kelamin === 'L')
-                                Laki-Laki
+                                L
                             @else
-                                Perempuan
+                                P
                             @endif
                         </td>
-                        <td>{{ $peserta->no_telepon }}</td>
+                        <td>{{ $peserta->organisasi }}</td>
                         <td>{{ $training[0]->nama_training }}</td>
                         <td>
                             {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id }}" style=""
                         class="btn btn-primary"><i class="fa-regular fa-eye"></i></button> --}}
-                            <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id_peserta }}"
-                                style="" class="btn btn-warning mt-1"><i class="fa fa-edit"></i></button>
+                            {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id_peserta }}"
+                                style="" class="btn btn-warning mt-1"><i class="fa fa-edit"></i></button> --}}
                             <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $peserta->id_peserta }}"
                                 class="btn btn-danger">
                                 <i class="fa fa-trash"></i>
@@ -72,8 +72,8 @@
         @else
             <b class="mt-3">
                 <h5>
-                    *Note: Data Peserta Training hanya bisa dibuat ketika kamu sudah mengisi <a href="/training">Data
-                        Training</a> terlebih dahulu !
+                    *Note: Data Peserta Training hanya bisa dibuat ketika kamu sudah mengisi <a href="/pegawai">Data
+                        Pegawai</a> terlebih dahulu !
                 </h5>
             </b>
         @endif

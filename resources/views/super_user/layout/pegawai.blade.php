@@ -13,7 +13,7 @@
                     <th>Foto</th>
                     <th>NIK</th>
                     <th>Nama</th>
-                    <th>Gender</th>
+                    <th>L/P</th>
 
                     {{-- <th>Alamat</th> --}}
                     <th>No Telp</th>
@@ -80,7 +80,7 @@
                                     <label for="name" class="col-form-label">NIK :</label>
                                     <input style="font-size: 14px;" type="text"
                                         class="form-control @error('nik') is-invalid @enderror" placeholder="NIK.."
-                                        id="name" name="nik">
+                                        id="name" name="nik" required>
                                     @error('nik')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -89,7 +89,7 @@
                                     <label for="name" class="col-form-label">Nama pegawai :</label>
                                     <input style="font-size: 14px;" type="text"
                                         class="form-control @error('nama_user') is-invalid @enderror"
-                                        placeholder="Nama pegawai.." id="name" name="nama_user">
+                                        placeholder="Nama pegawai.." id="name" name="nama_user" required>
                                     @error('nama_user')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -133,25 +133,25 @@
                                     <label for="name" class="col-form-label">Organisasi :</label>
                                     <input style="font-size: 14px;" type="text"
                                         class="form-control @error('organisasi') is-invalid @enderror"
-                                        placeholder="Organisasi.." id="name" name="organisasi">
+                                        placeholder="Organisasi.." id="name" name="organisasi" required>
                                     @error('organisasi')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
+                                    <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none; width: 120px; height: 120px;"
+                                        id="img-preview">
                                     <label for="name" class="col-form-label">Foto :</label>
                                     <br>
                                     <input style="font-size: 14px;" type="file"
                                         class="form-control mb-3 @error('foto') is-invalid @enderror"
                                         placeholder="Choose Photo.." id="foto" name="foto"
-                                        onchange="previewImage()">
+                                        onchange="previewImage()" required>
                                     @error('foto')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none;"
-                                        id="img-preview">
 
                                 </div>
                             </div>
@@ -265,19 +265,35 @@
                                         @enderror
                                         <label for="name" class="col-form-label">Foto :</label>
                                         <br>
-                                        <img class="img-preview img-fluid col-3 rounded rounded-circle"
-                                        id="img-preview-edit" src="{{ asset('storage/' . $pegawai->foto) }}">
+                                        <div class="row d-flex w-100 align-items-center">
+                                            <div class="col-md-4">
+
+                                                <img class="img-preview img-fluid col-3 rounded rounded-circle"
+                                            id="img-preview" src="{{ asset('storage/' . $pegawai->foto) }}" style="width: 120px; height: 120px;">
+
+
+                                            </div>
+                                            <div class="col-md-4 text-center"><i class="fa-solid fa-circle-chevron-right"></i><br>Ubah menjadi</i></div>
+                                            <div class="col-md-4">
+                                                <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none;width: 120px; height: 120px; "
+                                                id="img-preview-edit">
+                                            </div>
+
+
+                                        </div>
                                         <br>
                                         <label for="name" class="col-form-label">New Foto :</label>
                                         <input style="font-size: 14px;" type="file"
                                             class="form-control mb-3 @error('foto') is-invalid @enderror"
-                                            placeholder="Choose Photo.." id="foto-edit" name="foto"
-                                            onchange="previewImageedit()">
+                                            placeholder="Choose Photo.." id="new_foto" name="foto"
+                                            onchange="previewImageEdit()">
                                         @error('foto')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
                                         @enderror
+
+
                                     </div>
                                 </div>
                             </div>
@@ -352,6 +368,20 @@
             const image = document.getElementById("foto")
             console.log(image);
             const imgPreview = document.getElementById('img-preview');
+
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
+        function previewImageEdit() {
+            const image = document.getElementById("new_foto")
+            console.log(image);
+            const imgPreview = document.getElementById('img-preview-edit');
 
             imgPreview.style.display = 'block';
 

@@ -132,6 +132,14 @@ class PController extends Controller
             'cek' => $cek,
         ]);
     }
+    public function goSchedule()
+    {
+        return view('petugas.layout.schedule-training')->with([
+            'title' => 'Jadwal Training',
+            'active' => 'Jadwal Training',
+
+        ]);
+    }
     public function goProfile()
     {
         return view('petugas.layout.profile')->with([

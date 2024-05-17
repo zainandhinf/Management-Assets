@@ -118,7 +118,7 @@ body {
                 <tr>
                     <td style="padding: 10px;">Username</td>
                     <td>
-                        <input class="form-control mb-2" type="text" id="username" name="username" placeholder="Username" required>
+                        <input class="form-control mb-2" type="text" id="username" name="username" placeholder="Username" autocomplete="off" autofocus required>
                     </td>
                 </tr>
                 <tr>
