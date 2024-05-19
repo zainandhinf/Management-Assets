@@ -81,6 +81,7 @@ Route::delete('/deleteimgruangan', [SUController::class, 'deleteimgRuangan']);
 //training
 Route::post('/addtraining', [SUController::class, 'addTraining']);
 Route::put('/edittraining', [SUController::class, 'editTraining']);
+Route::put('/edit-infotraining', [SUController::class, 'editInfoTraining']);
 Route::delete('/deletetraining', [SUController::class, 'deleteTraining']);
 
 //peserta training
@@ -98,7 +99,7 @@ Route::get('/barang-koordinator', [PController::class, 'goBarang']);
 Route::get('/kategori-barang-koordinator', [PController::class, 'goKBarang']);
 Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
-Route::get('/training-koordinator', [PController::class, 'goTraining']);
+Route::get('/training-koordinator', [PController::class, 'goSchedule']);
 Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
 
 Route::get('/pengadaan', [PController::class, 'goPengadaan']);

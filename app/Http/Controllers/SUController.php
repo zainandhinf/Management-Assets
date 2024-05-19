@@ -113,10 +113,16 @@ class SUController extends Controller
     {
         $cek1 = DB::table('users')->where('role', '=', 'petugas')->count();
         $cek2 = DB::table('ruangans')->count();
+
+
+
+                    // dd($total_peserta);
+
         return view('super_user.layout.training')->with([
             'title' => 'Data Training',
             'active' => 'Data Training',
             'trainings' => training::all(),
+            // 'total_peserta' => $total_peserta,
             'cek1' => $cek1,
             'cek2' => $cek2,
         ]);
@@ -124,6 +130,9 @@ class SUController extends Controller
     public function goPeserta()
     {
         $cek = DB::table('trainings')->count();
+
+        $cek_pegawai = DB::table('pegawais')->count();
+
         $pesertas = DB::table('peserta_trainings')
             ->select('pegawais.foto', 'pegawais.nik', 'pegawais.nama_user', 'pegawais.jenis_kelamin', 'pegawais.no_telepon', 'pegawais.organisasi', 'peserta_trainings.id as id_peserta', 'trainings.nama_training', 'trainings.id as id_training')
             ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
@@ -134,6 +143,7 @@ class SUController extends Controller
             'active' => 'Data Peserta Training',
             'pesertas' => $pesertas,
             'cek' => $cek,
+            'cek_pegawai' => $cek_pegawai,
         ]);
     }
     public function goProfile()
@@ -346,7 +356,10 @@ class SUController extends Controller
             'foto' => 'required|file'
         ]);
 
+
         // dd($request);
+        $validatedData['organisasi'] = strtoupper($request->input('organisasi'));
+
         $validatedData['foto'] = $request->file('foto')->store('fotopegawai');
 
         pegawai::create($validatedData);
@@ -787,6 +800,45 @@ class SUController extends Controller
 
 
     }
+
+    public function editInfoTraining(Request $request){
+
+        $validatedData = $request->validate([
+            'nama_training' => '',
+            'tanggal_mulai' => '',
+            'tanggal_selesai' => 'nullable',
+            'waktu_mulai' => '',
+            'waktu_selesai' => '',
+            'no_ruangan' => '',
+            'total_peserta' => '',
+            'instruktur' => '',
+            'id_petugas' => '',
+            'keterangan' => ''
+        ]);
+
+
+        $validatedData['total_peserta'] = 0;
+
+
+
+        if ($request->tanggal_selesai) {
+            $validatedData['tanggal_selesai'] = $request->input('tanggal_selesai');
+        } else {
+            $validatedData['tanggal_selesai'] = $request->input('tanggal_mulai');
+        }
+
+        // dd($validatedData);
+        DB::table('trainings')
+            ->where('id', $request->input('id_training'))
+            ->update($validatedData);
+
+        $request->session()->flash('success', 'Training telah diedit!');
+
+        return redirect('/training');
+
+
+    }
+
     public function editTraining(Request $request, training $training)
     {
         $cek = DB::table('trainings')
@@ -811,7 +863,7 @@ class SUController extends Controller
 
 
 
-        // dd($cek);
+
 
 
         if ($cek->isEmpty()) {
