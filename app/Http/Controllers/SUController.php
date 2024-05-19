@@ -16,6 +16,7 @@ use App\Models\training;
 use App\Models\peserta_training;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Rules\SquareImage;
 
 class SUController extends Controller
 {
@@ -275,6 +276,7 @@ class SUController extends Controller
             'username' => 'required|max:255',
             'password' => 'required|max:8',
             'role' => 'required',
+            'foto' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048', new SquareImage],
         ]);
 
         $validatedData['password'] = Hash::make($request->input('password'));

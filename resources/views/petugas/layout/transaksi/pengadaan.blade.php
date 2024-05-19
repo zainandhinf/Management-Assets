@@ -40,7 +40,7 @@
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
-                    <td>No Barang: <b>{{ $barang->no_barang }}</b> <br>Barcode: <b>{{ $barang->kode_barcode }}</b> <br>No
+                    <td>No Barang: <b>{{ $barang->no_barang }}</b> <br>Barcode: <b>{!! DNS1D::getBarcodeHTML($barang->kode_barcode, 'UPCA') !!}{{ $barang->kode_barcode }}</b> <br>No
                         Asset: <b>{{ $barang->no_asset }}</b> </td>
                     <td>{{ $barang->merk }}, {{ $barang->spesifikasi }}</td>
                     <td>{{ $barang->tanggal_pengadaan }}</td>
@@ -112,7 +112,7 @@
                             }
 
                             $no_pengadaan =
-                                'P' . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') . $no_pengadaan_last;
+                                'PD-' . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') . $no_pengadaan_last;
                         @endphp
 
                         <div class="row">
@@ -169,7 +169,7 @@
                                     {{-- <td>{{ $city->id }}</td> --}}
                                     {{-- <td>lorem</td> --}}
                                     <td>No Barang: <b>{{ $keranjang->no_barang }}</b> <br>Barcode:
-                                        <b>{{ $keranjang->kode_barcode }}</b> <br>No Asset:
+                                        <b>{!! DNS1D::getBarcodeHTML($keranjang->kode_barcode, 'UPCA') !!}{{ $keranjang->kode_barcode }}</b> <br>No Asset:
                                         <b>{{ $keranjang->no_asset }}</b>
                                     </td>
                                     <td>{{ $keranjang->nama_barang }}</td>
@@ -196,7 +196,7 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
                         Cancel
                     </button>
-                    <button type="submit" class="btn btn-success" style="font-size: 14px;">Checkout!</button>
+                    <button type="submit" class="btn btn-success" style="font-size: 14px;">Add!</button>
                 </div>
                 </form>
             </div>

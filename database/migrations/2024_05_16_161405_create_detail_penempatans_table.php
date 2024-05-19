@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('detail_penempatans', function (Blueprint $table) {
             $table->id();
             $table->string('no_penempatan');
-            $table->date('no_barang');
-            $table->date('kode_barcode');
+            $table->string('no_barang');
+            $table->string('kode_barcode');
             $table->timestamps();
         });
     }
