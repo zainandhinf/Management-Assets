@@ -8,9 +8,9 @@
                     <i class="fa-solid fa-cart-flatbed"></i>
                     List Barang
                 </button></div>
-            <div class="col-md-8"> <a href="/penempatan-tambah" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
+            <div class="col-md-8"> <a href="/mutasi-tambah" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
                     <i class="fa-solid fa-square-plus"></i>
-                    Tambah Penempatan Baru
+                    Tambah Mutasi Baru
                 </a></div>
         </div>
 
@@ -23,9 +23,9 @@
                     {{-- <th>Alamat</th> --}}
                     {{-- <th>No Telepon</th> --}}
                     <th>Merk</th>
-                    <th>Tanggal Penempatan</th>
+                    <th>Tanggal Mutasi</th>
                     {{-- <th>Jenis Pengadaan</th> --}}
-                    <th>Lokasi Penempatan</th>
+                    <th>Lokasi Penempatan Baru</th>
                     {{-- <th>Status</th> --}}
                     <th>Keterangan</th>
                     {{-- <th>Keterangan</th> --}}
@@ -35,28 +35,28 @@
             @php
                 $no = 1;
             @endphp
-            @foreach ($penempatans as $penempatan)
+            @foreach ($mutasis as $mutasi)
                 <tr>
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
-                    <td>No Barang: <b>{{ $penempatan->no_barang }}</b> <br>Barcode:
-                        <b>{!! DNS1D::getBarcodeHTML($penempatan->kode_barcode, 'UPCA') !!}{{ $penempatan->kode_barcode }}</b> <br>No
-                        Asset: <b>{{ $penempatan->no_asset }}</b>
+                    <td>No Barang: <b>{{ $mutasi->no_barang }}</b> <br>Barcode:
+                        <b>{!! DNS1D::getBarcodeHTML($mutasi->kode_barcode, 'UPCA') !!}{{ $mutasi->kode_barcode }}</b> <br>No
+                        Asset: <b>{{ $mutasi->no_asset }}</b>
                     </td>
-                    <td>{{ $penempatan->merk }}, {{ $penempatan->spesifikasi }}</td>
-                    <td>{{ $penempatan->tanggal_penempatan }}</td>
-                    {{-- <td>{{ $penempatan->jenis_pengadaan }}</td> --}}
-                    <td>{{ $penempatan->lokasi_penempatan }}</td>
-                    <td>{{ $penempatan->keterangan }}</td>
-                    {{-- <td>Rp. {{ number_format($penempatan->harga) }}</td> --}}
+                    <td>{{ $mutasi->merk }}, {{ $mutasi->spesifikasi }}</td>
+                    <td>{{ $mutasi->tanggal_mutasi }}</td>
+                    {{-- <td>{{ $mutasi->jenis_pengadaan }}</td> --}}
+                    <td>{{ $mutasi->lokasi_terbaru }}</td>
+                    <td>{{ $mutasi->keterangan_mutasi }}</td>
+                    {{-- <td>Rp. {{ number_format($mutasi->harga) }}</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                    {{-- <td>{{ $penempatan->keterangan }}</td> --}}
+                    {{-- <td>{{ $mutasi->keterangan }}</td> --}}
                     {{-- <td>
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $penempatan->id }}"
+                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $mutasi->id }}"
                             style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
-                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $penempatan->id }}"
+                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $mutasi->id }}"
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>

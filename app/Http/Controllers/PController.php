@@ -20,6 +20,9 @@ use App\Models\pengadaan;
 use App\Models\penempatan;
 use App\Models\keranjang_penempatan;
 use App\Models\detail_penempatan;
+use App\Models\mutasi;
+use App\Models\keranjang_mutasi;
+use App\Models\detail_mutasi;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -157,6 +160,8 @@ class PController extends Controller
             ->join('barangs', 'keranjang_pengadaans.no_barang', '=', 'barangs.no_barang')
             ->select('keranjang_pengadaans.*', 'barangs.nama_barang')
             ->get();
+            
+            
 
         $total_harga = DB::table('keranjang_pengadaans')
             ->sum('harga');
@@ -181,7 +186,7 @@ class PController extends Controller
     public function goPengadaanTambah()
     {
 
-        $noPengadaan = "PA-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+        $noPengadaan = "PD-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
         $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
             ->get();
@@ -199,10 +204,13 @@ class PController extends Controller
     }
     public function goPenempatan()
     {
-        $detail_barang = DB::table('detail_penempatans')
+        $detail_penempatan = DB::table('detail_penempatans')
             ->join('penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
             ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
             ->select('penempatans.tanggal_penempatan','penempatans.lokasi_penempatan','penempatans.keterangan', 'detail_barangs.*')
+            ->get();
+        $detail_barang = DB::table('detail_barangs')
+            ->select('*')
             ->get();
 
         // dd($keranjang);
@@ -211,13 +219,14 @@ class PController extends Controller
         return view('petugas.layout.transaksi.penempatan')->with([
             'title' => 'Penempatan',
             'active' => 'Penempatan',
+            'penempatans' => $detail_penempatan,
             'barangs' => $detail_barang,
         ]);
     }
     public function goPenempatanTambah()
     {
 
-        $noPengadaan = "PA-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+        $noPenempatan = "PN-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
         $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
             ->get();
@@ -231,7 +240,51 @@ class PController extends Controller
             'active' => 'Penempatan',
             'detail_barangs' => detail_barang::all(),
             'barangs' => $barangAll,
-            'noPengadaan' => $noPengadaan,
+            'noPenempatan' => $noPenempatan,
+            'today' => $today,
+            'keranjangs' => $keranjang
+        ]);
+    }
+    public function goMutasi()
+    {
+        $detail_mutasi = DB::table('detail_mutasis')
+            ->join('mutasis', 'detail_mutasis.no_mutasi', '=', 'mutasis.no_mutasi')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_mutasis.kode_barcode')
+            ->select('mutasis.tanggal_mutasi','mutasis.lokasi_terbaru','mutasis.keterangan as keterangan_mutasi', 'detail_barangs.*')
+            ->get();
+        $detail_barang = DB::table('detail_barangs')
+            ->select('*')
+            ->get();
+
+        // dd($keranjang);
+
+
+        return view('petugas.layout.transaksi.mutasi')->with([
+            'title' => 'Mutasi',
+            'active' => 'Mutasi',
+            'mutasis' => $detail_mutasi,
+            'barangs' => $detail_barang,
+        ]);
+    }
+    public function goMutasiTambah()
+    {
+
+        $noMutasi = "M-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+        $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
+        $today = date('Y-m-d');
+        $keranjang = DB::table('keranjang_mutasis')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_mutasis.kode_barcode')
+            // ->join('penempatans', 'penempatans.kode_barcode', '=', 'keranjang_mutasis.kode_barcode')
+            ->get();
+
+        return view('petugas.layout.transaksi.mutasi-tambah')->with([
+            'title' => 'Buat Mutasi',
+            'active' => 'Mutasi',
+            'detail_barangs' => detail_barang::all(),
+            'barangs' => $barangAll,
+            'no_mutasi' => $noMutasi,
             'today' => $today,
             'keranjangs' => $keranjang
         ]);
@@ -472,17 +525,100 @@ class PController extends Controller
 
         $validatedData['tanggal_penempatan'] = now()->format('Y-m-d');
 
+        $kode_barcodes = DB::table('keranjang_penempatans')->select('kode_barcode')->get();
 
         penempatan::create($validatedData);
+        
+        $validatedDataStatus['status'] = "Sudah Ditempatkan"; 
+
+        // dd($validatedDataStatus['status']);
+
+        foreach ($kode_barcodes as $kode_barcode) {
+            DB::table('detail_barangs')
+                ->where('kode_barcode', $kode_barcode->kode_barcode)
+                ->update($validatedDataStatus);
+        }
 
         DB::statement("INSERT INTO detail_penempatans (no_penempatan, no_barang, kode_barcode)
          SELECT '$request->no_penempatan', no_barang, kode_barcode FROM keranjang_penempatans");
 
         DB::table('keranjang_penempatans')->truncate();
 
+
         $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
 
         return redirect('/penempatan');
+    }
+    public function addKeranjangMutasi(Request $request)
+    {
+        $validatedData = $request->validate([
+            'no_mutasi' => 'required',
+            'kode_barcode' => 'required',
+        ]);
+
+        $no_barang = DB::table('detail_barangs')
+            ->select('no_barang')
+            ->where('kode_barcode', '=', $request->input('kode_barcode'))
+            ->first();
+
+        $validatedData['no_barang'] = $no_barang->no_barang;
+
+        keranjang_mutasi::create($validatedData);
+
+        $request->session()->flash('success', 'Barang masuk kedalam List Mutasi!');
+
+        return redirect('/mutasi-tambah');
+    }
+    public function deleteKeranjangMutasi(Request $request)
+    {
+
+        $nama_barang = DB::table('keranjang_mutasis')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_mutasis.kode_barcode')
+            ->where('keranjang_mutasis.no_mutasi', '=', $request->input('no_mutasi'))
+            ->first();
+
+        DB::table('keranjang_mutasis')
+            ->where('no_mutasi', $request->input('no_mutasi'))->delete();
+
+        $pesanFlash = "Barang (Merk: *{$nama_barang->merk} ) telah berhasil dihapus dari list!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/mutasi-tambah');
+    }
+    public function addMutasi(Request $request)
+    {
+        $validatedData = $request->validate([
+            'no_mutasi' => '',
+            'lokasi_terbaru' => '',
+            'keterangan' => '',
+        ]);
+
+        $validatedData['tanggal_mutasi'] = now()->format('Y-m-d');
+
+        // $kode_barcodes = DB::table('keranjang_mutasis')->select('kode_barcode')->get();
+
+        mutasi::create($validatedData);
+        
+        // $validatedDataStatus['status'] = "Sudah Ditempatkan di " . $request->input('lokasi_penempatan'); 
+
+        // dd($validatedDataStatus['status']);
+
+        // foreach ($kode_barcodes as $kode_barcode) {
+        //     DB::table('detail_barangs')
+        //         ->where('kode_barcode', $kode_barcode->kode_barcode)
+        //         ->update($validatedDataStatus);
+        // }
+
+        DB::statement("INSERT INTO detail_mutasis (no_mutasi, no_barang, kode_barcode)
+         SELECT '$request->no_mutasi', no_barang, kode_barcode FROM keranjang_mutasis");
+
+        DB::table('keranjang_mutasis')->truncate();
+
+
+        $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
+
+        return redirect('/mutasi');
     }
     // End Transaksi Penempatan
 

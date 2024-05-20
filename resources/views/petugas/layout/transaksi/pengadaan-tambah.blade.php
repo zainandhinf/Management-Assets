@@ -21,7 +21,7 @@
             <div class="form-group">
 
                 <label for="">No. Barang</label><br>
-                <input type="text" name="no_pengadaan" class="form-control mb-2 w-100" value="BB00001">
+                <input type="text" name="no_pengadaan" class="form-control mb-2 w-100" value="">
                 {{-- <label for="">No. Pengadaan</label><br>
                 <input type="text" name="no_pengadaan" class="form-control mb-2" value="BB00001">
                 <label for="">No. Pengadaan</label><br>
@@ -55,39 +55,46 @@
 
                     <table class="table table-striped" id="data-tables" style="font-size: 14px;">
                         <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Kode Barang</th>
-                                    <th>Nama</th>
-                                    <th>Kategori</th>
-                                    <th>Qty</th>
-                                    <th data-searchable="false">Action</th>
-                                </tr>
-                            </thead>
-                            @php
-                                $no = 1;
-                            @endphp
-                            @foreach ($barangs as $barang)
+                            <tr>
+                                <th>#</th>
+                                <th>Kode Barang</th>
+                                <th>Nama</th>
+                                <th>Kategori</th>
+                                <th>Qty</th>
+                                <th data-searchable="false">Action</th>
+                            </tr>
+                        </thead>
+                        @php
+                            $no = 1;
+                        @endphp
+                        @foreach ($barangs as $barang)
                             {{-- <form action="/pengadaan-tambah/{{ $barang->no_barang }}" method="post"> --}}
-                                {{-- @csrf --}}
-                                <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $barang->no_barang }}</td>
-                                    <td>{{ $barang->nama_barang }}</td>
-                                    <td>{{ $barang->nama_kategori }}</td>
-                                    <td>{{ $barang->qty }}</td>
-                                    <td>
-                                        <button style="margin-right: 10px" class="btn btn-info mr-2">
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-warning select-barang" data-no-barang="{{ $barang->no_barang }}">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
+                            {{-- @csrf --}}
+                            @php
+                                $qty = DB::table('detail_barangs')
+                                    ->join('barangs', 'detail_barangs.no_barang', '=', 'barangs.no_barang')
+                                    ->where('detail_barangs.no_barang', '=', $barang->no_barang)
+                                    ->count();
+                            @endphp
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $barang->no_barang }}</td>
+                                <td>{{ $barang->nama_barang }}</td>
+                                <td>{{ $barang->nama_kategori }}</td>
+                                <td>{{ $qty }}</td>
+                                <td>
+                                    <button style="margin-right: 10px" class="btn btn-info mr-2">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-warning select-barang"
+                                        data-no-barang="{{ $barang->no_barang }}">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
                                     {{-- </form> --}}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </table>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
@@ -98,8 +105,8 @@
         </div>
     </div>
 
-      {{-- Hidden Form --}}
-      <form id="form-pengadaan" action="/pengadaan-tambah-barang" method="post" style="display: none;">
+    {{-- Hidden Form --}}
+    <form id="form-pengadaan" action="/pengadaan-tambah-barang" method="post" style="display: none;">
         @csrf
         <input type="hidden" name="no_barang" id="input-no-barang">
     </form>
@@ -116,12 +123,11 @@
     {{-- end modal delete data --}}
 
     {{-- end modal --}}
-
 @endsection
 
 @section('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.select-barang').forEach(button => {
                 button.addEventListener('click', function() {
                     const noBarang = this.getAttribute('data-no-barang');
