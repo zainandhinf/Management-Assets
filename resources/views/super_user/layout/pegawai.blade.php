@@ -35,9 +35,9 @@
                     <td>{{ $pegawai->nama_user }}</td>
                     <td>
                         @if ($pegawai->jenis_kelamin === 'L')
-                            Laki-Laki
+                            L
                         @else
-                            Perempuan
+                            P
                         @endif
                     </td>
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}

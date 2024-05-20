@@ -116,6 +116,7 @@ class SUController extends Controller
 
 
 
+
                     // dd($total_peserta);
 
         return view('super_user.layout.training')->with([
@@ -682,31 +683,6 @@ class SUController extends Controller
     //training
     public function addTraining(Request $request)
     {
-
-        // dd($request);
-
-        // $cek = DB::table('trainings')
-        //     ->select('trainings.*', 'ruangans.ruangan')
-        //     ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
-        //     ->where('trainings.no_ruangan', '=', $request->no_ruangan)
-        //     ->whereBetween('trainings.tanggal_mulai', [$request->input('tanggal_mulai'), $request->input('tanggal_selesai')])
-        //     ->whereBetween('trainings.tanggal_selesai', [$request->input('tanggal_mulai'), $request->input('tanggal_selesai')])
-        //     ->get();
-        // $cek = DB::table('trainings')
-        // ->select('trainings.*', 'ruangans.ruangan')
-        // ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
-        // ->where('trainings.no_ruangan', '=', $request->no_ruangan)
-        // ->where(function($query) use ($request) {
-        //     $query->orWhere(function($subquery) use ($request) {
-        //         $subquery->where('trainings.tanggal_mulai', '>=', $request->input('tanggal_mulai'))
-        //                 ->where('trainings.tanggal_mulai', '<=', $request->input('tanggal_selesai'));
-        //     })->orWhere(function($subquery) use ($request) {
-        //         $subquery->where('trainings.tanggal_selesai', '>=', $request->input('tanggal_mulai'))
-        //                 ->where('trainings.tanggal_selesai', '<=', $request->input('tanggal_selesai'));
-        //     });
-        // })
-        // ->get();
-
         // WOrk tapi ga ngerti...
 
         $cek = DB::table('trainings')
@@ -787,17 +763,10 @@ class SUController extends Controller
 
 
         } else {
-            $request->session()->flash('error', 'Ruangan Terpakai Pada Tanggal Tersebut !');
+            $request->session()->flash('error', 'Ruangan Terpakai Pada Tanggal dan Jam Tersebut !');
 
             return redirect('/training');
         }
-
-
-
-
-
-
-
 
     }
 
@@ -832,7 +801,7 @@ class SUController extends Controller
             ->where('id', $request->input('id_training'))
             ->update($validatedData);
 
-        $request->session()->flash('success', 'Training telah diedit!');
+        $request->session()->flash('success', 'Informasi Training telah diedit!');
 
         return redirect('/training');
 
@@ -859,11 +828,25 @@ class SUController extends Controller
                             ->where('trainings.tanggal_selesai', '>=', $request->input('tanggal_selesai'));
                     });
             })
+            ->where(function ($query) use ($request) {
+                $query->where(function ($subquery) use ($request) {
+                    $subquery->where('trainings.waktu_mulai', '>=', $request->input('waktu_mulai'))
+                        ->where('trainings.waktu_mulai', '<=', $request->input('waktu_selesai'));
+                })
+                    ->orWhere(function ($subquery) use ($request) {
+                        $subquery->where('trainings.waktu_selesai', '>=', $request->input('waktu_mulai'))
+                            ->where('trainings.waktu_selesai', '<=', $request->input('waktu_selesai'));
+                    })
+                    ->orWhere(function ($subquery) use ($request) {
+                        $subquery->where('trainings.waktu_mulai', '<=', $request->input('waktu_mulai'))
+                            ->where('trainings.waktu_selesai', '>=', $request->input('waktu_selesai'));
+                    });
+            })
             ->get();
 
 
 
-
+        // dd($cek);
 
 
         if ($cek->isEmpty()) {
@@ -895,10 +878,10 @@ class SUController extends Controller
 
             // dd($validatedData);
             DB::table('trainings')
-                ->where('id', $request->input('id_training'))
-                ->update($validatedData);
+            ->where('id', $request->input('id_training'))
+            ->update($validatedData);
 
-            $request->session()->flash('success', 'Training telah diedit!');
+            $request->session()->flash('success', 'Waktu Training BARU telah dibuat!');
 
             return redirect('/training');
 
@@ -907,10 +890,13 @@ class SUController extends Controller
 
 
         } else {
-            $request->session()->flash('error', 'Ruangan Terpakai Pada Tanggal Tersebut !');
+            $request->session()->flash('error', 'Ruangan Terpakai Pada Tanggal dan Jam Tersebut !');
 
             return redirect('/training');
         }
+
+
+
     }
     public function deleteTraining(Request $request, training $training)
     {
@@ -944,8 +930,8 @@ class SUController extends Controller
         $cekPeserta = DB::table('peserta_trainings')
                             ->join('trainings', 'peserta_trainings.id_training', '=', 'trainings.id')
                             ->where('peserta_trainings.nik', '=', $request->input('nik'))
-                            ->select('nik')
-                            ->count();
+                            ->select('trainings.id')
+                            ->first();
 
                             // dd($cekPeserta);
 
@@ -955,8 +941,8 @@ class SUController extends Controller
             return redirect('/peserta-training');
 
 
-        } else if ($cekPeserta > 0) {
-            $request->session()->flash('error', 'Data peserta baru gagal ditambahkan! Pegawai sudah memiliki Judul Training!');
+        } else if ($cekPeserta->id == $request->input('id_training')) {
+            $request->session()->flash('error', 'Data peserta baru gagal ditambahkan! Pegawai sudah Sudah terdaftar di Training ini!');
 
             return redirect('/peserta-training');
            }  else {

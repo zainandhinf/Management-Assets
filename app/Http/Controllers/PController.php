@@ -20,6 +20,9 @@ use App\Models\pengadaan;
 use App\Models\penempatan;
 use App\Models\keranjang_penempatan;
 use App\Models\detail_penempatan;
+use App\Models\peminjaman;
+use App\Models\keranjang_peminjaman;
+use App\Models\detail_peminjaman;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -232,6 +235,46 @@ class PController extends Controller
             'detail_barangs' => detail_barang::all(),
             'barangs' => $barangAll,
             'noPengadaan' => $noPengadaan,
+            'today' => $today,
+            'keranjangs' => $keranjang
+        ]);
+    }
+
+    public function goPeminjaman() {
+
+        $detail_peminjaman = DB::table('detail_peminjamans')
+                                ->join('peminjamans', 'detail_peminjamans.no_peminjaman', '=', 'peminjamans.no_peminjaman')
+                                ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_peminjamans.kode_barcode')
+                                ->select('peminjamans.tanggal_peminjaman','peminjamans.id_pegawai','peminjamans.keterangan', 'detail_barangs.*')
+                                ->get();
+
+        return view('petugas.layout.transaksi.peminjaman')->with([
+            'title' => 'Buat Peminjaman',
+            'active' => 'Peminjaman',
+            'data_peminjaman' => $detail_peminjaman
+        ]);
+
+    }
+
+
+    public function goPeminjamanTambah()
+    {
+
+        $noPeminjaman = "PJ-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+        $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
+        $today = date('Y-m-d');
+        $keranjang = DB::table('keranjang_peminjamans')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_peminjamans.kode_barcode')
+            ->get();
+
+        return view('petugas.layout.transaksi.peminjaman-tambah')->with([
+            'title' => 'Buat Peminjaman',
+            'active' => 'Peminjaman',
+            'detail_barangs' => detail_barang::all(),
+            'barangs' => $barangAll,
+            'noPeminjaman' => $noPeminjaman,
             'today' => $today,
             'keranjangs' => $keranjang
         ]);
@@ -485,5 +528,34 @@ class PController extends Controller
         return redirect('/penempatan');
     }
     // End Transaksi Penempatan
+
+
+
+    // Transaksi Peminjaman
+
+    public function addKeranjangPeminjaman(Request $request)
+    {
+        $validatedData = $request->validate([
+            'no_peminjaman' => 'required',
+            'kode_barcode' => 'required',
+        ]);
+
+        $no_barang = DB::table('detail_barangs')
+            ->select('no_barang')
+            ->where('kode_barcode', '=', $request->input('kode_barcode'))
+            ->first();
+
+        $validatedData['no_barang'] = $no_barang->no_barang;
+
+        keranjang_peminjaman::create($validatedData);
+
+        $request->session()->flash('success', 'Barang masuk kedalam List Peminjaman!');
+
+        return redirect('/peminjaman-tambah');
+    }
+
+
+
+    // END END Transaksi Peminjaman
 
 }
