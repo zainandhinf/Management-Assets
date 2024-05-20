@@ -196,7 +196,7 @@
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
                         Cancel
                     </button>
-                    <button type="submit" class="btn btn-success" style="font-size: 14px;">Add!</button>
+                    <button type="submit" class="btn btn-success" style="font-size: 14px;">Add</button>
                 </div>
                 </form>
             </div>

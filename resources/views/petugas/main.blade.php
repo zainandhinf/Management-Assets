@@ -139,11 +139,11 @@
                 <div class="d-flex justify-content-between">
                     <h3>{{ $title }}</h3>
                     @if (session()->has('success'))
-                        <div class="alert alert-success position-absolute end-0 me-5" role="alert" style="margin-top: -10px;">
+                        <div class="alert alert-success position-absolute end-0 me-5 z-1" role="alert" style="margin-top: -10px;">
                             {{ session('success') }}
                         </div>
                     @elseif (session()->has('error'))
-                        <div class="alert alert-warning position-absolute end-0 me-5" role="alert" style="margin-top: -10px;">
+                        <div class="alert alert-warning position-absolute end-0 me-5 z-1" role="alert" style="margin-top: -10px;">
                             {{ session('error') }}
                         </div>
                     @endif

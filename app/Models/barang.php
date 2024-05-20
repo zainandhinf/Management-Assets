@@ -19,11 +19,11 @@ class barang extends Model
 
     public static function generateKode()
     {
-        $latestProduct = self::orderBy('id', 'desc')->first();
+        $latestProduct = barang::orderBy('no_barang', 'desc')->first();
         if (!$latestProduct) {
             $number = 1;
         } else {
-            $number = intval(substr($latestProduct->kode, 3)) + 1;
+            $number = intval(substr($latestProduct->no_barang, 3)) + 1;
         }
 
         return 'BRG' . str_pad($number, 4, '0', STR_PAD_LEFT);

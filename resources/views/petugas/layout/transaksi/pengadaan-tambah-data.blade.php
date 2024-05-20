@@ -150,6 +150,12 @@
                                 $no = 1;
                             @endphp
                             @foreach ($barangs as $barang)
+                            @php
+                                $qty = DB::table('detail_barangs')
+                                    ->join('barangs', 'detail_barangs.no_barang', '=', 'barangs.no_barang')
+                                    ->where('detail_barangs.no_barang', '=', $barang->no_barang)
+                                    ->count();
+                            @endphp
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $barang->no_barang }}</td>
