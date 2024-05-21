@@ -49,17 +49,23 @@
                             ->where('id', '=', $training->id_petugas)
                             ->get();
 
-                            $total_peserta = DB::table('ruangans')
-    ->join('trainings', 'trainings.no_ruangan', '=', 'ruangans.no_ruangan')
-    ->join('peserta_trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
-    ->where('trainings.id', '=', 'peserta_trainings.id_training') // Ganti $specific_no_ruangan dengan nilai yang sesuai
-    ->where('ruangans.no_ruangan', '=', $training->no_ruangan) // Ganti $specific_no_ruangan dengan nilai yang sesuai
-    ->count();
-
-
-
-
-
+                            $total_peserta = DB::table('peserta_trainings')
+                                                ->select(
+                                                    'pegawais.foto',
+                                                    'pegawais.nik',
+                                                    'pegawais.nama_user',
+                                                    'pegawais.jenis_kelamin',
+                                                    'pegawais.no_telepon',
+                                                    'pegawais.organisasi',
+                                                    'peserta_trainings.id as id_peserta',
+                                                    'trainings.nama_training',
+                                                    'trainings.id as id_training',
+                                                )
+                                                ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
+                                                ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
+                                                ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
+                                                ->where('trainings.id', '=', $training->id)
+                                                ->count();
                     @endphp
                     <tr>
                         <td>{{ $no++ }}</td>
@@ -698,7 +704,7 @@
                                     ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
                                     ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
                                     ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
-                                    ->where('ruangans.no_ruangan', '=', $training->no_ruangan)
+                                    ->where('trainings.id', '=', $training->id)
                                     ->get();
                             @endphp
                             <thead>
@@ -707,7 +713,7 @@
                                     <th>Foto</th>
                                     <th>NIK</th>
                                     <th>Nama</th>
-                                    <th>Gender</th>
+                                    <th>L/P</th>
                                     <th>No Telepon</th>
                                     <th>Training</th>
                                 </tr>

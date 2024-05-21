@@ -36,9 +36,9 @@
                     <td>{{ $petugas->nama_user }}</td>
                     <td>
                         @if ($petugas->jenis_kelamin === 'L')
-                            Laki-Laki
+                            L
                         @else
-                            Perempuan
+                            P
                         @endif
                     </td>
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
@@ -336,7 +336,7 @@
                                                 {{ $message }}
                                             </div>
                                         @enderror
-                                        <label for="name" class="col-form-label">Foto :</label>
+                                        {{-- <label for="name" class="col-form-label">Foto :</label>
                                         <br>
                                         <img class="img-preview img-fluid col-3 rounded rounded-circle"
                                         id="img-preview-edit" src="{{ asset('storage/' . $petugas->foto) }}">
@@ -346,6 +346,35 @@
                                             class="form-control mb-3 @error('foto') is-invalid @enderror"
                                             placeholder="Choose Photo.." id="foto-edit" name="foto"
                                             onchange="previewImageedit()">
+                                        @error('foto')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror --}}
+                                        <label for="name" class="col-form-label">Foto :</label>
+                                        <br>
+                                        <div class="row d-flex w-100 align-items-center">
+                                            <div class="col-md-4">
+
+                                                <img class="img-preview img-fluid col-3 rounded rounded-circle"
+                                            id="img-preview" src="{{ asset('storage/' . $petugas->foto) }}" style="width: 120px; height: 120px;">
+
+
+                                            </div>
+                                            <div class="col-md-4 text-center"><i class="fa-solid fa-circle-chevron-right"></i><br>Ubah menjadi</i></div>
+                                            <div class="col-md-4">
+                                                <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none;width: 120px; height: 120px; "
+                                                id="img-preview-edit">
+                                            </div>
+
+
+                                        </div>
+                                        <br>
+                                        <label for="name" class="col-form-label">New Foto :</label>
+                                        <input style="font-size: 14px;" type="file"
+                                            class="form-control mb-3 @error('foto') is-invalid @enderror"
+                                            placeholder="Choose Photo.." id="new_foto" name="foto"
+                                            onchange="previewImageEdit()">
                                         @error('foto')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

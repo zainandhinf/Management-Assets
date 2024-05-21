@@ -102,6 +102,9 @@ Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
 Route::get('/training-koordinator', [PController::class, 'goSchedule']);
 Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
 
+
+
+// TRANSAKSI PENGADAAN //
 Route::get('/pengadaan', [PController::class, 'goPengadaan']);
 Route::get('/pengadaan-tambah', [PController::class, 'goPengadaanTambah']);
 
@@ -119,10 +122,24 @@ Route::post('/addkeranjang', [PController::class, 'addKeranjang']);
 Route::delete('/deletekeranjang', [PController::class, 'deleteKeranjang']);
 Route::post('/addpengadaan', [PController::class, 'addPengadaan']);
 Route::delete('/deletedetail', [PController::class, 'deleteDetail']);
+// TRANSAKSI PENGADAAN END END//
 
+// TRANSAKSI PENEMPATAN //
+Route::get('/penempatan', [PController::class, 'goPenempatan']);
+Route::get('/penempatan-tambah', [PController::class, 'goPenempatanTambah']);
 Route::post('/addkeranjangpenempatan', [PController::class, 'addKeranjangPenempatan']);
 Route::delete('/deletekeranjangpenempatan', [PController::class, 'deleteKeranjangPenempatan']);
 Route::post('/addpenempatan', [PController::class, 'addPenempatan']);
+// TRANSAKSI PENEMPATAN END END//
+
+// TRANSAKSI PEMINJAMAN //
+Route::get('/peminjaman', [PController::class, 'goPeminjaman']);
+Route::get('/peminjaman-tambah', [PController::class, 'goPeminjamanTambah']);
+Route::post('/addkeranjangpeminjaman', [PController::class, 'addKeranjangPeminjaman']);
+Route::delete('/deletekeranjangpeminjaman', [PController::class, 'deleteKeranangPeminjaman']);
+Route::post('/addpeminjaman', [PController::class, 'addPeminjaman']);
+// TRANSAKSI PEMINJAMAN END END//
+
 
 Route::post('/addkeranjangmutasi', [PController::class, 'addKeranjangMutasi']);
 Route::delete('/deletekeranjangmutasi', [PController::class, 'deleteKeranjangMutasi']);
