@@ -38,5 +38,73 @@ class DefaultSeeder extends Seeder
             'password' => Hash::make('111'),
             'role' =>'petugas',
         ]);
+        DB::table('kategori_barangs')->insert([
+            'nama_kategori' =>'Elektronik',
+        ]);
+        DB::table('barangs')->insert([
+            'no_barang' =>'BRG0001',
+            'kode_awal' =>'MO',
+            'nama_barang' =>'Monitor',
+            'id_kategori' =>'1',
+            'qty' =>'0',
+        ]);
+        DB::table('tipe_ruangans')->insert([
+            'nama_tipe' =>'Ruang Training',
+            'keterangan' =>'Untuk melakukan Hal-hal dan kegiatan berkenaan dengan Training untuk para pegawai PT. DI',
+        ]);
+        DB::table('ruangans')->insert([
+            'no_ruangan' =>'Ruang-211',
+            'ruangan' =>'Ruang Training 211',
+            'lokasi' =>'Lt. 3 Gedung Diklat, Pusat Pembelajaran',
+            'kapasitas' =>'2',
+            'tipe_ruangan' =>'1',
+        ]);
+        DB::table('ruangans')->insert([
+            'no_ruangan' =>'R-212',
+            'ruangan' =>'Ruang Training 212',
+            'lokasi' =>'Lt. 3 Gedung Diklat, Pusat Pembelajaran',
+            'kapasitas' =>'36',
+            'tipe_ruangan' =>'1',
+        ]);
+        DB::table('pegawais')->insert([
+            'nik' =>'1111',
+            'nama_user' =>'Pegawai Satu',
+            'jenis_kelamin' =>'L',
+            'alamat' =>'Bandung, JL. Braga No. 10',
+            'no_telepon' =>'0812345678910',
+            'foto' =>'',
+            'organisasi' =>'IT5000',
+        ]);
+        DB::table('pegawais')->insert([
+            'nik' =>'2222',
+            'nama_user' =>'Pegawai Dua',
+            'jenis_kelamin' =>'L',
+            'alamat' =>'Bandung, JL. Asia Afrika No. 11',
+            'no_telepon' =>'088811112234',
+            'foto' =>'',
+            'organisasi' =>'UI2500',
+
+        ]);
+        DB::table('pegawais')->insert([
+            'nik' =>'3333',
+            'nama_user' =>'Pegawai Tiga',
+            'jenis_kelamin' =>'P',
+            'alamat' =>'Bandung, JL. Asia Afrika No. 12',
+            'no_telepon' =>'081123456789',
+            'foto' =>'',
+            'organisasi' =>'SC7000',
+
+        ]);
+        DB::table('pegawais')->insert([
+            'nik' =>'4444',
+            'nama_user' =>'Pegawai Empat',
+            'jenis_kelamin' =>'P',
+            'alamat' =>'Bandung, JL. Asia Afrika No. 14',
+            'no_telepon' =>'081243546576',
+            'foto' =>'',
+            'organisasi' =>'HD3000',
+
+        ]);
+
     }
 }
