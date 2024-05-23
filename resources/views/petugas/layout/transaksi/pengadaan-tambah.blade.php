@@ -78,17 +78,17 @@
                             @endphp
                             <tr>
                                 <td>{{ $no++ }}</td>
-                                <td>{{ $barang->no_barang }}</td>
+                                <td><strong>{{ $barang->no_barang }}</strong></td>
                                 <td>{{ $barang->nama_barang }}</td>
                                 <td>{{ $barang->nama_kategori }}</td>
                                 <td>{{ $qty }}</td>
                                 <td>
-                                    <button style="margin-right: 10px" class="btn btn-info mr-2">
+                                    {{-- <button style="margin-right: 10px" class="btn btn-info mr-2">
                                         <i class="fa fa-eye"></i>
-                                    </button>
+                                    </button> --}}
                                     <button type="button" class="btn btn-warning select-barang"
                                         data-no-barang="{{ $barang->no_barang }}">
-                                        <i class="fa fa-plus"></i>
+                                        <i class="fa fa-plus"></i> Pilih Barang
                                     </button>
                                     {{-- </form> --}}
                                 </td>

@@ -24,8 +24,9 @@ return new class extends Migration
             $table->string('kondisi'); // Baik - Rusak
             $table->string('status'); //  Belum Ditempatkan atau Sudah Ditempatkan di Ruangan sekian
             $table->integer('harga'); // Rp. 20.000,00
+            $table->string('foto_barang')->nullable(); // FOTONYA
             // $table->string('kode_aktiva');
-            $table->string('keterangan'); // Pengadaan Baru untuk Buang duit
+            $table->string('keterangan')->nullable(); // Pengadaan Baru untuk Buang duit
             $table->timestamps();
         });
     }

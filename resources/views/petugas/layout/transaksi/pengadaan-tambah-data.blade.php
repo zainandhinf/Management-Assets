@@ -15,51 +15,27 @@
                 <i class="fa-solid fa-boxes-packing mb-2"></i>
                 Pilih Barang
             </button>
-            {{-- @php
-                use Carbon\Carbon;
-                // $no_last = DB::table('keranjang_pengadaans')->select('*')->orderByDesc('no_pengadaan')->first();
-                $no_last = DB::table('keranjang_pengadaans')
-                    ->select(DB::raw('RIGHT(no_pengadaan, 4) + 1 as noUrut'))
-                    ->orderBy('no_pengadaan', 'DESC')
-                    ->limit(1)
-                    ->get();
 
-                $no_count = DB::table('keranjang_pengadaans')->select('*')->count();
-                // dd($no_last);
-
-                if (!$no_last->isEmpty()) {
-                    $noUrut = $no_last[0]->noUrut;
-                    $floatValue = floatval($noUrut);
-                }
-                if ($no_last->isEmpty()) {
-                    $no_pengadaan_last = '0001';
-                } else {
-                    if ($noUrut < 10) {
-                        $no_pengadaan_last = '000' . $noUrut;
-                    } elseif ($noUrut < 100) {
-                        $no_pengadaan_last = '00' . $noUrut;
-                    } elseif ($noUrut < 1000) {
-                        $no_pengadaan_last = '0' . $noUrut;
-                    } elseif ($noUrut < 10000) {
-                        $no_pengadaan_last = $noUrut;
-                    } else {
-                        $no_pengadaan_last = '0001';
-                    }
-                }
-
-                $no_pengadaan = 'P' . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') . $no_pengadaan_last;
-            @endphp --}}
             <div class="form-group">
-                <form action="/addkeranjang" method="POST">
+                <form action="/addkeranjang" enctype="multipart/form-data" method="post">
                     @csrf
 
-                    {{-- <label for="">No. Pengadaan</label><br>
-                    <input type="text" name="no_pengadaan" class="form-control mb-2 w-100" value="{{ $no_pengadaan }}"
-                        readonly> --}}
+                    {{-- <label for="">No. Pengadaan</label><br> --}}
+                    <input type="hidden" name="no_pengadaan" class="form-control mb-2 w-100" value=""
+                        readonly>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="">No. Barang</label><br>
+                            <input type="text" name="no_barang" class="form-control mb-2 w-100"
+                                value="{{ $data_barang->no_barang }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">Nama Barang</label><br>
+                            <input type="text" name="nama_barang" class="form-control mb-2 w-100"
+                                value="{{ $data_barang->nama_barang }}" readonly>
+                        </div>
+                    </div>
 
-                    <label for="">No. Barang</label><br>
-                    <input type="text" name="no_barang" class="form-control mb-2 w-100"
-                        value="{{ $data_barang->no_barang }}" readonly>
 
                     <label for="">Kode Barcode</label><br>
                     <input type="text" name="kode_barcode" class="form-control mb-2" value="{{ $kode_barcode }}"
@@ -108,6 +84,12 @@
                         <option value="Donasi">Donasi</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
+
+                    <label for="">Foto Barang</label>
+                    <input type="file" class="form-control" name="foto_barang" id="foto_barang" onchange="previewImage()">
+                    *preview
+                    <img class="img-preview img-fluid col-6"
+                        style="display: none;" id="img-preview"> <br>
 
                     <label for="">Keterangan</label><br>
                     <textarea class="form-control mb-4" name="keterangan" cols="10" rows="3" placeholder="Keterangan.." required></textarea>
@@ -197,4 +179,21 @@
     {{-- end modal delete data --}}
 
     {{-- end modal --}}
+
+    <script>
+        function previewImage() {
+            const image = document.getElementById("foto_barang")
+            console.log(image);
+            const imgPreview = document.getElementById('img-preview');
+
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
+    </script>
 @endsection

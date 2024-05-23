@@ -20,6 +20,7 @@ class keranjang_pengadaan extends Model
         'kondisi',
         'status',
         'harga',
+        'foto_barang',
         'keterangan',
     ];
 }
