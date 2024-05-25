@@ -38,6 +38,7 @@
 
     {{-- DataTables --}}
     <link rel="stylesheet" href="assets/DataTables/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/css/preloader.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js">
     <link rel="stylesheet" href="../assets/DataTables/dataTables.bootstrap5.min.css">
@@ -107,14 +108,43 @@
             animation: transitionIn 0.55s;
 
         }
+
+
+.container-fluid {
+    display: none; /* Menyembunyikan container saat preloader ditampilkan */
+}
+
+
+
+
     </style>
+
 
 </head>
 
 <body>
+
     @include('sweetalert::alert')
 
-    <div class="container-fluid p-0 d-flex container-custom">
+    <div id="preloader" class="preloader">
+        <!-- Preloader content here -->
+
+<!-- resources/views/preloader.blade.php -->
+<div id="preloader">
+    <div class="divider" aria-hidden="true"></div>
+    <p class="loading-text" aria-label="Loading">
+      <span class="letter" aria-hidden="true">L</span>
+      <span class="letter" aria-hidden="true">o</span>
+      <span class="letter" aria-hidden="true">a</span>
+      <span class="letter" aria-hidden="true">d</span>
+      <span class="letter" aria-hidden="true">i</span>
+      <span class="letter" aria-hidden="true">n</span>
+      <span class="letter" aria-hidden="true">g</span>
+    </p>
+  </div>
+
+    </div>
+    <div class="container-fluid p-0 d-flex container-custom" style="display: none">
         @include('super_user.partials.sidebar')
 
         <div class="bg-light flex-fill overflow-auto" style="width: 200px">
@@ -157,6 +187,7 @@
 
         </div>
     </div>
+
 
 
 
@@ -214,6 +245,33 @@
     <script src="assets/js/jquery.masknumber.js"></script>
     <script src="../assets/js/jquery.masknumber.js"></script>
     {{-- end Masknumber --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+  var preloader = document.getElementById('preloader');
+  var containerFluid = document.querySelector('.container-fluid');
+
+  // Menyembunyikan container saat konten dimuat
+  if (containerFluid) {
+    containerFluid.style.display = 'none';
+  }
+
+  // Menampilkan preloader saat konten dimuat
+  if (preloader) {
+    preloader.style.display = 'flex';
+  }
+
+  // Menyembunyikan preloader dan menampilkan container setelah konten dimuat
+  window.addEventListener('load', function() {
+    if (preloader) {
+      preloader.style.display = 'none';
+    }
+    if (containerFluid) {
+      containerFluid.style.display = 'block';
+    }
+  });
+});
+
+    </script>
     <script>
         function toggleDataDropdown() {
             // console.log("berhasil");
