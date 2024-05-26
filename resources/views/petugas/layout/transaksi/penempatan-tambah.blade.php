@@ -50,7 +50,7 @@
                         <td>: {{ $no_penempatan }}</td>
                     </tr>
                     <tr>
-                        <td>Tgl Penempatan</td>
+                        <td>Tanggal Penempatan</td>
                         <td>: {{ now()->format('Y-m-d') }}</td>
                     </tr>
                     <tr>

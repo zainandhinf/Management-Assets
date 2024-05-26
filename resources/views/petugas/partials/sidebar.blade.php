@@ -144,7 +144,7 @@
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/pemeliharaan" class="{{ $title === 'Pemeliharaan' ? 'active' : '' }}">
+                    <a href="/maintenance" class="{{ $title === 'Maintenance' ? 'active' : '' }}">
                         <i class="fa-solid fa-screwdriver-wrench"></i>Maintenance
                     </a>
                 </li>

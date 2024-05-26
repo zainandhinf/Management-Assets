@@ -35,7 +35,7 @@
                 }
             }
 
-            $no_penempatan = 'PN-' . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') . $no_mutasi_last;
+            $no_mutasi = 'MT-' . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') . $no_mutasi_last;
         @endphp
         <div class="bg-secondary ps-2 text-white w-30">
             Informasi Mutasi
@@ -50,7 +50,7 @@
                         <td>: {{ $no_mutasi }}</td>
                     </tr>
                     <tr>
-                        <td>Tgl Mutasi</td>
+                        <td>Tanggal Mutasi</td>
                         <td>: {{ now()->format('Y-m-d') }}</td>
                     </tr>
                     <tr>

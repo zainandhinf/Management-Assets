@@ -26,6 +26,7 @@ use App\Models\detail_peminjaman;
 use App\Models\mutasi;
 use App\Models\keranjang_mutasi;
 use App\Models\detail_mutasi;
+use App\Models\maintenance;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -210,7 +211,7 @@ class PController extends Controller
         $detail_penempatan = DB::table('detail_penempatans')
             ->join('penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
             ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
-            ->select('penempatans.tanggal_penempatan','penempatans.lokasi_penempatan','penempatans.keterangan', 'detail_barangs.*')
+            ->select('penempatans.tanggal_penempatan', 'penempatans.lokasi_penempatan', 'penempatans.keterangan', 'detail_barangs.*')
             ->get();
         $detail_barang = DB::table('detail_barangs')
             ->select('*')
@@ -253,7 +254,7 @@ class PController extends Controller
         $detail_mutasi = DB::table('detail_mutasis')
             ->join('mutasis', 'detail_mutasis.no_mutasi', '=', 'mutasis.no_mutasi')
             ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_mutasis.kode_barcode')
-            ->select('mutasis.tanggal_mutasi','mutasis.lokasi_terbaru','mutasis.keterangan as keterangan_mutasi', 'detail_barangs.*')
+            ->select('mutasis.tanggal_mutasi', 'mutasis.lokasi_terbaru', 'mutasis.keterangan as keterangan_mutasi', 'detail_barangs.*')
             ->get();
         $detail_barang = DB::table('detail_barangs')
             ->select('*')
@@ -293,13 +294,14 @@ class PController extends Controller
         ]);
     }
 
-    public function goPeminjaman() {
+    public function goPeminjaman()
+    {
 
         $detail_peminjaman = DB::table('detail_peminjamans')
-                                ->join('peminjamans', 'detail_peminjamans.no_peminjaman', '=', 'peminjamans.no_peminjaman')
-                                ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_peminjamans.kode_barcode')
-                                ->select('peminjamans.tanggal_peminjaman','peminjamans.id_pegawai','peminjamans.keterangan', 'detail_barangs.*')
-                                ->get();
+            ->join('peminjamans', 'detail_peminjamans.no_peminjaman', '=', 'peminjamans.no_peminjaman')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_peminjamans.kode_barcode')
+            ->select('peminjamans.tanggal_peminjaman', 'peminjamans.id_pegawai', 'peminjamans.keterangan', 'detail_barangs.*')
+            ->get();
 
         return view('petugas.layout.transaksi.peminjaman')->with([
             'title' => 'Buat Peminjaman',
@@ -332,7 +334,67 @@ class PController extends Controller
             'keranjangs' => $keranjang
         ]);
     }
+
+    public function goMaintenance()
+    {
+        $detail_maintenance = DB::table('maintenances')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'maintenances.kode_barcode')
+            ->select('*','maintenances.status as status_maintenance','maintenances.keterangan as keterangan_maintenance')
+            ->get();
+        $detail_barang = DB::table('detail_barangs')
+            ->select('*')
+            ->get();
+
+        // dd($keranjang);
+
+
+        return view('petugas.layout.transaksi.maintenance')->with([
+            'title' => 'Maintenance',
+            'active' => 'Maintenance',
+            'maintenances' => $detail_maintenance,
+            'barangs' => $detail_barang,
+        ]);
+    }
+    public function goMaintenanceTambah()
+    {
+
+        $noMaintenance = "MA-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+        $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
+        $today = date('Y-m-d');
+        // $keranjang = DB::table('keranjang_mutasis')
+        //     ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_mutasis.kode_barcode')
+        //     // ->join('penempatans', 'penempatans.kode_barcode', '=', 'keranjang_mutasis.kode_barcode')
+        //     ->get();
+
+        return view('petugas.layout.transaksi.maintenance-tambah')->with([
+            'title' => 'Buat Maintenance',
+            'active' => 'Maintenance',
+            'detail_barangs' => detail_barang::all(),
+            'barangs' => $barangAll,
+            'no_mutasi' => $noMaintenance,
+            'today' => $today,
+            // 'keranjangs' => $keranjang
+        ]);
+    }
     //end route view
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // Transaksi PENGADAAN
@@ -693,5 +755,80 @@ class PController extends Controller
 
 
     // END END Transaksi Peminjaman
+
+    //Transaksi Maintenance
+    public function getBarangByBarcode(Request $request)
+    {
+        $kode_barcode = $request->input('kode_barcode');
+        $barang = DB::table('detail_barangs')
+            ->select('*')
+            ->join('barangs', 'barangs.no_barang', '=', 'detail_barangs.no_barang')
+            ->where('detail_barangs.kode_barcode', '=', $kode_barcode)
+            ->first();
+
+        // dd($barang);
+
+        if ($barang) {
+            $merk_barang = $barang->nama_barang . ' , ' . $barang->merk . ' , ' . $barang->spesifikasi;
+            return response()->json(['status' => 'success', 'data' => $barang, 'merk_barang' => $merk_barang]);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Barang not found'], 404);
+        }
+    }
+    public function addMaintenance(Request $request)
+    {
+        $validatedData = $request->validate([
+            'no_maintenance' => '',
+            'biaya' => 'required|numeric',
+            'keterangan' => 'required',
+            'kode_barcode' => 'required',
+        ]);
+
+        $no_barang = DB::table('detail_barangs')->select('no_barang')->where('kode_barcode','=',$request->kode_barcode)->first();
+
+        $validatedData['tanggal_maintenance'] = now()->format('Y-m-d');
+        
+        $validatedData['no_barang'] = $no_barang->no_barang;
+        $validatedData['status'] = "Sedang Diproses";
+        $validatedData['user_id'] = auth()->user()->id;
+        
+        maintenance::create($validatedData);
+
+        // $validatedDataStatus['status'] = "Sudah Ditempatkan di " . $request->input('lokasi_penempatan');
+
+        // dd($validatedDataStatus['status']);
+
+        // foreach ($kode_barcodes as $kode_barcode) {
+        //     DB::table('detail_barangs')
+        //         ->where('kode_barcode', $kode_barcode->kode_barcode)
+        //         ->update($validatedDataStatus);
+        // }
+
+        // DB::statement("INSERT INTO detail_mutasis (no_mutasi, no_barang, kode_barcode)
+        //  SELECT '$request->no_mutasi', no_barang, kode_barcode FROM keranjang_mutasis");
+
+        // DB::table('keranjang_mutasis')->truncate();
+
+
+        $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
+
+        return redirect('/maintenance');
+    }
+    public function confirmMaintenance(Request $request, ruangan $ruangan)
+    {
+        $validatedData['tanggal_selesai'] = now()->format('Y-m-d');
+        $validatedData['status'] = "Selesai Maintenance";
+
+
+        DB::table('maintenances')
+            ->where('no_maintenance', $request->input('no_maintenance'))
+            ->update($validatedData);
+            
+
+        $request->session()->flash('success', 'Maintenance telah dikonfirmasi selesai!');
+
+        return redirect('/maintenance');
+    }
+    //End Transaksi Maintenance
 
 }

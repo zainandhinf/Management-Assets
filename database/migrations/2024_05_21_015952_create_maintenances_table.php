@@ -14,9 +14,14 @@ return new class extends Migration
         Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
             $table->string('no_maintenance');
-            $table->string('tanggal_maintenance');
+            $table->string('no_barang');
+            $table->string('kode_barcode');
+            $table->date('tanggal_maintenance');
+            $table->date('tanggal_selesai')->nullable();
             $table->integer('biaya');
+            $table->string('status');
             $table->string('keterangan');
+            $table->string('user_id');
             $table->timestamps();
         });
     }

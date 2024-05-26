@@ -619,6 +619,7 @@ class SUController extends Controller
         DB::table('ruangans')
             ->where('id', $request->input('id_ruangan'))
             ->update($validatedData);
+            
 
         $request->session()->flash('success', 'Ruangan telah berhasil diedit!');
 
@@ -927,57 +928,61 @@ class SUController extends Controller
             ->select('*')
             ->where('id_training', '=', $request->input('id_training'))
             ->count();
-        $cekPeserta = DB::table('peserta_trainings')
-                            ->join('trainings', 'peserta_trainings.id_training', '=', 'trainings.id')
-                            ->where('peserta_trainings.nik', '=', $request->input('nik'))
-                            ->select('trainings.id')
-                            ->first();
 
-                            // dd($cekPeserta);
+
+        $cekPeserta = DB::table('peserta_trainings')
+            ->join('trainings', 'peserta_trainings.id_training', '=', 'trainings.id')
+            ->where('peserta_trainings.nik', '=', $request->input('nik'))
+            ->select('peserta_trainings.id')
+            ->first();
+
+        // dd($cekPeserta);
 
         if ($kapasitas[0]->kapasitas == $jumlah_peserta_seluruh) {
             $request->session()->flash('error', 'Data peserta baru gagal ditambahkan! Kapasitas ruangan sudah maksimal!');
 
             return redirect('/peserta-training');
 
+        } else {
+            // if ($cekPeserta->id == $request->input('id_training')) {
+            if ($cekPeserta) {
+                $request->session()->flash('error', 'Data peserta baru gagal ditambahkan! Pegawai sudah Sudah terdaftar di Training ini!');
 
-        } else if ($cekPeserta->id == $request->input('id_training')) {
-            $request->session()->flash('error', 'Data peserta baru gagal ditambahkan! Pegawai sudah Sudah terdaftar di Training ini!');
-
-            return redirect('/peserta-training');
-           }  else {
-            $validatedData = $request->validate([
-                'nik' => 'required',
-                'id_training' => 'required',
-            ]);
-
-            // dd($validatedData);
-
-            peserta_training::create($validatedData);
-
-            $jumlah_peserta = DB::table('peserta_trainings')
-                ->select('*')
-                ->where('id_training', '=', $request->input('id_training'))
-                ->count();
-
-            if ($jumlah_peserta == 0) {
-                DB::table('trainings')
-                    ->where('id', $request->input('id_training'))
-                    ->update([
-                        'total_peserta' => 1,
-                    ]);
+                return redirect('/peserta-training');
             } else {
-                DB::table('trainings')
-                    ->where('id', $request->input('id_training'))
-                    ->update([
-                        'total_peserta' => $jumlah_peserta,
-                    ]);
+                $validatedData = $request->validate([
+                    'nik' => 'required',
+                    'id_training' => 'required',
+                ]);
 
+                // dd($validatedData);
+
+                peserta_training::create($validatedData);
+
+                $jumlah_peserta = DB::table('peserta_trainings')
+                    ->select('*')
+                    ->where('id_training', '=', $request->input('id_training'))
+                    ->count();
+
+                if ($jumlah_peserta == 0) {
+                    DB::table('trainings')
+                        ->where('id', $request->input('id_training'))
+                        ->update([
+                            'total_peserta' => 1,
+                        ]);
+                } else {
+                    DB::table('trainings')
+                        ->where('id', $request->input('id_training'))
+                        ->update([
+                            'total_peserta' => $jumlah_peserta,
+                        ]);
+
+                }
+
+                $request->session()->flash('success', 'Data peserta baru telah ditambahkan!');
+
+                return redirect('/peserta-training');
             }
-
-            $request->session()->flash('success', 'Data peserta baru telah ditambahkan!');
-
-            return redirect('/peserta-training');
         }
 
     }
