@@ -27,6 +27,9 @@ use App\Models\mutasi;
 use App\Models\keranjang_mutasi;
 use App\Models\detail_mutasi;
 use App\Models\maintenance;
+use App\Models\penghapusan;
+use App\Models\keranjang_penghapusan;
+use App\Models\detail_penghapusan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -211,7 +214,7 @@ class PController extends Controller
         $detail_penempatan = DB::table('detail_penempatans')
             ->join('penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
             ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
-            ->select('penempatans.tanggal_penempatan', 'penempatans.lokasi_penempatan', 'penempatans.keterangan', 'detail_barangs.*')
+            ->select('penempatans.tanggal_penempatan', 'penempatans.lokasi_penempatan', 'penempatans.keterangan as keterangan_penempatan', 'detail_barangs.*')
             ->get();
         $detail_barang = DB::table('detail_barangs')
             ->select('*')
@@ -376,6 +379,49 @@ class PController extends Controller
             'no_mutasi' => $noMaintenance,
             'today' => $today,
             // 'keranjangs' => $keranjang
+        ]);
+    }
+    public function goPenghapusan()
+    {
+        $detail_penghapusan = DB::table('detail_penghapusans')
+            ->join('penghapusans', 'detail_penghapusans.no_penghapusan', '=', 'penghapusans.no_penghapusan')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penghapusans.kode_barcode')
+            ->select('penghapusans.tanggal_penghapusan', 'penghapusans.jenis_penghapusan', 'penghapusans.keterangan as keterangan_penghapusan', 'detail_barangs.*')
+            ->get();
+        $detail_barang = DB::table('detail_barangs')
+            ->select('*')
+            ->get();
+
+        // dd($keranjang);
+
+
+        return view('petugas.layout.transaksi.penghapusan')->with([
+            'title' => 'Penghapusan',
+            'active' => 'Penghapusan',
+            'penghapusans' => $detail_penghapusan,
+            'barangs' => $detail_barang,
+        ]);
+    }
+    public function goPenghapusanTambah()
+    {
+
+        $noPenghapusan = "PH-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
+        $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
+        $today = date('Y-m-d');
+        $keranjang = DB::table('keranjang_penghapusans')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_penghapusans.kode_barcode')
+            ->get();
+
+        return view('petugas.layout.transaksi.penghapusan-tambah')->with([
+            'title' => 'Buat Penghapusan',
+            'active' => 'Penghapusan',
+            'detail_barangs' => detail_barang::all(),
+            'barangs' => $barangAll,
+            'noPenghapusan' => $noPenghapusan,
+            'today' => $today,
+            'keranjangs' => $keranjang
         ]);
     }
     //end route view
@@ -654,6 +700,7 @@ class PController extends Controller
 
         return redirect('/penempatan');
     }
+    //End Transaksi Penempatan
     public function addKeranjangMutasi(Request $request)
     {
         $validatedData = $request->validate([
@@ -831,4 +878,79 @@ class PController extends Controller
     }
     //End Transaksi Maintenance
 
+    // Transaksi Penghapusan
+    public function addKeranjangPenghapusan(Request $request)
+    {
+        $validatedData = $request->validate([
+            'no_penghapusan' => 'required',
+            'kode_barcode' => 'required',
+        ]);
+
+        $no_barang = DB::table('detail_barangs')
+            ->select('no_barang')
+            ->where('kode_barcode', '=', $request->input('kode_barcode'))
+            ->first();
+
+        $validatedData['no_barang'] = $no_barang->no_barang;
+
+        keranjang_penghapusan::create($validatedData);
+
+        $request->session()->flash('success', 'Barang masuk kedalam List Penghapusan!');
+
+        return redirect('/penghapusan-tambah');
+    }
+    public function deleteKeranjangPenghapusan(Request $request)
+    {
+
+        $nama_barang = DB::table('keranjang_penghapusans')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_penghapusans.kode_barcode')
+            ->where('keranjang_penghapusans.no_penghapusan', '=', $request->input('no_penghapusan'))
+            ->first();
+
+        DB::table('keranjang_penghapusans')
+            ->where('no_penghapusan', $request->input('no_penghapusan'))->delete();
+
+        $pesanFlash = "Barang (Merk: *{$nama_barang->merk} ) telah berhasil dihapus dari list!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/penghapusan-tambah');
+    }
+    public function addPenghapusan(Request $request)
+    {
+        $validatedData = $request->validate([
+            'no_penghapusan' => '',
+            'jenis_penghapusan' => '',
+            'keterangan' => '',
+        ]);
+
+        $validatedData['tanggal_penghapusan'] = now()->format('Y-m-d');
+
+        $kode_barcodes = DB::table('keranjang_penghapusans')->select('kode_barcode')->get();
+
+        penghapusan::create($validatedData);
+
+        $validatedDataStatus['status'] = "Sudah Dihapus";
+
+        // dd($validatedDataStatus['status']);
+
+        foreach ($kode_barcodes as $kode_barcode) {
+            DB::table('detail_barangs')
+                ->where('kode_barcode', $kode_barcode->kode_barcode)
+                ->update($validatedDataStatus);
+        }
+
+        DB::statement("INSERT INTO detail_penghapusans (no_penghapusan, no_barang, kode_barcode)
+         SELECT '$request->no_penghapusan', no_barang, kode_barcode FROM keranjang_penghapusans");
+
+        DB::table('keranjang_penghapusans')->truncate();
+
+
+        $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
+
+        return redirect('/penghapusan');
+    }
+    //End Transaksi Penghapusan
+
 }
+

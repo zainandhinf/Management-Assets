@@ -8,9 +8,9 @@
                     <i class="fa-solid fa-cart-flatbed"></i>
                     List Barang
                 </button></div>
-            <div class="col-md-8"> <a href="/penempatan-tambah" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
+            <div class="col-md-8"> <a href="/penghapusan-tambah" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
                     <i class="fa-solid fa-square-plus"></i>
-                    Tambah Penempatan Baru
+                    Tambah Penghapusan Baru
                 </a></div>
         </div>
 
@@ -23,9 +23,9 @@
                     {{-- <th>Alamat</th> --}}
                     {{-- <th>No Telepon</th> --}}
                     <th>Merk</th>
-                    <th>Tanggal Penempatan</th>
+                    <th>Tanggal Penghapusan</th>
                     {{-- <th>Jenis Pengadaan</th> --}}
-                    <th>Lokasi Penempatan</th>
+                    <th>Jenis Penghapusan</th>
                     {{-- <th>Status</th> --}}
                     <th>Keterangan</th>
                     {{-- <th>Keterangan</th> --}}
@@ -35,28 +35,28 @@
             @php
                 $no = 1;
             @endphp
-            @foreach ($penempatans as $penempatan)
+            @foreach ($penghapusans as $penghapusan)
                 <tr>
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
-                    <td>No Barang: <b>{{ $penempatan->no_barang }}</b> <br>Barcode:
-                        <b>{!! DNS1D::getBarcodeHTML($penempatan->kode_barcode, 'UPCA') !!}{{ $penempatan->kode_barcode }}</b> <br>No
-                        Asset: <b>{{ $penempatan->no_asset }}</b>
+                    <td>No Barang: <b>{{ $penghapusan->no_barang }}</b> <br>Barcode:
+                        <b>{!! DNS1D::getBarcodeHTML($penghapusan->kode_barcode, 'UPCA') !!}{{ $penghapusan->kode_barcode }}</b> <br>No
+                        Asset: <b>{{ $penghapusan->no_asset }}</b>
                     </td>
-                    <td>{{ $penempatan->merk }}, {{ $penempatan->spesifikasi }}</td>
-                    <td>{{ $penempatan->tanggal_penempatan }}</td>
-                    {{-- <td>{{ $penempatan->jenis_pengadaan }}</td> --}}
-                    <td>{{ $penempatan->lokasi_penempatan }}</td>
-                    <td>{{ $penempatan->keterangan_penempatan }}</td>
-                    {{-- <td>Rp. {{ number_format($penempatan->harga) }}</td> --}}
+                    <td>{{ $penghapusan->merk }}, {{ $penghapusan->spesifikasi }}</td>
+                    <td>{{ $penghapusan->tanggal_penghapusan }}</td>
+                    {{-- <td>{{ $penghapusan->jenis_pengadaan }}</td> --}}
+                    <td>{{ $penghapusan->jenis_penghapusan }}</td>
+                    <td>{{ $penghapusan->keterangan_penghapusan }}</td>
+                    {{-- <td>Rp. {{ number_format($penghapusan->harga) }}</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                    {{-- <td>{{ $penempatan->keterangan }}</td> --}}
+                    {{-- <td>{{ $penghapusan->keterangan }}</td> --}}
                     {{-- <td>
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $penempatan->id }}"
+                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $penghapusan->id }}"
                             style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
-                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $penempatan->id }}"
+                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $penghapusan->id }}"
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>
@@ -152,7 +152,7 @@
 {{-- end modal edit data --}}
 
 {{-- modal delete data detail --}}
-@foreach ($barangs as $barang)
+{{-- @foreach ($barangs as $barang)
     <div class="modal modal-blur fade" id="deletedata{{ $barang->id }}" tabindex="-1" role="dialog"
         aria-hidden="true">
         <div class="modal-dialog w-50 modal-dialog-centered" role="document">
@@ -183,7 +183,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="id_detail" value="{{ $barang->id }}">
-                                {{-- <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
+                                <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}">
                                 <button class="btn btn-danger w-100">
                                     Yakin
                                 </button>
@@ -194,7 +194,7 @@
             </div>
         </div>
     </div>
-@endforeach
+@endforeach --}}
 {{-- end modal delete data detail --}}
 
 {{-- end modal --}}

@@ -148,6 +148,16 @@ Route::put('/confirmmaintenance', [PController::class, 'confirmMaintenance']);
 // Route::delete('/deletekeranjangpenempatan', [PController::class, 'deleteKeranjangPenempatan']);
 //
 
+// TRANSAKSI PENGHAPUSAN //
+Route::get('/penghapusan', [PController::class, 'goPenghapusan']);
+Route::get('/penghapusan-tambah', [PController::class, 'goPenghapusanTambah']);
+// Route::get('/penghapusan', [PController::class, 'gopenghapusan']);
+// Route::get('/penghapusan-tambah', [PController::class, 'gopenghapusanTambah']);
+Route::post('/addkeranjangpenghapusan', [PController::class, 'addKeranjangPenghapusan']);
+Route::delete('/deletekeranjangpenghapusan', [PController::class, 'deleteKeranjangPenghapusan']);
+Route::post('/addpenghapusan', [PController::class, 'addPenghapusan']);
+// TRANSAKSI PENGHAPUSAN END END//
+
 
 
 Route::get('/profile-koordinator', [PController::class, 'goProfile']);

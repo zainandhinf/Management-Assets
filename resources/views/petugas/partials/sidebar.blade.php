@@ -150,7 +150,7 @@
                 </li>
                 <li class="nav-item mb-1">
                     <a href="/penghapusan" class="{{ $title === 'Penghapusan' ? 'active' : '' }}">
-                        <i class="fa-solid fa-ban"></i>Peghapusan
+                        <i class="fa-solid fa-ban"></i>Penghapusan
                     </a>
                 </li>
             </ul>
