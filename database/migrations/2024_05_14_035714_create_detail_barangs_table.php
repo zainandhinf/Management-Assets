@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('detail_barangs', function (Blueprint $table) {
             $table->id();
-            $table->string('no_pengadaan'); //Otomatis terisi
+            $table->string('no_pengadaan')->nullable(); //Otomatis terisi
             $table->string('no_barang'); //Dari Tabel Barang otomatis terisi
             $table->string('kode_barcode'); // Otomatis / Kode auto
             $table->string('no_asset'); // Diisikan oleh penginput dengan format ('KL'-'Input Sendiri'-'Input Sendiri')
@@ -24,8 +24,9 @@ return new class extends Migration
             $table->string('kondisi'); // Baik - Rusak
             $table->string('status'); //  Belum Ditempatkan atau Sudah Ditempatkan di Ruangan sekian
             $table->integer('harga'); // Rp. 20.000,00
+            $table->integer('foto_barang')->nullable(); // FOTONYA
             // $table->string('kode_aktiva');
-            $table->string('keterangan'); // Pengadaan Baru untuk Buang duit
+            $table->string('keterangan')->nullable(); // Pengadaan Baru untuk Buang duit
             $table->timestamps();
         });
     }

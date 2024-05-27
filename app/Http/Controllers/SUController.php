@@ -13,6 +13,7 @@ use App\Models\tipe_ruangan;
 use App\Models\barang;
 use App\Models\image_ruangan;
 use App\Models\training;
+use App\Models\detail_barang;
 use App\Models\peserta_training;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -62,6 +63,13 @@ class SUController extends Controller
 
         $kode = barang::generateKode();
 
+        $details = DB::table('detail_barangs')
+                            ->join('barangs', 'barangs.no_barang', '=', 'detail_barangs.no_barang')
+                            ->select('detail_barangs.*', 'barangs.nama_barang')
+                            ->get();
+
+        // dd($details);    
+
 
         $kategori_barang = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
@@ -76,6 +84,7 @@ class SUController extends Controller
             'kode_barang' => $kode,
             'barangs' => $kategori_barang,
             'kategoris' => $kategoris,
+            'details' => $details,
             // 'kategori_barang' => $kategori_barang,
 
         ]);
@@ -418,42 +427,50 @@ class SUController extends Controller
     //barang
 
     public function addBarang(Request $request)
-    {
-        // dd($request);
+{
+    try {
         $validatedData = $request->validate([
             'no_barang' => 'required|max:30',
-            'nama_barang' => 'required|max:60',
-            'kode_awal' => 'required|max:30',
+            'nama_barang' => 'required|unique:barangs,nama_barang|max:60',
+            'kode_awal' => 'required|unique:barangs,kode_awal|max:5',
             'id_kategori' => 'required',
             'qty' => 'required',
         ]);
-        // dd($validatedData);
-
-        // $validatedData['kode_awal'] = $request->input('kode_awal') . '-';
-
-
-
-
-
-        barang::create($validatedData);
-
-        $request->session()->flash('success', 'Barang baru telah ditambahkan!');
-
-        return redirect('/barang');
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Tambahkan pesan flash untuk kesalahan validasi
+        $request->session()->flash('error', 'Barang baru GAGAL ditambahkan!, periksa validasi');
+        return redirect('/barang')
+                    ->withErrors($e->validator)
+                    ->withInput();
     }
+
+    // Jika validasi berhasil, tambahkan barang
+    barang::create($validatedData);
+
+    // Tambahkan pesan flash untuk kesuksesan
+    $request->session()->flash('success', 'Barang baru telah ditambahkan!');
+
+    return redirect('/barang');
+}
+
 
     public function editBarang(Request $request, pegawai $pegawai)
     {
-        // dd($request);
-        $validatedData = $request->validate([
-            'no_barang' => 'required|max:30',
-            'nama_barang' => 'required|max:60',
-            'kode_awal' => 'required|max:30',
-            'id_kategori' => 'required',
-            'qty' => 'required',
-        ]);
-
-        // dd($validatedData);
+        try {
+            $validatedData = $request->validate([
+                'no_barang' => 'required|max:30',
+                'nama_barang' => 'required|unique:barangs,nama_barang|max:60',
+                'kode_awal' => 'required|unique:barangs,kode_awal|max:5',
+                'id_kategori' => 'required',
+                'qty' => 'required',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Tambahkan pesan flash untuk kesalahan validasi
+            $request->session()->flash('error', 'Data GAGAL diubah, periksa validasi!');
+            return redirect('/barang')
+                        ->withErrors($e->validator)
+                        ->withInput();
+        }
 
         DB::table('barangs')
             ->where('id', $request->input('id_barang'))
@@ -470,6 +487,8 @@ class SUController extends Controller
             ->select('nama_barang')
             ->where('id', '=', $request->input('id_barang'))
             ->get();
+
+
 
         DB::table('barangs')->where('id', $request->input('id_barang'))->delete();
 

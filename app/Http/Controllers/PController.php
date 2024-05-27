@@ -170,6 +170,8 @@ class PController extends Controller
 
 
 
+
+
         $total_harga = DB::table('keranjang_pengadaans')
             ->sum('harga');
 
@@ -447,6 +449,7 @@ class PController extends Controller
     public function select(Request $request)
     {
 
+
         $id = $request->input('no_barang');
 
         $no_last = DB::table('detail_barangs')
@@ -493,8 +496,11 @@ class PController extends Controller
     }
     public function addKeranjang(Request $request)
     {
+
+
+
         $validatedData = $request->validate([
-            // 'no_pengadaan' => 'required',
+            'no_pengadaan' => 'nullable',
             'no_barang' => 'required',
             'kode_barcode' => 'required',
             'no_asset' => 'required',
@@ -504,10 +510,21 @@ class PController extends Controller
             'kondisi' => 'required',
             'status' => 'required',
             'harga' => 'required|numeric',
+            'foto_barang' => '',
             'keterangan' => 'required|max:255',
         ]);
 
+
         $validatedData['no_asset'] = $request->input('kode_awal') . '-' . $request->input('no_asset') . '-LC';
+
+        if($request->foto_barang == null) {
+            $validatedData['foto_barang'] = '';
+
+
+        } else {
+            $validatedData['foto_barang'] = $request->file('foto_barang')->store('fotobarang');
+        }
+
 
         keranjang_pengadaan::create($validatedData);
 
@@ -515,6 +532,7 @@ class PController extends Controller
 
         return redirect('/pengadaan');
     }
+
     public function deleteKeranjang(Request $request)
     {
 

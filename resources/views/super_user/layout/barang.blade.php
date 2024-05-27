@@ -37,6 +37,8 @@
                     <td>{{ $barang->nama_kategori }}</td>
                     <td>{{ $qty }}</td>
                     <td>
+                        <button data-bs-toggle="modal" data-bs-target="#detailbarang{{ $barang->id }}" style="margin-right: 10px"
+                            class="btn btn-primary mr-2"><i class="fa fa-list"></i></button>
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $barang->id }}" style="margin-right: 10px"
                             class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
                         <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $barang->id }}" class="btn btn-danger">
@@ -79,11 +81,11 @@
                         @csrf
                         <div class="form-group">
                             <label for="no_barang" class="col-form-label">No. Barang :</label>
-                            <input style="font-size: 14px;" type="text"
+                            <input  style="font-size: 14px;" type="text"
                                 class="form-control @error('no_barang')
                   is-invalid
               @enderror"
-                                placeholder="No Barang.." id="name" name="no_barang" value="{{ $kode_barang }}" readonly>
+                                placeholder="No Barang.." style="background: #eee;" id="name" name="no_barang" value="{{ $kode_barang }}" readonly>
                             @error('nobarang')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -93,7 +95,7 @@
 
 
                             <label for="nama_barang" class="col-form-label">Nama Barang :</label>
-                            <input style="font-size: 14px;" type="text"
+                            <input value="{{ old('nama_barang') }}" style="font-size: 14px;" type="text"
                                 class="form-control @error('nama_barang')
                                 is-invalid
                                 @enderror"
@@ -105,7 +107,7 @@
                             @enderror
 
                             <label for="kode_awal" class="col-form-label">Kode Unik(Untuk No. asset) :</label>
-                            <input style="font-size: 14px;" type="text"
+                            <input value="{{ old('kode_awal') }}" style="font-size: 14px;" type="text"
                                 class="form-control @error('kode_awal')
                                 is-invalid
                                 @enderror"
@@ -249,6 +251,91 @@
      </div>
  @endforeach
  {{-- end modal edit data --}}
+
+
+     {{-- modal DETAIL BARANG --}}
+     @foreach ($barangs as $barang)
+
+     <div class="modal modal-blur fade" id="detailbarang{{ $barang->id }}" tabindex="-1" role="dialog"
+        aria-hidden="true" style="font-size: 14px;">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h5 class="modal-title fs-6">Edit {{ $title }}</h5>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                     <strong><center>
+                        Data Barang dengan Kode: {{ $barang->no_barang }} / {{ $barang->nama_barang }}
+                    </center></strong>
+
+                    <table class="table table-striped" id="data-tables" style="font-size: 14px;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                {{-- <th>Kode Aktiva</th> --}}
+                                <th>No Pengadaan</th>
+                                {{-- <th>Kode Barcode</th> --}}
+                                <th>No Asset</th>
+                                <th>Merk {{ $barang->nama_barang }}</th>
+                                <th>Jenis Pengadaan</th>
+                                <th>Kondisi</th>
+                                <th>Status</th>
+                                <th>Harga</th>
+                                {{-- <th>Foto</th> --}}
+                                {{-- <th>Keterangan</th> --}}
+                                <th data-searchable="false">Action</th>
+                            </tr>
+                        </thead>
+                        @foreach ($details as $detail)
+                        @php
+                            $no = 1;
+                        @endphp
+
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $detail->no_pengadaan }}</td>
+                                {{-- <td>{{ $detail->kode_barcode }}</td> --}}
+                                <td>{{ $detail->no_asset }}</td>
+                                <td>{{ $detail->merk }}, {{ $detail->spesifikasi }}</td>
+                                <td>{{ $detail->jenis_pengadaan }}</td>
+                                <td>{{ $detail->kondisi }}</td>
+                                <td>{{ $detail->status }}</td>
+                                <td>Rp. {{ number_format($detail->harga) }}</td>
+                                {{-- <td>{{ $detail->foto_barang }}</td> --}}
+                                {{-- <td>{{ $detail->keterangan }}</td> --}}
+                                <td>
+                                    <button data-bs-toggle="modal" data-bs-target="#seefoto{{ $detail->no_barang }}" style="margin-right: 10px"
+                                        class="btn btn-primary mr-2"><i class="fa fa-eye"></i></button>
+                                    {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $barang->id }}" style="margin-right: 10px"
+                                        class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
+                                    <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $barang->id }}" class="btn btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button> --}}
+
+
+
+                                </td>
+                            </tr>
+                            @endforeach
+
+                    </table>
+
+
+                 </div>
+                 <div class="modal-footer">
+                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
+                         Cancel
+                     </button>
+                     <button type="submit" class="btn btn-primary" style="font-size: 14px;">Edit Data</button>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+     @endforeach
+
+ {{-- end modal DETAIL BARANG --}}
 
   {{-- modal delete data --}}
   @foreach ($barangs as $barang)
