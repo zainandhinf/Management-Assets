@@ -43,8 +43,9 @@ class PController extends Controller
         return view(
             'petugas.layout.dashboard',
             [
-                "title" => "Dashboard",
-                "active" => "Dashboard"
+                'title' => 'Dashboard',
+                'active' => 'Dashboard',
+                'open' => 'no',
             ]
         );
     }
@@ -55,7 +56,7 @@ class PController extends Controller
             'title' => 'Data Petugas',
             'active' => 'Data Petugas',
             'petugass' => User::all(),
-
+            'open' => 'yes-1',
         ]);
     }
 
@@ -65,7 +66,7 @@ class PController extends Controller
             'title' => 'Data Pegawai',
             'active' => 'Data Pegawai',
             'pegawais' => pegawai::all(),
-
+            'open' => 'yes-1',
         ]);
     }
     public function goBarang()
@@ -90,6 +91,7 @@ class PController extends Controller
             'cek' => $cekKategori,
             'barangs' => $kategori_barang,
             'kategoris' => $kategoris,
+            'open' => 'yes-1',
             // 'kategori_barang' => $kategori_barang,
 
         ]);
@@ -100,6 +102,7 @@ class PController extends Controller
             'title' => 'Data Kategori Barang',
             'active' => 'Data Kategori Barang',
             'ktgr_brngs' => kategori_barang::all(),
+            'open' => 'yes-1',
         ]);
     }
     public function goRuangan()
@@ -111,7 +114,7 @@ class PController extends Controller
             'active' => 'Data Ruangan',
             'cek' => $cekTipe,
             'ruangans' => ruangan::all(),
-
+            'open' => 'yes-1',
         ]);
     }
     public function goTRuangan()
@@ -120,7 +123,7 @@ class PController extends Controller
             'title' => 'Data Tipe Ruangan',
             'active' => 'Data Tipe Ruangan',
             'tipe_ruangans' => tipe_ruangan::all(),
-
+            'open' => 'yes-1',
         ]);
     }
     public function goTraining()
@@ -133,6 +136,7 @@ class PController extends Controller
             'trainings' => training::all(),
             'cek1' => $cek1,
             'cek2' => $cek2,
+            'open' => 'no',
         ]);
     }
     public function goPeserta()
@@ -143,6 +147,7 @@ class PController extends Controller
             'active' => 'Data Peserta Training',
             'pesertas' => peserta_training::all(),
             'cek' => $cek,
+            'open' => 'no',
         ]);
     }
     public function goSchedule()
@@ -150,6 +155,7 @@ class PController extends Controller
         return view('petugas.layout.schedule-training')->with([
             'title' => 'Jadwal Training',
             'active' => 'Jadwal Training',
+            'open' => 'no',
 
         ]);
     }
@@ -158,6 +164,7 @@ class PController extends Controller
         return view('petugas.layout.profile')->with([
             'title' => 'Profile',
             'active' => 'Profile',
+            'open' => 'no',
 
         ]);
     }
@@ -189,7 +196,8 @@ class PController extends Controller
             'active' => 'Pengadaan',
             'barangs' => $detail_barang,
             'keranjangs' => $keranjangs,
-            'total_harga' => $total_harga
+            'total_harga' => $total_harga,
+            'open' => 'yes-2',
         ]);
     }
     public function goPengadaanTambah()
@@ -207,8 +215,8 @@ class PController extends Controller
             'detail_barangs' => detail_barang::all(),
             'barangs' => $barangAll,
             'noPengadaan' => $noPengadaan,
-            'today' => $today
-
+            'today' => $today,
+            'open' => 'yes-2',
         ]);
     }
     public function goPenempatan()
@@ -230,6 +238,7 @@ class PController extends Controller
             'active' => 'Penempatan',
             'penempatans' => $detail_penempatan,
             'barangs' => $detail_barang,
+            'open' => 'yes-2',
         ]);
     }
     public function goPenempatanTambah()
@@ -251,7 +260,8 @@ class PController extends Controller
             'barangs' => $barangAll,
             'noPenempatan' => $noPenempatan,
             'today' => $today,
-            'keranjangs' => $keranjang
+            'keranjangs' => $keranjang,
+            'open' => 'yes-2',
         ]);
     }
     public function goMutasi()
@@ -273,6 +283,7 @@ class PController extends Controller
             'active' => 'Mutasi',
             'mutasis' => $detail_mutasi,
             'barangs' => $detail_barang,
+            'open' => 'yes-2',
         ]);
     }
     public function goMutasiTambah()
@@ -295,7 +306,8 @@ class PController extends Controller
             'barangs' => $barangAll,
             'no_mutasi' => $noMutasi,
             'today' => $today,
-            'keranjangs' => $keranjang
+            'keranjangs' => $keranjang,
+            'open' => 'yes-2',
         ]);
     }
 
@@ -311,7 +323,8 @@ class PController extends Controller
         return view('petugas.layout.transaksi.peminjaman')->with([
             'title' => 'Buat Peminjaman',
             'active' => 'Peminjaman',
-            'data_peminjaman' => $detail_peminjaman
+            'data_peminjaman' => $detail_peminjaman,
+            'open' => 'yes-2',
         ]);
 
     }
@@ -336,7 +349,8 @@ class PController extends Controller
             'barangs' => $barangAll,
             'noPeminjaman' => $noPeminjaman,
             'today' => $today,
-            'keranjangs' => $keranjang
+            'keranjangs' => $keranjang,
+            'open' => 'yes-2',
         ]);
     }
 
@@ -358,6 +372,7 @@ class PController extends Controller
             'active' => 'Maintenance',
             'maintenances' => $detail_maintenance,
             'barangs' => $detail_barang,
+            'open' => 'yes-2',
         ]);
     }
     public function goMaintenanceTambah()
@@ -380,6 +395,7 @@ class PController extends Controller
             'barangs' => $barangAll,
             'no_mutasi' => $noMaintenance,
             'today' => $today,
+            'open' => 'yes-2',
             // 'keranjangs' => $keranjang
         ]);
     }
@@ -402,6 +418,7 @@ class PController extends Controller
             'active' => 'Penghapusan',
             'penghapusans' => $detail_penghapusan,
             'barangs' => $detail_barang,
+            'open' => 'yes-2',
         ]);
     }
     public function goPenghapusanTambah()
@@ -423,7 +440,8 @@ class PController extends Controller
             'barangs' => $barangAll,
             'noPenghapusan' => $noPenghapusan,
             'today' => $today,
-            'keranjangs' => $keranjang
+            'keranjangs' => $keranjang,
+            'open' => 'yes-2',
         ]);
     }
     //end route view

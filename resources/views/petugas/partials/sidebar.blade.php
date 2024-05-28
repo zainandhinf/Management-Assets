@@ -16,11 +16,11 @@
         </li>
         <li
             class="nav-item active dropdown-custom @if (
-                $active == 'Data Petugas' &&
-                    'Data Pegawai' &&
-                    'Kategori Barang' &&
-                    'Tipe Ruangan' &&
-                    'Data Barang' &&
+                $active == 'Data Petugas' ||
+                    'Data Pegawai' ||
+                    'Kategori Barang' ||
+                    'Tipe Ruangan' ||
+                    'Data Barang' ||
                     'Data Ruangan') dropdown-active-custom @endif
         {{-- {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '' }} --}}
         ">
@@ -32,9 +32,12 @@
                 </div>
                 <i class="fa-solid fa-chevron-down down mt-1"></i>
             </button>
-
-
-            <ul class="ms-2" id="dataDropdown">
+            <ul class="ms-2" id="dataDropdown"
+                @if ($open == 'yes-1') style="display: block;"
+                @elseif ($open == 'yes-2')
+                    style="display: none;"
+                @else
+                    style="display: none;" @endif>
                 <li class="nav-item mb-1">
                     <a href="/petugas-koordinator" class="{{ $title === 'Data Petugas' ? 'active' : '' }}">
                         <i class="fa-solid fa-user-gear"></i>
@@ -100,11 +103,11 @@
 
         <li
             class="nav-item active dropdown-custom @if (
-                $active == 'Data Petugas' &&
-                    'Data Pegawai' &&
-                    'Kategori Barang' &&
-                    'Tipe Ruangan' &&
-                    'Data Barang' &&
+                $active == 'Data Petugas' ||
+                    'Data Pegawai' ||
+                    'Kategori Barang' ||
+                    'Tipe Ruangan' ||
+                    'Data Barang' ||
                     'Data Ruangan') dropdown-active-custom @endif
     {{-- {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '' }} --}}
     ">
@@ -118,7 +121,12 @@
             </button>
 
 
-            <ul class="ms-2" id="dataDropdown4">
+            <ul class="ms-2" id="dataDropdown4"
+                @if ($open == 'yes-1') style="display: none;"
+            @elseif ($open == 'yes-2')
+                style="display: block;"
+            @else
+                style="display: none;" @endif>
                 <li class="nav-item mb-1">
                     <a href="/pengadaan" class="{{ $title === 'Pengadaan' ? 'active' : '' }}">
                         <i class="fa-solid fa-cart-plus"></i>
@@ -192,8 +200,9 @@
                 <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
                     style="width: 50px; height: 50px; margin-top: 4px;" alt="">
             @else
-                <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-fluid rounded rounded-circle me-2"
-                    style="width: 50px; height: 50px; margin-top: 4px;" alt="">
+                <img src="{{ asset('storage/' . auth()->user()->foto) }}"
+                    class="img-fluid rounded rounded-circle me-2" style="width: 50px; height: 50px; margin-top: 4px;"
+                    alt="">
             @endif
         </a>
         <span style="margin-top: 4px">

@@ -32,9 +32,9 @@
                 </div>
                 <i class="fa-solid fa-chevron-down down mt-1"></i>
             </button>
-
-
-            <ul class="ms-2" id="dataDropdown">
+            <ul class="ms-2" id="dataDropdown"
+                @if(
+                $open == 'yes') style="display: block;" @else style="display: none;" @endif>
                 <li class="nav-item mb-1">
                     <a href="/petugas" class="{{ $title === 'Data Petugas' ? 'active' : '' }}">
                         <i class="fa-solid fa-user-gear"></i>
@@ -49,8 +49,7 @@
                 </li>
                 <li
                     class="nav-item mb-0 dropdown-custom-child {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
-                    <button onclick="toggleDataDropdown3()" href=""
-                        class="{{ $active === 'data' ? '' : '' }}">
+                    <button onclick="toggleDataDropdown3()" href="" class="{{ $active === 'data' ? '' : '' }}">
                         <div class="customtoogle">
                             <i class="fa-solid fa-share-from-square"></i>
                             Kategori {{-- Jangan Panjang Panhjang ntar rusak --}}

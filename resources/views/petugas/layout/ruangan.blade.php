@@ -3,7 +3,6 @@
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
         @if ($cek > 0)
-
             <table class="table table-striped" id="data-tables">
                 <thead>
                     <tr>
@@ -41,8 +40,14 @@
                         <td>
                             <div class="d-flex flex-column image-ruangan">
                                 {{-- @foreach ($image_ruangans as $image_ruangan) --}}
+                                {{-- <img src="{{ asset('storage/' . $image_ruangan->image) }}" alt="" width="100px"
+                                        class="mb-1"> --}}
+                                @if ($image_ruangan)
                                     <img src="{{ asset('storage/' . $image_ruangan->image) }}" alt="" width="100px"
                                         class="mb-1">
+                                @else
+                                    <img src="/lol" alt="No Png" width="100px" class="mb-1">
+                                @endif
                                 {{-- @endforeach --}}
                                 <button class="btn btn-primary view-button btn-lg" data-bs-toggle="modal"
                                     data-bs-target="#viewimg{{ $ruangan->id }}">
@@ -373,7 +378,7 @@
                         <div id="carouselExample{{ $ruangan->id }}" class="carousel slide">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <div class="img-ruangan">
+                                    {{-- <div class="img-ruangan">
                                         <img src="{{ asset('storage/' . $image_view[0]->image) }}"
                                             class="d-block img-fluid" alt="...">
                                         <div class="delete-button-img-ruangan">
@@ -388,7 +393,31 @@
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </div>
+                                    </div> --}}
+                                    @if($image_view->isEmpty())
+                                    
+                                    No Png
+                                    
+                                    @else
+                                    <div class="img-ruangan">
+                                        <img src="{{ asset('storage/' . $image_view->image) }}"
+                                            class="d-block img-fluid" alt="...">
+                                        {{-- <div class="delete-button-img-ruangan">
+                                            <a class="btn btn-primary btn-lg text-decoration-none"
+                                                href="http://127.0.0.1:8000{{ asset('storage/' . $image_view->image) }}"
+                                                target="blank">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </a>
+
+                                            <button class="btn btn-danger btn-lg" data-bs-toggle="modal"
+                                                data-bs-target="#deleteimg{{ $image_view->id }}">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div> --}}
                                     </div>
+
+
+                                    @endif
                                 </div>
                                 @foreach ($images_view->skip(1) as $image)
                                     <div class="carousel-item">
