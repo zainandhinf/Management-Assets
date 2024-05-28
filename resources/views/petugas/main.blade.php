@@ -108,6 +108,10 @@
             animation: transitionIn 0.55s;
 
         }
+
+        .modal-open-nested .modal-backdrop{
+            display: none;
+        }
     </style>
 
 </head>

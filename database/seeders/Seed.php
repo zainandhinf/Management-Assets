@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
-class DefaultSeeder extends Seeder
+class Seed extends Seeder
 {
     /**
      * Run the database seeds.
@@ -22,18 +22,18 @@ class DefaultSeeder extends Seeder
             'jenis_kelamin' =>'L',
             'alamat' =>'',
             'no_telepon' =>'',
-            'foto' =>'',
+            'foto' =>'nophoto.png',
             'username' =>'user',
             'password' => Hash::make('111'),
             'role' =>'super_user',
         ]);
         DB::table('users')->insert([
-            'nik' =>'50977',
+            'nik' =>'50979',
             'nama_user' =>'Koordinator',
             'jenis_kelamin' =>'L',
             'alamat' =>'',
             'no_telepon' =>'',
-            'foto' =>'',
+            'foto' =>'nophoto.png',
             'username' =>'koor',
             'password' => Hash::make('111'),
             'role' =>'petugas',
@@ -72,7 +72,7 @@ class DefaultSeeder extends Seeder
             'jenis_kelamin' =>'L',
             'alamat' =>'Bandung, JL. Braga No. 10',
             'no_telepon' =>'0812345678910',
-            'foto' =>'',
+            'foto' =>'nophoto.png',
             'organisasi' =>'IT5000',
         ]);
         DB::table('pegawais')->insert([
@@ -81,7 +81,7 @@ class DefaultSeeder extends Seeder
             'jenis_kelamin' =>'L',
             'alamat' =>'Bandung, JL. Asia Afrika No. 11',
             'no_telepon' =>'088811112234',
-            'foto' =>'',
+            'foto' =>'nophoto.png',
             'organisasi' =>'UI2500',
 
         ]);
@@ -91,7 +91,7 @@ class DefaultSeeder extends Seeder
             'jenis_kelamin' =>'P',
             'alamat' =>'Bandung, JL. Asia Afrika No. 12',
             'no_telepon' =>'081123456789',
-            'foto' =>'',
+            'foto' =>'nophoto.png',
             'organisasi' =>'SC7000',
 
         ]);
@@ -101,7 +101,7 @@ class DefaultSeeder extends Seeder
             'jenis_kelamin' =>'P',
             'alamat' =>'Bandung, JL. Asia Afrika No. 14',
             'no_telepon' =>'081243546576',
-            'foto' =>'',
+            'foto' =>'nophoto.png',
             'organisasi' =>'HD3000',
 
         ]);

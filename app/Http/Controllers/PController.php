@@ -200,6 +200,10 @@ class PController extends Controller
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
             ->get();
         $today = date('Y-m-d');
+        $details = DB::table('detail_barangs')
+        ->join('barangs', 'barangs.no_barang', '=', 'detail_barangs.no_barang')
+        ->select('detail_barangs.*', 'barangs.nama_barang')
+        ->get();
 
         return view('petugas.layout.transaksi.pengadaan-tambah')->with([
             'title' => 'Buat Pengadaan',
@@ -207,7 +211,8 @@ class PController extends Controller
             'detail_barangs' => detail_barang::all(),
             'barangs' => $barangAll,
             'noPengadaan' => $noPengadaan,
-            'today' => $today
+            'today' => $today,
+            'details' => $details,
 
         ]);
     }
@@ -452,6 +457,11 @@ class PController extends Controller
 
         $id = $request->input('no_barang');
 
+        $cek = DB::table('barangs')->where('no_barang', '=', $id)->count();
+
+        if ($cek > 0) {
+
+
         $no_last = DB::table('detail_barangs')
             ->select(DB::raw('id + 1 as noUrut'))
             ->orderBy('id', 'DESC')
@@ -491,6 +501,19 @@ class PController extends Controller
             'barangs' => $barangAll,
             'kode_barcode' => $kode_barcode,
         ]);
+
+    } else {
+
+        $error = strtoupper( $request->input('no_barang'));
+
+        $pesanFlash = "Barang dengan kode ($error) Tidak ditemukan!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect()->back();
+
+    }
+
 
 
     }
@@ -852,11 +875,11 @@ class PController extends Controller
         $no_barang = DB::table('detail_barangs')->select('no_barang')->where('kode_barcode','=',$request->kode_barcode)->first();
 
         $validatedData['tanggal_maintenance'] = now()->format('Y-m-d');
-        
+
         $validatedData['no_barang'] = $no_barang->no_barang;
         $validatedData['status'] = "Sedang Diproses";
         $validatedData['user_id'] = auth()->user()->id;
-        
+
         maintenance::create($validatedData);
 
         // $validatedDataStatus['status'] = "Sudah Ditempatkan di " . $request->input('lokasi_penempatan');
@@ -888,7 +911,7 @@ class PController extends Controller
         DB::table('maintenances')
             ->where('no_maintenance', $request->input('no_maintenance'))
             ->update($validatedData);
-            
+
 
         $request->session()->flash('success', 'Maintenance telah dikonfirmasi selesai!');
 

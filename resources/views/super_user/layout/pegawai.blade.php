@@ -45,9 +45,9 @@
                     <td>{{ $pegawai->no_telepon }}</td>
 
                     <td>
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $pegawai->id }}"
+                        {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $pegawai->id }}"
                             style="margin-right: 10px" class="btn btn-primary mr-2"><i
-                                class="fa-regular fa-eye"></i></button>
+                                class="fa-regular fa-eye"></i></button> --}}
 
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $pegawai->id }}"
                             style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
@@ -192,8 +192,8 @@
                                     <div class="form-group">
                                         <label for="name" class="col-form-label">NIK :</label>
                                         <input style="font-size: 14px;" type="text"
-                                            class="form-control @error('nik') is-invalid @enderror" placeholder="NIK.."
-                                            id="name" name="nik" value="{{ $pegawai->nik }}" required>
+                                            class="form-control readonly @error('nik') is-invalid @enderror" placeholder="NIK.."
+                                            id="name" name="nik" value="{{ $pegawai->nik }}" readonly required>
                                         @error('nik')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -276,7 +276,7 @@
                                             <div class="col-md-4 text-center"><i class="fa-solid fa-circle-chevron-right"></i><br>Ubah menjadi</i></div>
                                             <div class="col-md-4">
                                                 <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none;width: 120px; height: 120px; "
-                                                id="img-preview-edit">
+                                                id="img-preview-edit{{ $pegawai->id }}">
                                             </div>
 
 
@@ -285,8 +285,8 @@
                                         <label for="name" class="col-form-label">New Foto :</label>
                                         <input style="font-size: 14px;" type="file"
                                             class="form-control mb-3 @error('foto') is-invalid @enderror"
-                                            placeholder="Choose Photo.." id="new_foto" name="foto"
-                                            onchange="previewImageEdit()">
+                                            placeholder="Choose Photo.." id="fotoedit{{ $pegawai->id }}" name="foto"
+                                            onchange="previewImage2({{ $pegawai->id }})">
                                         @error('foto')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -377,20 +377,30 @@
             oFReader.onload = function(oFREvent) {
                 imgPreview.src = oFREvent.target.result;
             }
-        }
-        function previewImageEdit() {
-            const image = document.getElementById("new_foto")
-            console.log(image);
-            const imgPreview = document.getElementById('img-preview-edit');
 
-            imgPreview.style.display = 'block';
-
-            const oFReader = new FileReader();
-            oFReader.readAsDataURL(image.files[0]);
-
-            oFReader.onload = function(oFREvent) {
-                imgPreview.src = oFREvent.target.result;
-            }
         }
     </script>
+    {{-- PREVIEW IMAGE UNTUK EDIT --}}
+    <script>
+        function previewImage2(idpegawai) {
+           console.log("haha");
+           // const idpegawai = document.getElementById('id_petugas').value;
+           // const haha = "fotoedit"
+           console.log(idpegawai);
+           var imageedit = "fotoedit" + idpegawai;
+           var imgPreviewedit = "img-preview-edit" + idpegawai;
+           const imageedit2 = document.getElementById(imageedit);
+           const imgPreviewedit2 = document.getElementById(imgPreviewedit);
+
+           imgPreviewedit2.style.display = 'block';
+
+           const oFReader2 = new FileReader();
+           oFReader2.readAsDataURL(imageedit2.files[0]);
+
+           oFReader2.onload = function(oFREvent) {
+               imgPreviewedit2.src = oFREvent.target.result;
+           }
+       }
+   </script>
+   {{-- END PREVIEW IMAGE UNTUK EDIT --}}
 @endsection

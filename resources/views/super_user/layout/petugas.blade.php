@@ -30,7 +30,7 @@
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
-                    <td><img src="{{ asset('storage/' . $petugas->foto) }}" class="rounded rounded-circle"
+                    <td><img src="{{ asset('storage/' . $petugas->foto) }}" class="rounded rounded-circle" style="width: 60px; height: 60px;"
                             style="width: 50px;" alt=""></td>
                     <td>{{ $petugas->nik }}</td>
                     <td>{{ $petugas->nama_user }}</td>
@@ -52,9 +52,9 @@
                         @endif
                     </td>
                     <td>
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
+                        {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
                             style="margin-right: 10px" class="btn btn-primary mr-2"><i
-                                class="fa-regular fa-eye"></i></button>
+                                class="fa-regular fa-eye"></i></button> --}}
 
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
                             style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
@@ -356,30 +356,38 @@
                                         <div class="row d-flex w-100 align-items-center">
                                             <div class="col-md-4">
 
-                                                <img class="img-preview img-fluid col-3 rounded rounded-circle"
-                                            id="img-preview" src="{{ asset('storage/' . $petugas->foto) }}" style="width: 120px; height: 120px;">
+                                                <img class=" img-fluid col-3 rounded rounded-circle"
+                                            id="" src="{{ asset('storage/' . $petugas->foto) }}" style="width: 120px; height: 120px;">
 
 
                                             </div>
                                             <div class="col-md-4 text-center"><i class="fa-solid fa-circle-chevron-right"></i><br>Ubah menjadi</i></div>
                                             <div class="col-md-4">
-                                                <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none;width: 120px; height: 120px; "
-                                                id="img-preview-edit">
+                                                <img class="img-preview-edit img-fluid col-3 rounded rounded-circle" style="display: none;width: 120px; height: 120px; "
+                                                id="img-preview-edit{{ $petugas->id }}">
+
                                             </div>
 
 
                                         </div>
                                         <br>
                                         <label for="name" class="col-form-label">New Foto :</label>
-                                        <input style="font-size: 14px;" type="file"
+                                        {{-- <input style="font-size: 14px;" type="file"
                                             class="form-control mb-3 @error('foto') is-invalid @enderror"
-                                            placeholder="Choose Photo.." id="new_foto" name="foto"
-                                            onchange="previewImageEdit()">
-                                        @error('foto')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
+                                            placeholder="Choose Photo.." id="fotoedit" name="foto"
+                                            onchange="previewImage2()"> --}}
+
+                                            <input style="font-size: 14px;" type="file"
+                                    class="form-control mb-3 @error('foto') is-invalid @enderror"
+                                    placeholder="Choose Photo.." id="fotoedit{{ $petugas->id }}" name="foto"
+                                    onchange="previewImage2('{{ $petugas->id }}')">
+                                @error('foto')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                {{-- <img class="img-preview img-fluid col-3 rounded rounded-circle"
+                                style="display: none;" id="img-preview-edit"> --}}
 
                                     </div>
                                 </div>
@@ -460,25 +468,36 @@
             imgPreview.style.display = 'block';
 
             const oFReader = new FileReader();
+            console.log(oFReader);
             oFReader.readAsDataURL(image.files[0]);
 
             oFReader.onload = function(oFREvent) {
                 imgPreview.src = oFREvent.target.result;
             }
         }
-        function previewImageedit() {
-            const imageedit = document.getElementById("foto-edit")
-            console.log(imageedit);
-            const imgPreviewedit = document.getElementById('img-preview-edit');
+    </script>
+    {{-- PREVIEW IMAGE UNTUK EDIT --}}
+    <script>
+         function previewImage2(idpetugas) {
+            console.log("haha");
+            // const idpetugas = document.getElementById('id_petugas').value;
+            // const haha = "fotoedit"
+            console.log(idpetugas);
+            var imageedit = "fotoedit" + idpetugas;
+            var imgPreviewedit = "img-preview-edit" + idpetugas;
+            const imageedit2 = document.getElementById(imageedit);
+            const imgPreviewedit2 = document.getElementById(imgPreviewedit);
 
-            imgPreviewedit.style.display = 'block';
+            imgPreviewedit2.style.display = 'block';
 
-            const oFReader = new FileReader();
-            oFReader.readAsDataURL(imageedit.files[0]);
+            const oFReader2 = new FileReader();
+            oFReader2.readAsDataURL(imageedit2.files[0]);
 
-            oFReader.onload = function(oFREvent) {
-                imgPreviewedit.src = oFREvent.target.result;
+            oFReader2.onload = function(oFREvent) {
+                imgPreviewedit2.src = oFREvent.target.result;
             }
         }
     </script>
+    {{-- END PREVIEW IMAGE UNTUK EDIT --}}
+
 @endsection

@@ -265,9 +265,9 @@
                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                  </div>
                  <div class="modal-body">
-                     <strong><center>
+                     <strong><
                         Data Barang dengan Kode: {{ $barang->no_barang }} / {{ $barang->nama_barang }}
-                    </center></strong>
+                    </strong>
 
                     <table class="table table-striped" id="data-tables" style="font-size: 14px;">
                         <thead>
@@ -327,8 +327,6 @@
                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
                          Cancel
                      </button>
-                     <button type="submit" class="btn btn-primary" style="font-size: 14px;">Edit Data</button>
-                     </form>
                  </div>
              </div>
          </div>

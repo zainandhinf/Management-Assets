@@ -2,10 +2,6 @@
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
-
-
-
-
         <div class="row">
 
 
@@ -18,10 +14,14 @@
                 <i class="fa-solid fa-boxes-packing mb-2"></i>
                 Pilih Barang
             </button>
+            <form action="/pengadaan-tambah-barang" method="post">
+                @csrf
+                {{-- <input type="hidden" name="no_barang" id="input-no-barang"> --}}
             <div class="form-group">
 
                 <label for="">No. Barang</label><br>
-                <input type="text" name="no_pengadaan" class="form-control mb-2 w-100" value="">
+                <input type="text" name="no_barang" class="form-control mb-2 w-100" value="" placeholder="Masukan No. Barang lalu tekan 'ENTER'..." required>
+                <button type="submit" style="display: none"></button>
                 {{-- <label for="">No. Pengadaan</label><br>
                 <input type="text" name="no_pengadaan" class="form-control mb-2" value="BB00001">
                 <label for="">No. Pengadaan</label><br>
@@ -37,6 +37,8 @@
 
 
             </div>
+        </form>
+
 
         </div>
     </div>
@@ -61,7 +63,7 @@
                                 <th>Nama</th>
                                 <th>Kategori</th>
                                 <th>Qty</th>
-                                <th data-searchable="false">Action</th>
+                                <th style="text-align: right" data-searchable="false">Action</th>
                             </tr>
                         </thead>
                         @php
@@ -82,11 +84,13 @@
                                 <td>{{ $barang->nama_barang }}</td>
                                 <td>{{ $barang->nama_kategori }}</td>
                                 <td>{{ $qty }}</td>
-                                <td>
+                                <td style="float: right;">
                                     {{-- <button style="margin-right: 10px" class="btn btn-info mr-2">
                                         <i class="fa fa-eye"></i>
                                     </button> --}}
-                                    <button type="button" class="btn btn-warning select-barang"
+
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning select-barang"
                                         data-no-barang="{{ $barang->no_barang }}">
                                         <i class="fa fa-plus"></i> Pilih Barang
                                     </button>
@@ -117,6 +121,9 @@
     {{-- modal edit data --}}
 
     {{-- end modal edit data --}}
+
+    {{-- modal detail barang --}}
+    {{-- end modal detail barang --}}
 
     {{-- modal delete data --}}
 
