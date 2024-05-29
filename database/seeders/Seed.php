@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
-class DefaultSeeder extends Seeder
+class Seed extends Seeder
 {
     /**
      * Run the database seeds.
@@ -28,7 +28,7 @@ class DefaultSeeder extends Seeder
             'role' =>'super_user',
         ]);
         DB::table('users')->insert([
-            'nik' =>'50977',
+            'nik' =>'50979',
             'nama_user' =>'Koordinator',
             'jenis_kelamin' =>'L',
             'alamat' =>'',

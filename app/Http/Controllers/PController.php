@@ -208,6 +208,10 @@ class PController extends Controller
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
             ->get();
         $today = date('Y-m-d');
+        $details = DB::table('detail_barangs')
+        ->join('barangs', 'barangs.no_barang', '=', 'detail_barangs.no_barang')
+        ->select('detail_barangs.*', 'barangs.nama_barang')
+        ->get();
 
         return view('petugas.layout.transaksi.pengadaan-tambah')->with([
             'title' => 'Buat Pengadaan',
@@ -217,6 +221,8 @@ class PController extends Controller
             'noPengadaan' => $noPengadaan,
             'today' => $today,
             'open' => 'yes-2',
+            'details' => $details,
+
         ]);
     }
     public function goPenempatan()
@@ -470,6 +476,11 @@ class PController extends Controller
 
         $id = $request->input('no_barang');
 
+        $cek = DB::table('barangs')->where('no_barang', '=', $id)->count();
+
+        if ($cek > 0) {
+
+
         $no_last = DB::table('detail_barangs')
             ->select(DB::raw('id + 1 as noUrut'))
             ->orderBy('id', 'DESC')
@@ -510,6 +521,19 @@ class PController extends Controller
             'kode_barcode' => $kode_barcode,
             'open' => 'yes-2',
         ]);
+
+    } else {
+
+        $error = strtoupper( $request->input('no_barang'));
+
+        $pesanFlash = "Barang dengan kode ($error) Tidak ditemukan!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect()->back();
+
+    }
+
 
 
     }

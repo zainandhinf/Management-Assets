@@ -36,11 +36,16 @@ class SUController extends Controller
 
     public function goPetugas()
     {
+    $petugass = DB::table('users')
+                    ->where('id',  '!=', auth()->user()->id)
+                    ->get();
+
         return view('super_user.layout.petugas')->with([
             'title' => 'Data Petugas',
             'active' => 'Data Petugas',
-            'petugass' => User::all(),
             'open' => 'yes',
+            'petugass' => $petugass,
+
         ]);
     }
 
@@ -69,7 +74,7 @@ class SUController extends Controller
                             ->select('detail_barangs.*', 'barangs.nama_barang')
                             ->get();
 
-        // dd($details);    
+        // dd($details);
 
 
         $kategori_barang = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
@@ -294,20 +299,59 @@ class SUController extends Controller
     //petugas
     public function addPetugas(Request $request)
     {
+
         $validatedData = $request->validate([
             'nik' => 'required|max:16',
             'nama_user' => 'required|max:255',
             'jenis_kelamin' => 'required',
             'alamat' => 'nullable|max:255',
-            'no_telepon' => 'nullable|max:12',
+            'no_telepon' => 'nullable|max:16',
             'username' => 'required|max:255',
-            'password' => 'required|max:8',
+            'password' => 'required|max:64',
             'role' => 'required',
-            'foto' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048', new SquareImage],
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ]);
 
+
+
+
         $validatedData['password'] = Hash::make($request->input('password'));
+
+
+        if ($request->file('foto')) {
+
         $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
+
+        }
+
+        User::create($validatedData);
+
+        $request->session()->flash('success', 'Petugas baru telah ditambahkan!');
+
+        return redirect('/petugas');
+    }
+    public function addPetugasFromPegawai(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'nik' => 'required|max:16',
+            'username' => 'required|max:255',
+            'password' => 'required|max:64',
+            'role' => 'required',
+        ]);
+
+
+        $datapegawai = DB::table('pegawais')
+                                ->where('nik', '=', $request->nik)
+                                ->select('*')
+                                ->first();
+
+        $validatedData['nama_user'] = $datapegawai->nama_user;
+        $validatedData['jenis_kelamin'] = $datapegawai->jenis_kelamin;
+        $validatedData['alamat'] = $datapegawai->alamat;
+        $validatedData['no_telepon'] = $datapegawai->no_telepon;
+        $validatedData['foto'] = $datapegawai->foto;
+        $validatedData['password'] = Hash::make($request->input('password'));
 
 
         User::create($validatedData);
@@ -320,19 +364,28 @@ class SUController extends Controller
     {
         // dd($request);
         $validatedData = $request->validate([
-            'nik' => 'max:16',
-            'nama_user' => 'max:255',
-            'jenis_kelamin' => 'max:10',
+            'nik' => 'required|max:16',
+            'nama_user' => 'required|max:255',
+            'jenis_kelamin' => 'required',
             'alamat' => 'nullable|max:255',
-            'no_telepon' => 'nullable|max:13',
-            'username' => 'max:255',
-            'role' => 'max:12',
+            'no_telepon' => 'nullable|max:16',
+            'username' => 'required|max:255',
+            // 'password' => 'required|max:64',
+            'role' => 'required',
         ]);
 
         // dd($validatedData);
+
         if ($request->file('foto')) {
             $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
+
+            if ($request->oldPic) {
+                Storage::delete($request->oldPic);
+            }
         }
+
+
+
         DB::table('users')
             ->where('id', $request->input('id_user'))
             ->update($validatedData);
@@ -348,7 +401,10 @@ class SUController extends Controller
             ->where('id', '=', $request->input('id_user'))
             ->get();
 
-        Storage::delete($request->input('foto'));
+        if ($request->foto != null) {
+            Storage::delete($request->input('foto'));
+        }
+
 
         DB::table('users')->where('id', $request->input('id_user'))->delete();
 
@@ -370,14 +426,20 @@ class SUController extends Controller
             'no_telepon' => 'nullable|max:12',
             'alamat' => 'nullable|max:255',
             'organisasi' => 'required',
-            'foto' => 'required|file'
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048']
         ]);
 
 
         // dd($request);
         $validatedData['organisasi'] = strtoupper($request->input('organisasi'));
 
-        $validatedData['foto'] = $request->file('foto')->store('fotopegawai');
+
+        if ($request->foto) {
+            $validatedData['foto'] = $request->file('foto')->store('fotopegawai');
+        } else {
+            $validatedData['foto'] = '';
+
+        }
 
         pegawai::create($validatedData);
 
@@ -395,13 +457,18 @@ class SUController extends Controller
             'jenis_kelamin' => 'max:10',
             'alamat' => 'nullable|max:255',
             'no_telepon' => 'nullable|max:13',
-            'foto' => 'nullable',
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ]);
 
         // dd($validatedData);
         if ($request->file('foto')) {
             $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
+
+            if ($request->oldPic) {
+                Storage::delete($request->oldPic);
+            }
         }
+
 
         DB::table('pegawais')
             ->where('id', $request->input('id_user'))
@@ -419,7 +486,13 @@ class SUController extends Controller
             ->where('id', '=', $request->input('id_user'))
             ->get();
 
-        Storage::delete($request->input('foto'));
+
+            if ($request->foto != null) {
+
+                Storage::delete($request->input('foto'));
+
+            }
+
 
         DB::table('pegawais')->where('id', $request->input('id_user'))->delete();
 
@@ -645,12 +718,13 @@ class SUController extends Controller
         DB::table('ruangans')
             ->where('id', $request->input('id_ruangan'))
             ->update($validatedData);
-            
+
 
         $request->session()->flash('success', 'Ruangan telah berhasil diedit!');
 
         return redirect('/ruangan');
     }
+
     public function deleteRuangan(Request $request, ruangan $ruangan)
     {
         $nama_ruangan = DB::table('ruangans')

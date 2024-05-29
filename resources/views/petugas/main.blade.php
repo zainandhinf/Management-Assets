@@ -118,6 +118,9 @@
         ::-webkit-scrollbar-thumb {
             background-color: #e2e3e5;
         }
+        .modal-open-nested .modal-backdrop{
+            display: none;
+        }
     </style>
 
 </head>
