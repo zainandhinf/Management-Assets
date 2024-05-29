@@ -22,7 +22,7 @@ class Seed extends Seeder
             'jenis_kelamin' =>'L',
             'alamat' =>'',
             'no_telepon' =>'',
-            'foto' =>'nophoto.png',
+            'foto' =>'',
             'username' =>'user',
             'password' => Hash::make('111'),
             'role' =>'super_user',
@@ -33,7 +33,7 @@ class Seed extends Seeder
             'jenis_kelamin' =>'L',
             'alamat' =>'',
             'no_telepon' =>'',
-            'foto' =>'nophoto.png',
+            'foto' =>'',
             'username' =>'koor',
             'password' => Hash::make('111'),
             'role' =>'petugas',
@@ -72,7 +72,7 @@ class Seed extends Seeder
             'jenis_kelamin' =>'L',
             'alamat' =>'Bandung, JL. Braga No. 10',
             'no_telepon' =>'0812345678910',
-            'foto' =>'nophoto.png',
+            'foto' =>'',
             'organisasi' =>'IT5000',
         ]);
         DB::table('pegawais')->insert([
@@ -81,7 +81,7 @@ class Seed extends Seeder
             'jenis_kelamin' =>'L',
             'alamat' =>'Bandung, JL. Asia Afrika No. 11',
             'no_telepon' =>'088811112234',
-            'foto' =>'nophoto.png',
+            'foto' =>'',
             'organisasi' =>'UI2500',
 
         ]);
@@ -91,7 +91,7 @@ class Seed extends Seeder
             'jenis_kelamin' =>'P',
             'alamat' =>'Bandung, JL. Asia Afrika No. 12',
             'no_telepon' =>'081123456789',
-            'foto' =>'nophoto.png',
+            'foto' =>'',
             'organisasi' =>'SC7000',
 
         ]);
@@ -101,7 +101,7 @@ class Seed extends Seeder
             'jenis_kelamin' =>'P',
             'alamat' =>'Bandung, JL. Asia Afrika No. 14',
             'no_telepon' =>'081243546576',
-            'foto' =>'nophoto.png',
+            'foto' =>'',
             'organisasi' =>'HD3000',
 
         ]);

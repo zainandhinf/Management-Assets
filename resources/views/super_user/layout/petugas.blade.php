@@ -30,8 +30,19 @@
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
-                    <td><img src="{{ asset('storage/' . $petugas->foto) }}" class="rounded rounded-circle" style="width: 60px; height: 60px;"
-                            style="width: 50px;" alt=""></td>
+                    <td>
+                        @if($petugas->foto == null)
+
+                        <img src="{{ asset('nophoto.png') }}" alt="No Photo" class="rounded rounded-circle" style="width: 60px; height: 60px;"
+                        style="width: 50px;" alt="">
+
+                        @else
+
+                        <img src="{{ asset('storage/' . $petugas->foto) }}" class="rounded rounded-circle" style="width: 60px; height: 60px;"
+                        style="width: 50px;" alt="">
+
+                        @endif
+                    </td>
                     <td>{{ $petugas->nik }}</td>
                     <td>{{ $petugas->nama_user }}</td>
                     <td>
@@ -85,23 +96,23 @@
                             <div class="form-group">
                                 <form action="/addpetugas" method="post" enctype="multipart/form-data">
                                     @csrf
-                                    <label for="name" class="col-form-label">NIK :</label>
+                                    <label for="name" class="col-form-label">NIK* :</label>
                                     <input style="font-size: 14px;" type="text"
                                         class="form-control @error('nik')
                   is-invalid
               @enderror"
-                                        placeholder="NIK.." id="name" name="nik">
+                                        placeholder="NIK.." id="name" name="nik" autocomplete="off" required>
                                     @error('nik')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <label for="name" class="col-form-label">Nama Petugas :</label>
+                                    <label for="name" class="col-form-label">Nama Petugas* :</label>
                                     <input style="font-size: 14px;" type="text"
                                         class="form-control @error('nama_user')
                   is-invalid
               @enderror"
-                                        placeholder="Nama petugas.." id="name" name="nama_user">
+                                        placeholder="Nama petugas.." id="name" name="nama_user" autocomplete="off" required>
                                     @error('nama_user')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -139,7 +150,7 @@
                                         class="form-control @error('no_telepon')
                   is-invalid
               @enderror"
-                                        placeholder="No telepon.." id="name" name="no_telepon">
+                                        placeholder="No telepon.." id="name" name="no_telepon" autocomplete="off">
                                     @error('no_telepon')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -150,23 +161,23 @@
                         <div class="col-md-6">
                             <div class="form-group">
 
-                                <label for="name" class="col-form-label">Username :</label>
+                                <label for="name" class="col-form-label">Username* :</label>
                                 <input style="font-size: 14px;" type="text"
                                     class="form-control @error('username')
                   is-invalid
               @enderror"
-                                    placeholder="Username.." id="name" name="username">
+                                    placeholder="Username.." id="name" name="username" autocomplete="off" required>
                                 @error('username')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <label for="name" class="col-form-label">Password :</label>
+                                <label for="name" class="col-form-label">Password* :</label>
                                 <input style="font-size: 14px;" type="password"
                                     class="form-control @error('password')
                   is-invalid
               @enderror"
-                                    placeholder="Password.." id="name" name="password">
+                                    placeholder="Password.." id="name" name="password" required>
                                 @error('password')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -186,7 +197,7 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <label for="name" class="col-form-label">Foto :</label>
+                                <label for="name" class="col-form-label">Foto(opsionals) :</label>
                                 <br>
                                 <input style="font-size: 14px;" type="file"
                                     class="form-control mb-3 @error('foto') is-invalid @enderror"
@@ -236,9 +247,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name" class="col-form-label">NIK :</label>
-                                        <input style="font-size: 14px;" type="text"
+                                        <input style="font-size: 14px; background: #eee;" type="text"
                                             class="form-control @error('nik') is-invalid @enderror" placeholder="NIK.."
-                                            id="name" name="nik" value="{{ $petugas->nik }}" required>
+                                            id="name" name="nik" value="{{ $petugas->nik }}" required readonly>
                                         @error('nik')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -307,7 +318,7 @@
               is-invalid
           @enderror"
                                             placeholder="Username.." id="name" name="username"
-                                            value="{{ $petugas->username }}" required>
+                                            value="{{ $petugas->username }}" autocomplete="off" required>
                                         @error('username')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -371,11 +382,14 @@
 
                                         </div>
                                         <br>
-                                        <label for="name" class="col-form-label">New Foto :</label>
+                                        <label for="name" class="col-form-label">New Foto(opsional) :</label>
                                         {{-- <input style="font-size: 14px;" type="file"
                                             class="form-control mb-3 @error('foto') is-invalid @enderror"
                                             placeholder="Choose Photo.." id="fotoedit" name="foto"
                                             onchange="previewImage2()"> --}}
+
+                        <input type="hidden" name="oldPic" value="{{ $petugas->foto }}">
+
 
                                             <input style="font-size: 14px;" type="file"
                                     class="form-control mb-3 @error('foto') is-invalid @enderror"

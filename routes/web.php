@@ -58,6 +58,7 @@ Route::put('/uploadprofile', [SUController::class, 'editProfileImage']);
 
 //petugas/koordinator
 Route::post('/addpetugas', [SUController::class, 'addPetugas']);
+Route::post('/addpetugasfrompegawai', [SUController::class, 'addPetugasFromPegawai']);
 Route::put('/editpetugas', [SUController::class, 'editPetugas']);
 Route::delete('/deletepetugas', [SUController::class, 'deletePetugas']);
 
