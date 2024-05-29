@@ -59,6 +59,7 @@
     <style>
         @import url('https://rsms.me/inter/inter.css');
 
+
         :root {
             --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
         }
@@ -81,21 +82,22 @@
 
             /* Tambahkan format-font lain jika Anda menyertakan format lainnya */
         }
-         /* ANIMASI MASUK */
-         @keyframes transitionIn {
-    from{
-        opacity: 0;
-        /* transform: rotateX(-10deg); */
-        margin-left: 20px;
-    }
 
-    to{
-        opacity: 1;
-        /* transform: rotateX(0); */
-        margin-left: 0px;
-    }
+        /* ANIMASI MASUK */
+        @keyframes transitionIn {
+            from {
+                opacity: 0;
+                /* transform: rotateX(-10deg); */
+                margin-left: 20px;
+            }
 
-  }
+            to {
+                opacity: 1;
+                /* transform: rotateX(0); */
+                margin-left: 0px;
+            }
+
+        }
 
 
 
@@ -103,9 +105,18 @@
             font-feature-settings: "cv03", "cv04", "cv11";
             font-family: 'Inter';
         }
-        .page-content{
+
+        .page-content {
             animation: transitionIn 0.55s;
 
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #e2e3e5;
         }
     </style>
 
@@ -138,11 +149,13 @@
                 <div class="d-flex justify-content-between">
                     <h3>{{ $title }}</h3>
                     @if (session()->has('success'))
-                        <div class="alert alert-success position-absolute end-0 me-5 z-1" role="alert" style="margin-top: -10px;">
+                        <div class="alert alert-success position-absolute end-0 me-5 z-1" role="alert"
+                            style="margin-top: -10px;">
                             {{ session('success') }}
                         </div>
                     @elseif (session()->has('error'))
-                        <div class="alert alert-warning position-absolute end-0 me-5 z-1" role="alert" style="margin-top: -10px;">
+                        <div class="alert alert-warning position-absolute end-0 me-5 z-1" role="alert"
+                            style="margin-top: -10px;">
                             {{ session('error') }}
                         </div>
                     @endif

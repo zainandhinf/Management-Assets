@@ -7,7 +7,9 @@
         </div>
     </div>
     <hr class="mb-1">
-    <ul class="mynav nav nav-pills flex-column mb-auto mt-3">
+    <div style="height: 340px; width: 245px; overflow-y: scroll; margin-bottom: 5px;">
+    <ul class="mynav nav nav-pills d-flex flex-column mb-auto mt-3" style="margin-right: 2px;">
+        
         <li class="nav-item mb-1">
             <a href="/dashboard-koordinator" class="{{ $title === 'Dashboard' ? 'active' : '' }}">
                 <i class="fa-solid fa-gauge"></i>
@@ -128,36 +130,36 @@
             @else
                 style="display: none;" @endif>
                 <li class="nav-item mb-1">
-                    <a href="/pengadaan" class="{{ $title === 'Pengadaan' ? 'active' : '' }}">
+                    <a href="/pengadaan" class="{{ $active === 'Pengadaan' ? 'active' : '' }}">
                         <i class="fa-solid fa-cart-plus"></i>
                         Pengadaan
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/penempatan" class="{{ $title === 'Penempatan' ? 'active' : '' }}">
+                    <a href="/penempatan" class="{{ $active === 'Penempatan' ? 'active' : '' }}">
                         <i class="fa-solid fa-map-location-dot"></i>
                         Penempatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="/mutasi" class="{{ $title === 'Mutasi' ? 'active' : '' }}">
+                    <a href="/mutasi" class="{{ $active === 'Mutasi' ? 'active' : '' }}">
                         <i class="fa-solid fa-building-circle-arrow-right"></i>
                         Mutasi
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/peminjaman" class="{{ $title === 'Peminjaman' ? 'active' : '' }}">
+                    <a href="/peminjaman" class="{{ $active === 'Peminjaman' ? 'active' : '' }}">
                         <i class="fa-solid fa-handshake"></i>Peminjaman
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/maintenance" class="{{ $title === 'Maintenance' ? 'active' : '' }}">
+                    <a href="/maintenance" class="{{ $active === 'Maintenance' ? 'active' : '' }}">
                         <i class="fa-solid fa-screwdriver-wrench"></i>Maintenance
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/penghapusan" class="{{ $title === 'Penghapusan' ? 'active' : '' }}">
+                    <a href="/penghapusan" class="{{ $active === 'Penghapusan' ? 'active' : '' }}">
                         <i class="fa-solid fa-ban"></i>Penghapusan
                     </a>
                 </li>
@@ -193,8 +195,9 @@
             </a>
         </li>
     </ul>
+</div>
     <hr class="mt-0 hr-custom">
-    <div class="d-flex user-custom mb-0">
+    <div class="d-flex user-custom mb-0 mt-2">
         <a href="/profile">
             @if (auth()->user()->foto == null)
                 <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2"

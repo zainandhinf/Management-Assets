@@ -110,6 +110,14 @@
             animation: transitionIn 0.55s;
 
         }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #e2e3e5;
+        }
     </style>
 
 </head>

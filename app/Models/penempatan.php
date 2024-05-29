@@ -13,6 +13,7 @@ class penempatan extends Model
         'no_penempatan',
         'tanggal_penempatan',
         'lokasi_penempatan',
+        'user_id',
         'keterangan',
     ];
 }
