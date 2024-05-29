@@ -569,10 +569,12 @@ class SUController extends Controller
             }
 
 
-        DB::table('pegawais')->where('id', $request->input('id_user'))->delete();
+        DB::table('pegawais')->where('nik', $request->input('nik'))->delete();
 
-        if
-        DB::table('users')->where('id', $request->input('id_user'))->delete();
+        if($existOnPetugasCheck) {
+            DB::table('users')->where('nik', $request->input('nik'))->delete();
+        }
+
 
         $pesanFlash = "pegawai (Nama pegawai: *{$nama_pegawai[0]->nama_user} ) telah berhasil dihapus!";
 
