@@ -29,18 +29,16 @@
                     <td>{{ $no++ }}</td>
                     <td>
 
-                        @if($pegawai->foto == null)
-
-                        <img src="{{ asset('nophoto.png') }}" class="rounded rounded-circle" style="width: 60px; height: 60px;"
-                            alt="">
-
+                        @if ($pegawai->foto == null)
+                            <img src="{{ asset('nophoto.png') }}" class="rounded rounded-circle"
+                                style="width: 60px; height: 60px;" alt="">
                         @else
-                        <img src="{{ asset('storage/' . $pegawai->foto) }}" class="rounded rounded-circle" style="width: 60px; height: 60px;"
-                            alt="">
+                            <img src="{{ asset('storage/' . $pegawai->foto) }}" class="rounded rounded-circle"
+                                style="width: 60px; height: 60px;" alt="">
                         @endif
 
 
-                        </td>
+                    </td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
                     <td>{{ $pegawai->nik }}</td>
@@ -63,12 +61,30 @@
 
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $pegawai->id }}"
                             style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
-                            <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $pegawai->id }}"
-                                class="btn btn-danger mt-1">
-                                <i class="fa fa-trash"></i>
-                            </button>
+                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $pegawai->id }}"
+                            class="btn btn-danger mt-1">
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                        @php
+                            // Query untuk memeriksa apakah pegawai sudah ada di tabel 'users'
+                            $cekPegawai = DB::table('pegawais')
+                                ->leftJoin('users', 'users.nik', '=', 'pegawais.nik')
+                                ->where('pegawais.id', '=', $pegawai->id)
+                                ->select('users.nik')
+                                ->first();
+                        @endphp
+
+                        @if ($cekPegawai && $cekPegawai->nik)
+                            {{-- Pegawai sudah menjadi user, jadi tombol tidak ditampilkan --}}
+                        @else
+                            {{-- Pegawai belum menjadi user, jadi tombol ditampilkan --}}
                             <button data-bs-toggle="modal" data-bs-target="#goAdmin{{ $pegawai->id }}"
-                                style="margin-right: 10px" class="btn btn-light mr-2"><i class="fa-solid fa-sliders"></i></button>
+                                style="margin-right: 10px" class="btn btn-light mr-2">
+                                <i class="fa-solid fa-sliders"></i>
+                            </button>
+                        @endif
+
                     </td>
                 </tr>
             @endforeach
@@ -153,9 +169,9 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none; width: 120px; height: 120px;"
-                                        id="img-preview">
-                                    <label for="name" class="col-form-label">Foto :</label>
+                                    <img class="img-preview img-fluid col-3 rounded rounded-circle"
+                                        style="display: none; width: 120px; height: 120px;" id="img-preview">
+                                    <label for="name" class="col-form-label">Foto(opsional) :</label>
                                     <br>
                                     <input style="font-size: 14px;" type="file"
                                         class="form-control mb-3 @error('foto') is-invalid @enderror"
@@ -206,8 +222,9 @@
                                     <div class="form-group">
                                         <label for="name" class="col-form-label">NIK :</label>
                                         <input style="font-size: 14px; background: #eee" type="text"
-                                            class="form-control readonly @error('nik') is-invalid @enderror" placeholder="NIK.."
-                                            id="name" name="nik" value="{{ $pegawai->nik }}" readonly required>
+                                            class="form-control readonly @error('nik') is-invalid @enderror"
+                                            placeholder="NIK.." id="name" name="nik"
+                                            value="{{ $pegawai->nik }}" readonly required>
                                         @error('nik')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -283,14 +300,17 @@
                                             <div class="col-md-4">
 
                                                 <img class="img-preview img-fluid col-3 rounded rounded-circle"
-                                            id="img-preview" src="{{ asset('storage/' . $pegawai->foto) }}" style="width: 120px; height: 120px;">
+                                                    id="img-preview" src="{{ asset('storage/' . $pegawai->foto) }}"
+                                                    style="width: 120px; height: 120px;">
 
 
                                             </div>
-                                            <div class="col-md-4 text-center"><i class="fa-solid fa-circle-chevron-right"></i><br>Ubah menjadi</i></div>
+                                            <div class="col-md-4 text-center"><i
+                                                    class="fa-solid fa-circle-chevron-right"></i><br>Ubah menjadi</i></div>
                                             <div class="col-md-4">
-                                                <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none;width: 120px; height: 120px; "
-                                                id="img-preview-edit{{ $pegawai->id }}">
+                                                <img class="img-preview img-fluid col-3 rounded rounded-circle"
+                                                    style="display: none;width: 120px; height: 120px; "
+                                                    id="img-preview-edit{{ $pegawai->id }}">
                                             </div>
 
 
@@ -298,7 +318,7 @@
                                         <br>
                                         <label for="name" class="col-form-label">New Foto(opsional) :</label>
 
-                        <input type="hidden" name="oldPic" value="{{ $pegawai->foto }}">
+                                        <input type="hidden" name="oldPic" value="{{ $pegawai->foto }}">
 
 
                                         <input style="font-size: 14px;" type="file"
@@ -333,8 +353,8 @@
     {{-- end modal edit data --}}
 
 
-     {{-- modal add data --}}
-     <div class="modal modal-blur fade" id="adddata" tabindex="-1" role="dialog" style="font-size: 14px;">
+    {{-- modal add data --}}
+    <div class="modal modal-blur fade" id="adddata" tabindex="-1" role="dialog" style="font-size: 14px;">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -410,8 +430,8 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <img class="img-preview img-fluid col-3 rounded rounded-circle" style="display: none; width: 120px; height: 120px;"
-                                        id="img-preview">
+                                    <img class="img-preview img-fluid col-3 rounded rounded-circle"
+                                        style="display: none; width: 120px; height: 120px;" id="img-preview">
                                     <label for="name" class="col-form-label">Foto :</label>
                                     <br>
                                     <input style="font-size: 14px;" type="file"
@@ -445,44 +465,55 @@
     {{-- modal jadikan adminsitrator --}}
 
     @foreach ($pegawais as $pegawai)
+        <div class="modal modal-blur fade" id="goAdmin{{ $pegawai->id }}" tabindex="-1" role="dialog"
+            aria-hidden="true" style="font-size: 14px;">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fs-6">Jadikan ({{ $pegawai->nama_user }}) <b>Petugas..</b></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <form action="/addpetugasfrompegawai" method="post" enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="name" class="col-form-label">NIK* :</label>
+                                                <input value="{{ $pegawai->nik }}"
+                                                    style="font-size: 14px; background: #eee" type="text"
+                                                    class="form-control @error('nik')
+                          is-invalid
+                      @enderror"
+                                                    placeholder="NIK.." id="name" name="nik" autocomplete="off"
+                                                    readonly required>
+                                                @error('nik')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="name" class="col-form-label">Nama Petugas* :</label>
+                                                <input value="{{ $pegawai->nama_user }}"
+                                                    style="font-size: 14px; background: #eee" type="text"
+                                                    class="form-control @error('nama_user')
+                          is-invalid
+                      @enderror"
+                                                    placeholder="Nama petugas.." id="name" name="nama_user"
+                                                    autocomplete="off" required readonly>
+                                                @error('nama_user')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                        </div>
 
-    <div class="modal modal-blur fade" id="goAdmin{{ $pegawai->id }}" tabindex="-1" role="dialog" aria-hidden="true"
-        style="font-size: 14px;">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fs-6">Jadikan ({{ $pegawai->nama_user }}) <b>Petugas..</b></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <form action="/addpetugasfrompegawai" method="post" enctype="multipart/form-data">
-                                    @csrf
-                                    <label for="name" class="col-form-label">NIK* :</label>
-                                    <input value="{{ $pegawai->nik }}" style="font-size: 14px; background: #eee" type="text"
-                                        class="form-control @error('nik')
-                  is-invalid
-              @enderror"
-                                        placeholder="NIK.." id="name" name="nik" autocomplete="off" readonly required>
-                                    @error('nik')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                    <label for="name" class="col-form-label">Nama Petugas* :</label>
-                                    <input value="{{ $pegawai->nama_user }}" style="font-size: 14px; background: #eee" type="text"
-                                        class="form-control @error('nama_user')
-                  is-invalid
-              @enderror"
-                                        placeholder="Nama petugas.." id="name" name="nama_user" autocomplete="off" required readonly>
-                                    @error('nama_user')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                    <label for="name" class="col-form-label">Gender :</label>
+
+                                        {{-- <label for="name" class="col-form-label">Gender :</label>
                                     <div class="input-group">
                                         @if ($pegawai->jenis_kelamin === 'L')
                                             <select style="font-size: 14px;"
@@ -508,8 +539,8 @@
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                    @enderror
-                                    <label for="name" class="col-form-label">Alamat :</label>
+                                    @enderror --}}
+                                        {{-- <label for="name" class="col-form-label">Alamat :</label>
                                     <textarea style="font-size: 14px;" type="text"
                                         class="form-control @error('alamat')
                   is-invalid
@@ -519,8 +550,8 @@
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                    @enderror
-                                    <label for="name" class="col-form-label">No Telepon :</label>
+                                    @enderror --}}
+                                        {{-- <label for="name" class="col-form-label">No Telepon :</label>
                                     <input value="{{ $pegawai->no_telepon }}" style="font-size: 14px;" type="text"
                                         class="form-control @error('no_telepon')
                   is-invalid
@@ -530,49 +561,48 @@
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                    @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
+                                    @enderror --}}
+                                </div>
+                                <div class="form-group">
 
-                                <label for="name" class="col-form-label"><b>Username*</b> :</label>
-                                <input value="{{ $pegawai->nik }}" style="font-size: 14px;" type="text"
-                                    class="form-control @error('username')
+                                    <label for="name" class="col-form-label"><b>Username*</b> :</label>
+                                    <input value="{{ $pegawai->nik }}" style="font-size: 14px;" type="text"
+                                        class="form-control @error('username')
                   is-invalid
               @enderror"
-                                    placeholder="Username.." id="name" name="username" autocomplete="off" required>
-                                @error('username')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                                <label for="name" class="col-form-label"><b>Password*</b> :</label>
-                                <input style="font-size: 14px;" type="password"
-                                    class="form-control @error('password')
+                                        placeholder="Username.." id="name" name="username" autocomplete="off"
+                                        required>
+                                    @error('username')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <label for="name" class="col-form-label"><b>Password*</b> :</label>
+                                    <input style="font-size: 14px;" type="password"
+                                        class="form-control @error('password')
                   is-invalid
               @enderror"
-                                    placeholder="Password.." id="name" name="password" required>
-                                @error('password')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                                <label for="name" class="col-form-label">Role :</label>
-                                <select style="font-size: 14px;"
-                                    class="form-select @error('role')
+                                        placeholder="Password.." id="name" name="password" required>
+                                    @error('password')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <label for="name" class="col-form-label">Role :</label>
+                                    <select style="font-size: 14px;"
+                                        class="form-select @error('role')
                                     is-invalid
                                 @enderror"
-                                    id="inputGroupSelect01" name="role">
-                                    <option value="super_user">Super User</option>
-                                    <option value="petugas">Koordinator</option>
-                                </select>
-                                @error('role')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                                <label for="name" class="col-form-label">Foto(opsional) :</label>
+                                        id="inputGroupSelect01" name="role">
+                                        <option value="super_user">Super User</option>
+                                        <option value="petugas">Koordinator</option>
+                                    </select>
+                                    @error('role')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    {{-- <label for="name" class="col-form-label">Foto(opsional) :</label>
                                 <br>
                                 <input value="{{ $pegawai->foto }}" style="font-size: 14px;" type="file"
                                     class="form-control mb-3 @error('foto') is-invalid @enderror"
@@ -584,24 +614,24 @@
                                     </div>
                                 @enderror
                                 <img class="img-preview img-fluid col-3 rounded rounded-circle"
-                                            style="display: none;" id="img-preview">
+                                            style="display: none;" id="img-preview"> --}}
+                                </div>
                             </div>
+
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary" style="font-size: 14px;">Create Data</button>
+                    </div>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="font-size: 14px;">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary" style="font-size: 14px;">Create Data</button>
-                </div>
-                </form>
+
             </div>
-
         </div>
-    </div>
-    </div>
-
+        </div>
     @endforeach
 
     {{-- end end modal jadikan administrator --}}
@@ -675,24 +705,24 @@
     {{-- PREVIEW IMAGE UNTUK EDIT --}}
     <script>
         function previewImage2(idpegawai) {
-           console.log("haha");
-           // const idpegawai = document.getElementById('id_petugas').value;
-           // const haha = "fotoedit"
-           console.log(idpegawai);
-           var imageedit = "fotoedit" + idpegawai;
-           var imgPreviewedit = "img-preview-edit" + idpegawai;
-           const imageedit2 = document.getElementById(imageedit);
-           const imgPreviewedit2 = document.getElementById(imgPreviewedit);
+            console.log("haha");
+            // const idpegawai = document.getElementById('id_petugas').value;
+            // const haha = "fotoedit"
+            console.log(idpegawai);
+            var imageedit = "fotoedit" + idpegawai;
+            var imgPreviewedit = "img-preview-edit" + idpegawai;
+            const imageedit2 = document.getElementById(imageedit);
+            const imgPreviewedit2 = document.getElementById(imgPreviewedit);
 
-           imgPreviewedit2.style.display = 'block';
+            imgPreviewedit2.style.display = 'block';
 
-           const oFReader2 = new FileReader();
-           oFReader2.readAsDataURL(imageedit2.files[0]);
+            const oFReader2 = new FileReader();
+            oFReader2.readAsDataURL(imageedit2.files[0]);
 
-           oFReader2.onload = function(oFREvent) {
-               imgPreviewedit2.src = oFREvent.target.result;
-           }
-       }
-   </script>
-   {{-- END PREVIEW IMAGE UNTUK EDIT --}}
+            oFReader2.onload = function(oFREvent) {
+                imgPreviewedit2.src = oFREvent.target.result;
+            }
+        }
+    </script>
+    {{-- END PREVIEW IMAGE UNTUK EDIT --}}
 @endsection

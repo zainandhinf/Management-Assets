@@ -11,6 +11,30 @@
         </div>
     @endif --}}
     <div class="d-flex mb-5">
+        <div class="card profile-right col-3 justify-content-center align-items-center p-4" style="height: 30%;">
+            @if (auth()->user()->foto == null)
+            <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2 ms-3" style="width: 200px; height: 200px;"
+            alt="">
+            @else
+            <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-fluid rounded rounded-circle me-2 ms-3" style="width: 200px; height: 200px;"
+            alt="">
+            @endif
+            {{-- <label for="file" class="custom-file-upload ms-3 mt-2">
+                <form action="/uploadprofile" method="POST" enctype="multipart/form-data" id="uploadprofile">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="oldPic" value="{{ auth()->user()->foto }}">
+                    <div class="icon">
+                        <i class="fa-solid fa-camera-rotate text-white fs-5"></i>
+                    </div>
+                    <div class="text">
+                        <span>Ubah foto profil</span>
+                    </div>
+                    <input id="file" type="file" onchange="handleFileChange()" name="foto">
+                </form>
+            </label> --}}
+
+        </div>
         <div class="card p-4 flex-row w-100">
 
 
@@ -55,31 +79,8 @@
             </div>
 
         </div>
-        <div class="card profile-right col-3 justify-content-center align-items-center p-4" style="height: 30%;">
-                @if (auth()->user()->foto == null)
-                <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2 ms-3" style="width: 200px; height: 200px;"
-                alt="">
-                @else
-                <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-fluid rounded rounded-circle me-2 ms-3" style="width: 200px; height: 200px;"
-                alt="">
-                @endif
-                {{-- <label for="file" class="custom-file-upload ms-3 mt-2">
-                    <form action="/uploadprofile" method="POST" enctype="multipart/form-data" id="uploadprofile">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="oldPic" value="{{ auth()->user()->foto }}">
-                        <div class="icon">
-                            <i class="fa-solid fa-camera-rotate text-white fs-5"></i>
-                        </div>
-                        <div class="text">
-                            <span>Ubah foto profil</span>
-                        </div>
-                        <input id="file" type="file" onchange="handleFileChange()" name="foto">
-                    </form>
-                </label> --}}
 
-            </div>
-        {{-- <div class="card p-4 ms-2" style="height: 150px; width: 270px;">
+        <div class="card p-4 ms-2" style="height: 150px; width: 270px;">
             <button onclick="ShowModal1()" type="button" class="btn btn-primary btn-sm mt-2 mb-2" data-bs-toggle="modal"
                 data-bs-target="#editdata">
                 Edit Profile
@@ -88,7 +89,7 @@
                 data-bs-target="#editpass">
                 Changes Password
             </button>
-        </div> --}}
+        </div>
     </div>
 
     {{-- modal --}}

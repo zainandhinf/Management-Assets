@@ -187,7 +187,7 @@
     </ul>
     <hr class="mt-0 hr-custom">
     <div class="d-flex user-custom mb-0">
-        <a href="/profile">
+        <a href="/profile-koordinator">
             @if (auth()->user()->foto == null)
                 <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
                     style="width: 50px; height: 50px; margin-top: 4px;" alt="">

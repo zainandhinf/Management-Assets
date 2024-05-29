@@ -100,6 +100,7 @@ Route::get('/barang-koordinator', [PController::class, 'goBarang']);
 Route::get('/kategori-barang-koordinator', [PController::class, 'goKBarang']);
 Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
+Route::get('/profile-koordinator', [PController::class, 'goKProfile']);
 Route::get('/training-koordinator', [PController::class, 'goSchedule']);
 Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
 
