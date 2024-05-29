@@ -26,6 +26,7 @@
                     <th>Tanggal Penempatan</th>
                     {{-- <th>Jenis Pengadaan</th> --}}
                     <th>Lokasi Penempatan</th>
+                    <th>Pengguna</th>
                     {{-- <th>Status</th> --}}
                     <th>Keterangan</th>
                     {{-- <th>Keterangan</th> --}}
@@ -36,6 +37,14 @@
                 $no = 1;
             @endphp
             @foreach ($penempatans as $penempatan)
+            @php
+                if ($penempatan->user_id == null) {
+                    $pengguna = "Tidak ada pengguna";
+                }else{
+                    $pengguna = DB::table('pegawais')->select('*')->where("id","=",$penempatan->user_id)->first();
+                    $pengguna = "(" . $pengguna->nik . ")" . $pengguna->nama_user;
+                }
+            @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
@@ -48,6 +57,7 @@
                     <td>{{ $penempatan->tanggal_penempatan }}</td>
                     {{-- <td>{{ $penempatan->jenis_pengadaan }}</td> --}}
                     <td>{{ $penempatan->lokasi_penempatan }}</td>
+                    <td>{{ $pengguna }}</td>
                     <td>{{ $penempatan->keterangan_penempatan }}</td>
                     {{-- <td>Rp. {{ number_format($penempatan->harga) }}</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}

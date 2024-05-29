@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('no_penempatan');
             $table->date('tanggal_penempatan');
             $table->string('lokasi_penempatan');
+            $table->string('user_id')->nullable();
             $table->string('keterangan');
             $table->timestamps();
         });

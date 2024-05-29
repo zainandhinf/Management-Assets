@@ -12,6 +12,9 @@
     color: #fff;
 } */
 
+
+
+
 .mynav li a {
     color: #0d3b66;
     text-decoration: none;
@@ -240,4 +243,5 @@ ul {
 
 #bdSidebar {
     color: #0d3b66;
+    width: 270px;
 }

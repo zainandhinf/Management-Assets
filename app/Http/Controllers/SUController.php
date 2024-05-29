@@ -28,10 +28,11 @@ class SUController extends Controller
         return view(
             'super_user.layout.dashboard',
             [
-                "title" => "Dashboard",
-                "active" => "Dashboard"
-            ]
-        );
+                'title' => 'Dashboard',
+                'active' => 'Dashboard',
+                'open' => 'no',
+                ]
+            );
     }
 
     public function goPetugas()
@@ -43,6 +44,7 @@ class SUController extends Controller
         return view('super_user.layout.petugas')->with([
             'title' => 'Data Petugas',
             'active' => 'Data Petugas',
+            'open' => 'yes',
             'petugass' => $petugass,
 
         ]);
@@ -57,7 +59,7 @@ class SUController extends Controller
             'title' => 'Data Pegawai',
             'active' => 'Data Pegawai',
             'pegawais' => pegawai::all(),
-
+            'open' => 'yes',
         ]);
     }
     public function goBarang()
@@ -93,6 +95,7 @@ class SUController extends Controller
             'barangs' => $kategori_barang,
             'kategoris' => $kategoris,
             'details' => $details,
+            'open' => 'yes',
             // 'kategori_barang' => $kategori_barang,
 
         ]);
@@ -103,6 +106,7 @@ class SUController extends Controller
             'title' => 'Data Kategori Barang',
             'active' => 'Data Kategori Barang',
             'ktgr_brngs' => kategori_barang::all(),
+            'open' => 'yes',
         ]);
     }
     public function goRuangan()
@@ -114,6 +118,7 @@ class SUController extends Controller
             'active' => 'Data Ruangan',
             'cek' => $cekTipe,
             'ruangans' => ruangan::all(),
+            'open' => 'yes',
 
         ]);
     }
@@ -123,7 +128,7 @@ class SUController extends Controller
             'title' => 'Data Tipe Ruangan',
             'active' => 'Data Tipe Ruangan',
             'tipe_ruangans' => tipe_ruangan::all(),
-
+            'open' => 'yes',
         ]);
     }
     public function goTraining()
@@ -143,6 +148,7 @@ class SUController extends Controller
             // 'total_peserta' => $total_peserta,
             'cek1' => $cek1,
             'cek2' => $cek2,
+            'open' => 'no',
         ]);
     }
     public function goPeserta()
@@ -162,6 +168,7 @@ class SUController extends Controller
             'pesertas' => $pesertas,
             'cek' => $cek,
             'cek_pegawai' => $cek_pegawai,
+            'open' => 'no',
         ]);
     }
     public function goProfile()
@@ -169,6 +176,7 @@ class SUController extends Controller
         return view('super_user.layout.profile')->with([
             'title' => 'Profile',
             'active' => 'Profile',
+            'open' => 'no',
 
         ]);
 

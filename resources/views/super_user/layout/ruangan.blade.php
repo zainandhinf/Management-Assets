@@ -386,13 +386,17 @@
                         <div id="carouselExample{{ $ruangan->id }}" class="carousel slide">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    @if($image_view)
+                                    @if($image_view->isEmpty())
 
+                                    No Png
+                                    
+                                    @else
+                                    
                                     <div class="img-ruangan">
                                         <img src="{{ asset('storage/' . $image_view->image) }}"
                                             class="d-block img-fluid" alt="...">
                                         <div class="delete-button-img-ruangan">
-                                            <a class="btn btn-primary btn-lg text-deco  ration-none"
+                                            <a class="btn btn-primary btn-lg text-decoration-none"
                                                 href="http://127.0.0.1:8000{{ asset('storage/' . $image_view->image) }}"
                                                 target="blank">
                                                 <i class="fa-solid fa-eye"></i>
@@ -404,10 +408,6 @@
                                             </button>
                                         </div>
                                     </div>
-
-                                    @else
-
-                                    No Png
 
                                     @endif
 

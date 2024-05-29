@@ -16,11 +16,11 @@
         </li>
         <li
             class="nav-item active dropdown-custom @if (
-                $active == 'Data Petugas' &&
-                    'Data Pegawai' &&
-                    'Kategori Barang' &&
-                    'Tipe Ruangan' &&
-                    'Data Barang' &&
+                $active == 'Data Petugas' ||
+                    'Data Pegawai' ||
+                    'Kategori Barang' ||
+                    'Tipe Ruangan' ||
+                    'Data Barang' ||
                     'Data Ruangan') dropdown-active-custom @endif
         {{-- {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '' }} --}}
         ">
@@ -32,9 +32,12 @@
                 </div>
                 <i class="fa-solid fa-chevron-down down mt-1"></i>
             </button>
-
-
-            <ul class="ms-2" id="dataDropdown">
+            <ul class="ms-2" id="dataDropdown"
+                @if ($open == 'yes-1') style="display: block;"
+                @elseif ($open == 'yes-2')
+                    style="display: none;"
+                @else
+                    style="display: none;" @endif>
                 <li class="nav-item mb-1">
                     <a href="/petugas-koordinator" class="{{ $title === 'Data Petugas' ? 'active' : '' }}">
                         <i class="fa-solid fa-user-gear"></i>
@@ -100,11 +103,11 @@
 
         <li
             class="nav-item active dropdown-custom @if (
-                $active == 'Data Petugas' &&
-                    'Data Pegawai' &&
-                    'Kategori Barang' &&
-                    'Tipe Ruangan' &&
-                    'Data Barang' &&
+                $active == 'Data Petugas' ||
+                    'Data Pegawai' ||
+                    'Kategori Barang' ||
+                    'Tipe Ruangan' ||
+                    'Data Barang' ||
                     'Data Ruangan') dropdown-active-custom @endif
     {{-- {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '' }} --}}
     ">
@@ -118,38 +121,43 @@
             </button>
 
 
-            <ul class="ms-2" id="dataDropdown4">
+            <ul class="ms-2" id="dataDropdown4"
+                @if ($open == 'yes-1') style="display: none;"
+            @elseif ($open == 'yes-2')
+                style="display: block;"
+            @else
+                style="display: none;" @endif>
                 <li class="nav-item mb-1">
-                    <a href="/pengadaan" class="{{ $title === 'Pengadaan' ? 'active' : '' }}">
+                    <a href="/pengadaan" class="{{ $active === 'Pengadaan' ? 'active' : '' }}">
                         <i class="fa-solid fa-cart-plus"></i>
                         Pengadaan
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/penempatan" class="{{ $title === 'Penempatan' ? 'active' : '' }}">
+                    <a href="/penempatan" class="{{ $active === 'Penempatan' ? 'active' : '' }}">
                         <i class="fa-solid fa-map-location-dot"></i>
                         Penempatan
                     </a>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="/mutasi" class="{{ $title === 'Mutasi' ? 'active' : '' }}">
+                    <a href="/mutasi" class="{{ $active === 'Mutasi' ? 'active' : '' }}">
                         <i class="fa-solid fa-building-circle-arrow-right"></i>
                         Mutasi
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/peminjaman" class="{{ $title === 'Peminjaman' ? 'active' : '' }}">
+                    <a href="/peminjaman" class="{{ $active === 'Peminjaman' ? 'active' : '' }}">
                         <i class="fa-solid fa-handshake"></i>Peminjaman
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/maintenance" class="{{ $title === 'Maintenance' ? 'active' : '' }}">
+                    <a href="/maintenance" class="{{ $active === 'Maintenance' ? 'active' : '' }}">
                         <i class="fa-solid fa-screwdriver-wrench"></i>Maintenance
                     </a>
                 </li>
                 <li class="nav-item mb-1">
-                    <a href="/penghapusan" class="{{ $title === 'Penghapusan' ? 'active' : '' }}">
+                    <a href="/penghapusan" class="{{ $active === 'Penghapusan' ? 'active' : '' }}">
                         <i class="fa-solid fa-ban"></i>Penghapusan
                     </a>
                 </li>
@@ -185,15 +193,19 @@
             </a>
         </li>
     </ul>
+</div>
     <hr class="mt-0 hr-custom">
     <div class="d-flex user-custom mb-0">
         <a href="/profile-koordinator">
+    <div class="d-flex user-custom mb-0 mt-2">
+        <a href="/profile">
             @if (auth()->user()->foto == null)
                 <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
                     style="width: 50px; height: 50px; margin-top: 4px;" alt="">
             @else
-                <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-fluid rounded rounded-circle me-2"
-                    style="width: 50px; height: 50px; margin-top: 4px;" alt="">
+                <img src="{{ asset('storage/' . auth()->user()->foto) }}"
+                    class="img-fluid rounded rounded-circle me-2" style="width: 50px; height: 50px; margin-top: 4px;"
+                    alt="">
             @endif
         </a>
         <span style="margin-top: 4px">

@@ -68,6 +68,21 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Pengguna (opsional)</td>
+                        <td>
+                            @php
+                                $pegawais = DB::table('pegawais')->select('*')->get();
+                            @endphp
+                            <select class="form-select" name="" id="user-id">
+                                <option value="{{ null }}">choose..</option>
+                                @foreach ($pegawais as $pegawai)
+                                    <option value="{{ $pegawai->id }}">{{ $pegawai->nik }} ({{ $pegawai->nama_user }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Keterangan</td>
                         <td>
                             <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" required></textarea>
@@ -157,6 +172,7 @@
         @csrf
         <input type="hidden" id="input-no-penempatan-2" name="no_penempatan" value="{{ $no_penempatan }}">
         <input type="hidden" id="input-lokasi-2" name="lokasi_penempatan">
+        <input type="hidden" id="input-user-2" name="user_id">
         <input type="hidden" id="input-keterangan-2" name="keterangan">
     </form>
 
@@ -204,7 +220,7 @@
             </div>
         </div>
     @endforeach
-    
+
     {{-- end modal delete data keranjang --}}
 
     <script>
@@ -225,11 +241,14 @@
         function addpenempatan() {
             var lokasiPenempatan = document.getElementById('lokasi-penempatan');
             var lokasiPenempatan2 = document.getElementById('input-lokasi-2');
+            var user = document.getElementById('user-id');
+            var user2 = document.getElementById('input-user-2');
             var keterangan = document.getElementById('keterangan');
             var keterangan2 = document.getElementById('input-keterangan-2');
             var formpenempatan = document.getElementById('addpenempatan');
 
             lokasiPenempatan2.value = lokasiPenempatan.value;
+            user2.value = user.value;
             keterangan2.value = keterangan.value;
 
             formpenempatan.submit();

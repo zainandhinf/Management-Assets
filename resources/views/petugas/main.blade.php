@@ -82,21 +82,22 @@
 
             /* Tambahkan format-font lain jika Anda menyertakan format lainnya */
         }
-         /* ANIMASI MASUK */
-         @keyframes transitionIn {
-    from{
-        opacity: 0;
-        /* transform: rotateX(-10deg); */
-        margin-left: 20px;
-    }
 
-    to{
-        opacity: 1;
-        /* transform: rotateX(0); */
-        margin-left: 0px;
-    }
+        /* ANIMASI MASUK */
+        @keyframes transitionIn {
+            from {
+                opacity: 0;
+                /* transform: rotateX(-10deg); */
+                margin-left: 20px;
+            }
 
-  }
+            to {
+                opacity: 1;
+                /* transform: rotateX(0); */
+                margin-left: 0px;
+            }
+
+        }
 
 
 
@@ -104,11 +105,19 @@
             font-feature-settings: "cv03", "cv04", "cv11";
             font-family: 'Inter';
         }
-        .page-content{
+
+        .page-content {
             animation: transitionIn 0.55s;
 
         }
 
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #e2e3e5;
+        }
         .modal-open-nested .modal-backdrop{
             display: none;
         }
@@ -143,11 +152,13 @@
                 <div class="d-flex justify-content-between">
                     <h3>{{ $title }}</h3>
                     @if (session()->has('success'))
-                        <div class="alert alert-success position-absolute end-0 me-5 z-1" role="alert" style="margin-top: -10px;">
+                        <div class="alert alert-success position-absolute end-0 me-5 z-1" role="alert"
+                            style="margin-top: -10px;">
                             {{ session('success') }}
                         </div>
                     @elseif (session()->has('error'))
-                        <div class="alert alert-warning position-absolute end-0 me-5 z-1" role="alert" style="margin-top: -10px;">
+                        <div class="alert alert-warning position-absolute end-0 me-5 z-1" role="alert"
+                            style="margin-top: -10px;">
                             {{ session('error') }}
                         </div>
                     @endif
@@ -237,13 +248,21 @@
             // console.log("berhasil");
             var dataDropdown = document.getElementById('dataDropdown');
             var dataDropdown2 = document.getElementById('dataDropdown2');
+            var dataDropdown4 = document.getElementById('dataDropdown4');
 
             // Toggle display dari <ul> ketika tautan diklik
-            if (dataDropdown.style.display === 'block') {
+            if (dataDropdown.style.display == 'none' && dataDropdown4.style.display == 'none') {
+                dataDropdown.style.display = 'block';
+            } else if (dataDropdown4.style.display == 'none') {
                 dataDropdown.style.display = 'none';
+                dataDropdown4.style.display = 'none';
+            } else if (dataDropdown.style.display === 'block') {
+                dataDropdown.style.display = 'none';
+                dataDropdown4.style.display = 'block';
             } else {
                 dataDropdown.style.display = 'block';
-                dataDropdown2.style.display = 'none';
+                // dataDropdown2.style.display = 'none';
+                dataDropdown4.style.display = 'none';
             }
         }
 
@@ -277,15 +296,33 @@
 
         function toggleDataDropdown4() {
             // console.log("berhasil");
-            var dataDropdown3 = document.getElementById('dataDropdown4');
+            var dataDropdown4 = document.getElementById('dataDropdown4');
+            var dataDropdown = document.getElementById('dataDropdown');
 
             // Toggle display dari <ul> ketika tautan diklik
-            if (dataDropdown4.style.display === 'block') {
+            // if (dataDropdown4.style.display === 'block') {
+            //     dataDropdown4.style.display = 'none';
+            //     dataDropdown.style.display = 'block';
+            // } else if (dataDropdown.style.display == 'none') {
+            //     dataDropdown4.style.display = 'none';
+            // } else {
+            //     dataDropdown4.style.display = 'block';
+            //     dataDropdown.style.display = 'none';
+            //     // dataDropdown2.style.display = 'none';
+
+            // }
+            if (dataDropdown4.style.display == 'none' && dataDropdown.style.display == 'none') {
+                dataDropdown4.style.display = 'block';
+            } else if (dataDropdown.style.display == 'none') {
                 dataDropdown4.style.display = 'none';
+                dataDropdown.style.display = 'none';
+            } else if (dataDropdown4.style.display === 'block') {
+                dataDropdown4.style.display = 'none';
+                dataDropdown.style.display = 'block';
             } else {
                 dataDropdown4.style.display = 'block';
                 // dataDropdown2.style.display = 'none';
-
+                dataDropdown.style.display = 'none';
             }
         }
 

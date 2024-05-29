@@ -1,4 +1,4 @@
-<div id="bdSidebar" style="overflow: auto"
+<div id="bdSidebar" style="overflow: hidden;"
     class="d-flex flex-column flex-shrink-0 p-3 bg-white offcanvas-md offcanvas-start" style="width: 280px;">
     <div class="navbar-brand d-flex mt-2">
         <div class="ms-3"><img src="assets/image/logoPTDIterbarucrop.jpg" width="50" alt=""></div>
@@ -7,102 +7,105 @@
         </div>
     </div>
     <hr class="mb-1">
-    <ul class="mynav nav nav-pills flex-column mb-auto mt-3">
-        <li class="nav-item mb-1">
-            <a href="/dashboard" class="{{ $title === 'Dashboard' ? 'active' : '' }}">
-                <i class="fa-solid fa-gauge"></i>
-                Dashboard
-            </a>
-        </li>
-        <li
-            class="nav-item active mb-0 dropdown-custom @if (
-                $active == 'Data Petugas' ||
-                    'Data Pegawai' ||
-                    'DataKategori Barang' ||
-                    'Data Tipe Ruangan' ||
-                    'Data Barang' ||
-                    'Data Ruangan') dropdown-active-custom @endif
+    <div style="height: 341px; width: 245px; overflow-y: scroll; margin-bottom: 5px;">
+
+        <ul class="mynav nav nav-pills d-flex flex-column mb-auto mt-3" style="margin-right: 2px;">
+            <li class="nav-item mb-1">
+                <a href="/dashboard" class="{{ $title === 'Dashboard' ? 'active' : '' }}">
+                    <i class="fa-solid fa-gauge"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li
+                class="nav-item active mb-0 dropdown-custom @if (
+                    $active == 'Data Petugas' ||
+                        'Data Pegawai' ||
+                        'DataKategori Barang' ||
+                        'Data Tipe Ruangan' ||
+                        'Data Barang' ||
+                        'Data Ruangan') dropdown-active-custom @endif
         {{-- {{ $active === 'Data Petugas' || 'Data Pegawai' || 'Kategori Barang' || 'Tipe Ruangan' || 'Data Barang' || 'Data Ruangan' ? 'dropdown-active-custom' : '' }} --}}
         ">
 
-            <button onclick="toggleDataDropdown()" href="">
-                <div class="customtoogle">
-                    <i class="fa-solid fa-database button-icon"></i>
-                    Data
-                </div>
-                <i class="fa-solid fa-chevron-down down mt-1"></i>
-            </button>
+                <button onclick="toggleDataDropdown()" href="">
+                    <div class="customtoogle">
+                        <i class="fa-solid fa-database button-icon"></i>
+                        Data
+                    </div>
+                    <i class="fa-solid fa-chevron-down down mt-1"></i>
+                </button>
+                <ul class="ms-2" id="dataDropdown"
+                    @if ($open == 'yes') style="display: block;" @else style="display: none;" @endif>
+                    <li class="nav-item mb-1">
+                        <a href="/petugas" class="{{ $title === 'Data Petugas' ? 'active' : '' }}">
+                            <i class="fa-solid fa-user-gear"></i>
+                            Petugas
+                        </a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a href="/pegawai" class="{{ $title === 'Data Pegawai' ? 'active' : '' }}">
+                            <i class="fa-solid fa-users"></i>
+                            Pegawai
+                        </a>
+                    </li>
+                    <li
+                        class="nav-item mb-0 dropdown-custom-child {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
+                        <button onclick="toggleDataDropdown3()" href=""
+                            class="{{ $active === 'data' ? '' : '' }}">
+                            <div class="customtoogle">
+                                <i class="fa-solid fa-share-from-square"></i>
+                                Kategori {{-- Jangan Panjang Panhjang ntar rusak --}}
+                            </div>
+                            <i class="fa-solid fa-chevron-down down mt-1"></i>
+                        </button>
+                        <ul id="dataDropdown3" class="ms-2">
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/kategori-barang"
+                                    class="{{ $title === 'Data Kategori Barang' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-dolly"></i>
+                                    Kategori Barang
+                                </a>
+                            </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/tipe-ruangan" class="{{ $title === 'Data Tipe Ruangan' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-tags"></i>
+                                    Tipe Ruangan
+                                </a>
+                            </li>
 
 
-            <ul class="ms-2" id="dataDropdown">
-                <li class="nav-item mb-1">
-                    <a href="/petugas" class="{{ $title === 'Data Petugas' ? 'active' : '' }}">
-                        <i class="fa-solid fa-user-gear"></i>
-                        Petugas
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="/pegawai" class="{{ $title === 'Data Pegawai' ? 'active' : '' }}">
-                        <i class="fa-solid fa-users"></i>
-                        Pegawai
-                    </a>
-                </li>
-                <li
-                    class="nav-item mb-0 dropdown-custom-child {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
-                    <button onclick="toggleDataDropdown3()" href=""
-                        class="{{ $active === 'data' ? '' : '' }}">
-                        <div class="customtoogle">
-                            <i class="fa-solid fa-share-from-square"></i>
-                            Kategori {{-- Jangan Panjang Panhjang ntar rusak --}}
-                        </div>
-                        <i class="fa-solid fa-chevron-down down mt-1"></i>
-                    </button>
-                    <ul id="dataDropdown3" class="ms-2">
-                        <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
-                            <a href="/kategori-barang" class="{{ $title === 'Data Kategori Barang' ? 'active' : '' }}">
-                                <i class="fa-solid fa-dolly"></i>
-                                Kategori Barang
-                            </a>
-                        </li>
-                        <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
-                            <a href="/tipe-ruangan" class="{{ $title === 'Data Tipe Ruangan' ? 'active' : '' }}">
-                                <i class="fa-solid fa-tags"></i>
-                                Tipe Ruangan
-                            </a>
-                        </li>
 
-
-
-                    </ul>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="/barang" class="{{ $title === 'Data Barang' ? 'active' : '' }}">
-                        <i class="fa-solid fa-computer"></i>
-                        Barang - Properti
-                    </a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="/ruangan" class="{{ $title === 'Data Ruangan' ? 'active' : '' }}">
-                        <i class="fa-solid fa-door-closed"></i>Ruangan
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="nav-item mb-1 mt-1">
-            <a href="/training" class="{{ $title === 'Data Training' ? 'active' : '' }}">
-                <i class="fa-solid fa-chalkboard-user"></i>
-                Training / Programs
-            </a>
-        </li>
-        <li class="nav-item mb-1">
-            <a href="/admin-reports" class="{{ $title === 'Reports' ? 'active' : '' }}">
-                <i class="fa-solid fa-scroll"></i>
-                Reports
-            </a>
-        </li>
-    </ul>
+                        </ul>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a href="/barang" class="{{ $title === 'Data Barang' ? 'active' : '' }}">
+                            <i class="fa-solid fa-computer"></i>
+                            Barang - Properti
+                        </a>
+                    </li>
+                    <li class="nav-item mb-1">
+                        <a href="/ruangan" class="{{ $title === 'Data Ruangan' ? 'active' : '' }}">
+                            <i class="fa-solid fa-door-closed"></i>Ruangan
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item mb-1 mt-1">
+                <a href="/training" class="{{ $title === 'Data Training' ? 'active' : '' }}">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    Training / Programs
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a href="/admin-reports" class="{{ $title === 'Reports' ? 'active' : '' }}">
+                    <i class="fa-solid fa-scroll"></i>
+                    Reports
+                </a>
+            </li>
+        </ul>
+    </div>
     <hr class="mt-0 hr-custom">
-    <div class="d-flex user-custom mb-0">
+    <div class="d-flex user-custom mb-0 mt-2">
         <a href="/profile">
             @if (auth()->user()->foto == null)
                 <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
@@ -112,9 +115,12 @@
                     style="width: 50px; height: 50px; margin-top: 4px;" alt="">
             @endif
         </a>
-        <span style="margin-top: 4px">
+        <span style="margin-top: 4px;">
             <h6 class="mt-1 mb-0">{{ auth()->user()->username }}</h6>
-            <small>Super User</small>
+            <div class="d-flex">
+                <small class="me-1">Super</small>
+                <small>User</small>
+            </div>
         </span>
         <div class="logout" style="margin-bottom: 100px">
             <button class="btn" style="background: #0d3b66" data-bs-toggle="modal" data-bs-target="#logout">
