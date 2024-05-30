@@ -67,20 +67,12 @@
         @font-face {
             font-family: 'Inter';
             src:
-                /* url('fonts/Inter-Black.ttf') format('truetype'), */
-                /* url('fonts/Inter-Bold.ttf') format('truetype'), */
-                /* url('fonts/Inter-ExtraBold.ttf') format('truetype'), */
-                /* url('fonts/Inter-ExtraLight.ttf') format('truetype'), */
-                /* url('fonts/Inter-Light.ttf') format('truetype'), */
-                url('fonts/Inter-Medium.ttf') format('truetype'),
-                url('fonts/Inter-Regular.ttf') format('truetype'),
-                url('fonts/Inter-SemiBold.ttf') format('truetype'),
-                url('fonts/Inter-Thin.ttf') format('truetype'),
-                url('fonts/Inter-VariableFont_slnt,wght.ttf') format('truetype');
-
+                url('/assets/fonts/Inter-Medium.ttf') format('truetype'),
+                url('/assets/fonts/Inter-Regular.ttf') format('truetype'),
+                url('/assets/fonts/Inter-SemiBold.ttf') format('truetype'),
+                url('/assets/fonts/Inter-Thin.ttf') format('truetype'),
+                url('/assets/fonts/Inter-VariableFont_slnt,wght.ttf') format('truetype');
             font-weight: 900;
-
-            /* Tambahkan format-font lain jika Anda menyertakan format lainnya */
         }
 
         /* ANIMASI MASUK */
@@ -122,7 +114,7 @@
 
 </head>
 
-<body>
+<body style="font-family: 'Inter';">
     @include('sweetalert::alert')
 
     <div class="container-fluid p-0 d-flex container-custom">
