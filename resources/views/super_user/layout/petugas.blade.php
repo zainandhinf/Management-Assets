@@ -197,7 +197,7 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <label for="name" class="col-form-label">Foto(opsionals) :</label>
+                                <label for="name" class="col-form-label">Foto(opsional) :</label>
                                 <br>
                                 <input style="font-size: 14px;" type="file"
                                     class="form-control mb-3 @error('foto') is-invalid @enderror"

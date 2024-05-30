@@ -12,7 +12,7 @@ class penempatan extends Model
     protected $fillable = [
         'no_penempatan',
         'tanggal_penempatan',
-        'lokasi_penempatan',
+        'no_ruangan',
         'user_id',
         'keterangan',
     ];

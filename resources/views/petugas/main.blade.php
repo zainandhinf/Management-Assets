@@ -56,6 +56,7 @@
     <link rel="stylesheet" href="assets/css/profile.css">
     <link rel="stylesheet" href="assets/css/ruangan.css">
     {{-- end Style --}}
+    
 
     <style>
         @import url('https://rsms.me/inter/inter.css');
@@ -118,7 +119,8 @@
         ::-webkit-scrollbar-thumb {
             background-color: #e2e3e5;
         }
-        .modal-open-nested .modal-backdrop{
+
+        .modal-open-nested .modal-backdrop {
             display: none;
         }
     </style>
@@ -219,8 +221,9 @@
 
 
     {{-- Js --}}
-    {{-- <script src="assets/js/admin.js"></script>
-    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/tooglekoor.js"></script>
+    <script src="../assets/js/tooglekoor.js"></script>
+    {{-- <script src="assets/js/sidebar.js"></script>
     <script src="../assets/js/sidebar.js"></script>
     <script src="assets/js/data.js"></script>
     <script src="../assets/js/data.js"></script> --}}
@@ -244,87 +247,7 @@
 
     {{-- end Masknumber --}}
     <script>
-        function toggleDataDropdown() {
-            // console.log("berhasil");
-            var dataDropdown = document.getElementById('dataDropdown');
-            var dataDropdown2 = document.getElementById('dataDropdown2');
-            var dataDropdown4 = document.getElementById('dataDropdown4');
-
-            // Toggle display dari <ul> ketika tautan diklik
-            if (dataDropdown.style.display == 'none' && dataDropdown4.style.display == 'none') {
-                dataDropdown.style.display = 'block';
-            } else if (dataDropdown4.style.display == 'none') {
-                dataDropdown.style.display = 'none';
-                dataDropdown4.style.display = 'none';
-            } else if (dataDropdown.style.display === 'block') {
-                dataDropdown.style.display = 'none';
-                dataDropdown4.style.display = 'block';
-            } else {
-                dataDropdown.style.display = 'block';
-                // dataDropdown2.style.display = 'none';
-                dataDropdown4.style.display = 'none';
-            }
-        }
-
-        function toggleDataDropdown2() {
-            // console.log("berhasil");
-            var dataDropdown = document.getElementById('dataDropdown2');
-            var dataDropdown2 = document.getElementById('dataDropdown');
-
-            // Toggle display dari <ul> ketika tautan diklik
-            if (dataDropdown.style.display === 'block') {
-                dataDropdown.style.display = 'none';
-            } else {
-                dataDropdown.style.display = 'block';
-                dataDropdown2.style.display = 'none';
-            }
-        }
-
-        function toggleDataDropdown3() {
-            // console.log("berhasil");
-            var dataDropdown3 = document.getElementById('dataDropdown3');
-
-            // Toggle display dari <ul> ketika tautan diklik
-            if (dataDropdown3.style.display === 'block') {
-                dataDropdown3.style.display = 'none';
-            } else {
-                dataDropdown3.style.display = 'block';
-                // dataDropdown2.style.display = 'none';
-
-            }
-        }
-
-        function toggleDataDropdown4() {
-            // console.log("berhasil");
-            var dataDropdown4 = document.getElementById('dataDropdown4');
-            var dataDropdown = document.getElementById('dataDropdown');
-
-            // Toggle display dari <ul> ketika tautan diklik
-            // if (dataDropdown4.style.display === 'block') {
-            //     dataDropdown4.style.display = 'none';
-            //     dataDropdown.style.display = 'block';
-            // } else if (dataDropdown.style.display == 'none') {
-            //     dataDropdown4.style.display = 'none';
-            // } else {
-            //     dataDropdown4.style.display = 'block';
-            //     dataDropdown.style.display = 'none';
-            //     // dataDropdown2.style.display = 'none';
-
-            // }
-            if (dataDropdown4.style.display == 'none' && dataDropdown.style.display == 'none') {
-                dataDropdown4.style.display = 'block';
-            } else if (dataDropdown.style.display == 'none') {
-                dataDropdown4.style.display = 'none';
-                dataDropdown.style.display = 'none';
-            } else if (dataDropdown4.style.display === 'block') {
-                dataDropdown4.style.display = 'none';
-                dataDropdown.style.display = 'block';
-            } else {
-                dataDropdown4.style.display = 'block';
-                // dataDropdown2.style.display = 'none';
-                dataDropdown.style.display = 'none';
-            }
-        }
+        
 
         $(document).ready(function() {
             $('#data-tables').DataTable();

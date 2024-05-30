@@ -61,7 +61,7 @@
                             @endphp
                             <select class="form-select" name="" id="lokasi-penempatan">
                                 @foreach ($ruangans as $ruangan)
-                                    <option value="{{ $ruangan->ruangan }}">{{ $ruangan->ruangan }} ({{ $ruangan->lokasi }})
+                                    <option value="{{ $ruangan->no_ruangan }}">{{ $ruangan->ruangan }} ({{ $ruangan->lokasi }})
                                     </option>
                                 @endforeach
                             </select>
@@ -171,7 +171,7 @@
     <form action="/addpenempatan" method="POST" id="addpenempatan" style="display: none;">
         @csrf
         <input type="hidden" id="input-no-penempatan-2" name="no_penempatan" value="{{ $no_penempatan }}">
-        <input type="hidden" id="input-lokasi-2" name="lokasi_penempatan">
+        <input type="hidden" id="input-lokasi-2" name="no_ruangan">
         <input type="hidden" id="input-user-2" name="user_id">
         <input type="hidden" id="input-keterangan-2" name="keterangan">
     </form>

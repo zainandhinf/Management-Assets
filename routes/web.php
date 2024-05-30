@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SUController;
 use App\Http\Controllers\PController;
+use App\Http\Controllers\ReportController;
 use App\Models\ruangan;
 use Illuminate\Http\Request;
 
@@ -92,6 +93,25 @@ Route::delete('/deletepeserta', [SUController::class, 'deletePeserta']);
 Route::get('/getUserByNik', [SUController::class, 'getUserByNik']);
 // end end crud super user //
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //petugas - Koordinator
 Route::get('/dashboard-koordinator', [PController::class, 'index']);
 Route::get('/petugas-koordinator', [PController::class, 'goPetugas']);
@@ -100,6 +120,8 @@ Route::get('/barang-koordinator', [PController::class, 'goBarang']);
 Route::get('/kategori-barang-koordinator', [PController::class, 'goKBarang']);
 Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
+Route::get('/data-aktiva-fasilitas', [PController::class, 'goAktiva']);
+Route::get('/data-assets', [PController::class, 'goAssets']);
 Route::get('/training-koordinator', [PController::class, 'goSchedule']);
 Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
 
@@ -160,6 +182,10 @@ Route::delete('/deletekeranjangpenghapusan', [PController::class, 'deleteKeranja
 Route::post('/addpenghapusan', [PController::class, 'addPenghapusan']);
 // TRANSAKSI PENGHAPUSAN END END//
 
+//LAPORAN DATA PETUGAS
+Route::get('/laporan-data-petugas', [ReportController::class, 'goLaporanPetugas']);
+Route::get('/laporan-data-petugas/f={filter}', [ReportController::class, 'goLaporanPetugasFilter']);
+//END LAPORAN DATA PETUGAS
 
 
 Route::get('/profile-koordinator', [PController::class, 'goProfile']);

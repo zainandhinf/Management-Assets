@@ -37,14 +37,22 @@
                 $no = 1;
             @endphp
             @foreach ($penempatans as $penempatan)
-            @php
-                if ($penempatan->user_id == null) {
-                    $pengguna = "Tidak ada pengguna";
-                }else{
-                    $pengguna = DB::table('pegawais')->select('*')->where("id","=",$penempatan->user_id)->first();
-                    $pengguna = "(" . $pengguna->nik . ")" . $pengguna->nama_user;
-                }
-            @endphp
+                @php
+                    if ($penempatan->user_id == null) {
+                        $pengguna = 'Tidak ada pengguna';
+                    } else {
+                        $pengguna = DB::table('pegawais')
+                            ->select('*')
+                            ->where('id', '=', $penempatan->user_id)
+                            ->first();
+                            $pengguna = '(' . $pengguna->nik . ')' . $pengguna->nama_user;
+                        }
+                        
+                        $nama_ruangan = DB::table('ruangans')
+                        ->select('ruangan')
+                        ->where('no_ruangan', '=', $penempatan->no_ruangan)
+                        ->first();
+                @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
@@ -56,7 +64,7 @@
                     <td>{{ $penempatan->merk }}, {{ $penempatan->spesifikasi }}</td>
                     <td>{{ $penempatan->tanggal_penempatan }}</td>
                     {{-- <td>{{ $penempatan->jenis_pengadaan }}</td> --}}
-                    <td>{{ $penempatan->lokasi_penempatan }}</td>
+                    <td>{{ $nama_ruangan->ruangan }}</td>
                     <td>{{ $pengguna }}</td>
                     <td>{{ $penempatan->keterangan_penempatan }}</td>
                     {{-- <td>Rp. {{ number_format($penempatan->harga) }}</td> --}}
@@ -132,7 +140,8 @@
                                 {{-- <td>{{ $barang->tanggal_pengadaan }}</td> --}}
                                 <td>{{ $barang->jenis_pengadaan }}</td>
                                 <td>{{ $barang->kondisi }}</td>
-                                <td class="@if($barang->status == "Belum Ditempatkan")bg-warning @else bg-success @endif text-white">{{ $barang->status }}</td>
+                                <td class="@if ($barang->status == 'Belum Ditempatkan') bg-warning @else bg-success @endif text-white">
+                                    {{ $barang->status }}</td>
                                 <td>Rp. {{ number_format($barang->harga) }}</td>
                                 {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                                 {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
@@ -151,67 +160,67 @@
 
 
 
-{{-- modal --}}
+    {{-- modal --}}
 
-{{-- modal add data --}}
+    {{-- modal add data --}}
 
-{{-- end modal add data --}}
+    {{-- end modal add data --}}
 
-{{-- modal edit data --}}
+    {{-- modal edit data --}}
 
-{{-- end modal edit data --}}
+    {{-- end modal edit data --}}
 
-{{-- modal delete data detail --}}
-@foreach ($barangs as $barang)
-    <div class="modal modal-blur fade" id="deletedata{{ $barang->id }}" tabindex="-1" role="dialog"
-        aria-hidden="true">
-        <div class="modal-dialog w-50 modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-status bg-danger"></div>
-                <div class="modal-body text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
-                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path
-                            d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
-                        <path d="M12 9v4" />
-                        <path d="M12 17h.01" />
-                    </svg>
-                    <h6>Are you sure?</h6>
-                    <div class="text-muted">Yakin? Anda akan menghapus data ini <br> (Merk:
-                        *<b>{{ $barang->merk }}</b>)...</div>
-                </div>
-                <div class="modal-footer">
-                    <div class="w-100">
-                        <div class="row">
-                            <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                    Cancel
-                                </button></div>
-                            <form action="/deletedetail" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="id_detail" value="{{ $barang->id }}">
-                                {{-- <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
-                                <button class="btn btn-danger w-100">
-                                    Yakin
-                                </button>
-                            </form>
+    {{-- modal delete data detail --}}
+    @foreach ($barangs as $barang)
+        <div class="modal modal-blur fade" id="deletedata{{ $barang->id }}" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog w-50 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-status bg-danger"></div>
+                    <div class="modal-body text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                            <path d="M12 9v4" />
+                            <path d="M12 17h.01" />
+                        </svg>
+                        <h6>Are you sure?</h6>
+                        <div class="text-muted">Yakin? Anda akan menghapus data ini <br> (Merk:
+                            *<b>{{ $barang->merk }}</b>)...</div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                        Cancel
+                                    </button></div>
+                                <form action="/deletedetail" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="id_detail" value="{{ $barang->id }}">
+                                    {{-- <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
+                                    <button class="btn btn-danger w-100">
+                                        Yakin
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-@endforeach
-{{-- end modal delete data detail --}}
+    @endforeach
+    {{-- end modal delete data detail --}}
 
-{{-- end modal --}}
+    {{-- end modal --}}
 
-<script>
-    $(document).ready(function() {
-        $('#data-tables-keranjang').DataTable();
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            $('#data-tables-keranjang').DataTable();
+        });
+    </script>
 @endsection

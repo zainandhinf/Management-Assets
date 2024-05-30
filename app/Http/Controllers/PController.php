@@ -230,7 +230,7 @@ class PController extends Controller
         $detail_penempatan = DB::table('detail_penempatans')
             ->join('penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
             ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
-            ->select('penempatans.user_id', 'penempatans.tanggal_penempatan', 'penempatans.lokasi_penempatan', 'penempatans.keterangan as keterangan_penempatan', 'detail_barangs.*')
+            ->select('penempatans.user_id', 'penempatans.tanggal_penempatan', 'penempatans.no_ruangan', 'penempatans.keterangan as keterangan_penempatan', 'detail_barangs.*')
             ->get();
         $detail_barang = DB::table('detail_barangs')
             ->select('*')
@@ -448,6 +448,32 @@ class PController extends Controller
             'today' => $today,
             'keranjangs' => $keranjang,
             'open' => 'yes-2',
+        ]);
+    }
+    public function goAktiva()
+    {
+        $cekTipe = DB::table('tipe_ruangans')->count();
+
+        return view('petugas.layout.aktiva')->with([
+            'title' => 'Data Aktiva / Fasilitas Ruangan',
+            'active' => 'Data Aktiva / Fasilitas Ruangan',
+            'cek' => $cekTipe,
+            'ruangans' => ruangan::all(),
+            'open' => 'no',
+        ]);
+    }
+    public function goAssets()
+    {
+
+        $barang = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
+
+        return view('petugas.layout.assets')->with([
+            'title' => 'Data Assets',
+            'active' => 'Data Assets',
+            'barangs' => $barang,
+            'open' => 'no',
         ]);
     }
     //end route view
@@ -749,7 +775,7 @@ class PController extends Controller
     {
         $validatedData = $request->validate([
             'no_penempatan' => '',
-            'lokasi_penempatan' => '',
+            'no_ruangan' => '',
             'user_id' => '',
             'keterangan' => '',
         ]);
