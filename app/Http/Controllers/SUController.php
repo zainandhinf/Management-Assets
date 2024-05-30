@@ -297,13 +297,13 @@ class SUController extends Controller
     {
 
         $cek = DB::table('users')
-                        ->where('nik', '=', $rquest->input('nik'))
+                        ->where('nik', '=', $request->input('nik'))
                         ->count();
 
 
         if ($cek > 0) {
 
-        $request->session()->flash('error', 'Petugas baru Gagal ditambahkan! Periksa validasi..');
+        $request->session()->flash('error', 'Petugas baru Gagal ditambahkan! Nik Sudah Terpakai..');
 
         return redirect('/petugas');
 

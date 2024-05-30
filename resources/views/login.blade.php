@@ -10,7 +10,7 @@
     <!-- <link rel="stylesheet" href="assets/../assets/model-login.css"> -->
     <style>
 
-@import url('https://rsms.me/inter/inter.css');
+/* @import url('https://rsms.me/inter/inter.css'); */
 
 @font-face {
 font-family: 'Inter';
