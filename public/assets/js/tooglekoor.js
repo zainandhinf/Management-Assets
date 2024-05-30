@@ -3,9 +3,15 @@ function toggleDataDropdown() {
     var dataDropdown = document.getElementById('dataDropdown');
     var dataDropdown2 = document.getElementById('dataDropdown2');
     var dataDropdown4 = document.getElementById('dataDropdown4');
+    var dataDropdown5 = document.getElementById('dataDropdown5');
 
     // Toggle display dari <ul> ketika tautan diklik
-    if (dataDropdown.style.display == 'none' && dataDropdown4.style.display == 'none') {
+    if (dataDropdown.style.display == 'none' && dataDropdown4.style.display == 'block' || dataDropdown5.style.display == 'block') {
+        dataDropdown.style.display = 'block';
+        dataDropdown4.style.display = 'none';
+        dataDropdown5.style.display = 'none';
+    }
+    else if (dataDropdown.style.display == 'none' && dataDropdown4.style.display == 'none') {
         dataDropdown.style.display = 'block';
     } else if (dataDropdown4.style.display == 'none') {
         dataDropdown.style.display = 'none';
@@ -52,6 +58,7 @@ function toggleDataDropdown4() {
     // console.log("berhasil");
     var dataDropdown4 = document.getElementById('dataDropdown4');
     var dataDropdown = document.getElementById('dataDropdown');
+    var dataDropdown5 = document.getElementById('dataDropdown5');
 
     // Toggle display dari <ul> ketika tautan diklik
     // if (dataDropdown4.style.display === 'block') {
@@ -65,7 +72,11 @@ function toggleDataDropdown4() {
     //     // dataDropdown2.style.display = 'none';
 
     // }
-    if (dataDropdown4.style.display == 'none' && dataDropdown.style.display == 'none') {
+    if (dataDropdown4.style.display == 'none' && dataDropdown.style.display == 'block' || dataDropdown5.style.display == 'block') {
+        dataDropdown4.style.display = 'block';
+        dataDropdown.style.display = 'none';
+        dataDropdown5.style.display = 'none';
+    }else if (dataDropdown4.style.display == 'none' && dataDropdown.style.display == 'none' && dataDropdown5.style.display == 'none') {
         dataDropdown4.style.display = 'block';
     } else if (dataDropdown.style.display == 'none') {
         dataDropdown4.style.display = 'none';
@@ -87,18 +98,23 @@ function toggleDataDropdown5() {
     var dataDropdown5 = document.getElementById('dataDropdown5');
 
     // Toggle display dari <ul> ketika tautan diklik
-    if (dataDropdown5.style.display == 'none' && dataDropdown.style.display == 'none' && dataDropdown4.style
+    if (dataDropdown5.style.display == 'none' && dataDropdown.style.display == 'block' || dataDropdown4.style
+        .display == 'block') {
+        dataDropdown.style.display = 'none';
+        dataDropdown4.style.display = 'none';
+        dataDropdown5.style.display = 'block';
+    }
+    else if (dataDropdown5.style.display == 'none' && dataDropdown.style.display == 'none' || dataDropdown4.style
         .display == 'none') {
         dataDropdown5.style.display = 'block';
     } else if (dataDropdown5.style.display == 'block' && dataDropdown.style.display == 'none' && dataDropdown4.style.display == 'none') {
         dataDropdown.style.display = 'none';
         dataDropdown4.style.display = 'none';
         dataDropdown5.style.display = 'none';
+        // else if (dataDropdown.style.display === 'block') {
+        //     dataDropdown.style.display = 'none';
+        //     dataDropdown4.style.display = 'block';
     }
-    // else if (dataDropdown.style.display === 'block') {
-    //     dataDropdown.style.display = 'none';
-    //     dataDropdown4.style.display = 'block';
-    // } 
     else {
         dataDropdown.style.display = 'block';
         // dataDropdown2.style.display = 'none';
