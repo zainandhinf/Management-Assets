@@ -18,6 +18,7 @@ use App\Models\peserta_training;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Rules\SquareImage;
+use Illuminate\Validation\Rule;
 
 class SUController extends Controller
 {
@@ -51,6 +52,9 @@ class SUController extends Controller
 
     public function goPegawai()
     {
+
+
+
         return view('super_user.layout.pegawai')->with([
             'title' => 'Data Pegawai',
             'active' => 'Data Pegawai',
@@ -175,29 +179,21 @@ class SUController extends Controller
             'open' => 'no',
 
         ]);
+
+    }
+
+    public function goKProfile()
+    {
+        return view('petugas.layout.profile')->with([
+            'title' => 'Profile',
+            'active' => 'Profile',
+
+        ]);
     }
     //end route view
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     //crud
-
-
-
-
-
     //kategori barang
     public function addKategori(Request $request)
     {
@@ -300,13 +296,27 @@ class SUController extends Controller
     public function addPetugas(Request $request)
     {
 
+        $cek = DB::table('users')
+                        ->where('nik', '=', $rquest->input('nik'))
+                        ->count();
+
+
+        if ($cek > 0) {
+
+        $request->session()->flash('error', 'Petugas baru Gagal ditambahkan! Periksa validasi..');
+
+        return redirect('/petugas');
+
+        } else {
+
+
         $validatedData = $request->validate([
-            'nik' => 'required|max:16',
+            'nik' => 'required|max:16|unique:users',
             'nama_user' => 'required|max:255',
             'jenis_kelamin' => 'required',
             'alamat' => 'nullable|max:255',
             'no_telepon' => 'nullable|max:16',
-            'username' => 'required|max:255',
+            'username' => 'required|max:255|unique:users',
             'password' => 'required|max:64',
             'role' => 'required',
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
@@ -330,21 +340,57 @@ class SUController extends Controller
 
         return redirect('/petugas');
     }
+
+    }
     public function addPetugasFromPegawai(Request $request)
     {
 
-        $validatedData = $request->validate([
-            'nik' => 'required|max:16',
-            'username' => 'required|max:255',
-            'password' => 'required|max:64',
-            'role' => 'required',
-        ]);
-
+// dd($request);
 
         $datapegawai = DB::table('pegawais')
-                                ->where('nik', '=', $request->nik)
-                                ->select('*')
-                                ->first();
+        ->where('nik', '=', $request->nik)
+        ->select('*')
+        ->first();
+
+        $usernameExist = DB::table('users')
+        ->where('username', '=', $request->username)
+        ->select('*')
+        ->first();
+
+        // dd($datapetugas);
+
+
+        $cek_keteradaan = DB::table('users')
+        ->where('nik', '=', $request->nik)
+        ->count();
+
+        $cek_username = DB::table('users')
+        ->where('username', '=', $request->username)
+        ->count();
+
+        // dd($cek_username);
+
+
+        if ($cek_keteradaan > 0) {
+
+            $pesanError = "Pegawai: *{$datapegawai->nama_user} sudah terdata sebagai Petugas";
+            $request->session()->flash('error', $pesanError);
+
+        return redirect('/petugas');
+
+        } else if ($cek_username > 0) {
+
+            $pesanError = "Username: *{$usernameExist->username} sudah digunakan";
+            $request->session()->flash('error', $pesanError);
+
+        return redirect('/petugas');
+        } else {
+            $validatedData = $request->validate([
+                'nik' => 'required|max:16',
+                'username' => 'required|max:255|unique:users',
+                'password' => 'required|max:64',
+                'role' => 'required',
+            ]);
 
         $validatedData['nama_user'] = $datapegawai->nama_user;
         $validatedData['jenis_kelamin'] = $datapegawai->jenis_kelamin;
@@ -359,22 +405,28 @@ class SUController extends Controller
         $request->session()->flash('success', 'Petugas baru telah ditambahkan!');
 
         return redirect('/petugas');
+        }
     }
-    public function editPetugas(Request $request, User $user)
+    public function editPetugas(Request $request)
     {
-        // dd($request);
+        $user = DB::table('users')->where('nik', $request->nik)->first();
+
+        if (!$user) {
+            $request->session()->flash('error', 'Pengguna tidak ditemukan!');
+            return redirect('/petugas');
+        }
+
+        // VALIDASI JIKA DATA YANG DI EDIT ITU ADALAH DIRI SENDIRI MAKA BISA TERUBAH..
         $validatedData = $request->validate([
             'nik' => 'required|max:16',
             'nama_user' => 'required|max:255',
             'jenis_kelamin' => 'required',
             'alamat' => 'nullable|max:255',
             'no_telepon' => 'nullable|max:16',
-            'username' => 'required|max:255',
-            // 'password' => 'required|max:64',
+            'username' => ['required', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'role' => 'required',
         ]);
-
-        // dd($validatedData);
 
         if ($request->file('foto')) {
             $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
@@ -384,16 +436,18 @@ class SUController extends Controller
             }
         }
 
+        DB::table('users')->where('nik', $request->nik)->update($validatedData);
 
+        // Update data pegawais
+        $validatedData2 = $request->only(['nik', 'nama_user', 'jenis_kelamin', 'alamat', 'no_telepon', 'foto']);
 
-        DB::table('users')
-            ->where('id', $request->input('id_user'))
-            ->update($validatedData);
+        DB::table('pegawais')->where('nik', $request->nik)->update($validatedData2);
 
         $request->session()->flash('success', 'Petugas telah berhasil diedit!');
 
         return redirect('/petugas');
     }
+
     public function deletePetugas(Request $request, User $user)
     {
         $nama_petugas = DB::table('users')
@@ -460,6 +514,18 @@ class SUController extends Controller
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ]);
 
+        $validatedData2 = $request->validate([
+            'nik' => 'required|max:16',
+            'nama_user' => 'required|max:255',
+            'jenis_kelamin' => 'required',
+            'alamat' => 'nullable|max:255',
+            'no_telepon' => 'nullable|max:16',
+            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            // 'username' => 'required|max:255',
+            // 'password' => 'required|max:64',
+            // 'role' => 'required',
+        ]);
+
         // dd($validatedData);
         if ($request->file('foto')) {
             $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
@@ -470,9 +536,13 @@ class SUController extends Controller
         }
 
 
-        DB::table('pegawais')
-            ->where('id', $request->input('id_user'))
-            ->update($validatedData);
+            DB::table('pegawais')
+                ->where('id', $request->input('id_user'))
+                ->update($validatedData);
+
+            DB::table('users')
+            ->where('nik', $request->input('nik'))
+            ->update($validatedData2);
 
         $request->session()->flash('success', 'Pegawai telah berhasil diedit!');
 
@@ -486,6 +556,11 @@ class SUController extends Controller
             ->where('id', '=', $request->input('id_user'))
             ->get();
 
+        $existOnPetugasCheck = DB::table('pegawais')
+                                    ->join('users', 'users.id', '=', $request->input('id_user'))
+                                    ->where('id', '=', $request->input('id_user'))
+                                    ->get();
+
 
             if ($request->foto != null) {
 
@@ -494,7 +569,12 @@ class SUController extends Controller
             }
 
 
-        DB::table('pegawais')->where('id', $request->input('id_user'))->delete();
+        DB::table('pegawais')->where('nik', $request->input('nik'))->delete();
+
+        if($existOnPetugasCheck) {
+            DB::table('users')->where('nik', $request->input('nik'))->delete();
+        }
+
 
         $pesanFlash = "pegawai (Nama pegawai: *{$nama_pegawai[0]->nama_user} ) telah berhasil dihapus!";
 

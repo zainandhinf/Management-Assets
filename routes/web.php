@@ -122,6 +122,7 @@ Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
 Route::get('/data-aktiva-fasilitas', [PController::class, 'goAktiva']);
 Route::get('/data-assets', [PController::class, 'goAssets']);
+Route::get('/profile-koordinator', [PController::class, 'goKProfile']);
 Route::get('/training-koordinator', [PController::class, 'goSchedule']);
 Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
 
