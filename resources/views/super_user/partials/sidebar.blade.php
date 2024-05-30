@@ -1,4 +1,4 @@
-<div id="bdSidebar" style="overflow: hidden;"
+<div id="bdSidebar" style="overflow: hidden; height: 100vh;"
     class="d-flex flex-column flex-shrink-0 p-3 bg-white offcanvas-md offcanvas-start" style="width: 280px;">
     <div class="navbar-brand d-flex mt-2">
         <div class="ms-3"><img src="assets/image/logoPTDIterbarucrop.jpg" width="50" alt=""></div>
@@ -7,7 +7,7 @@
         </div>
     </div>
     <hr class="mb-1">
-    <div style="height: 341px; width: 245px; overflow-y: scroll; margin-bottom: 5px;">
+    <div style="height: 100%; width: 245px; overflow-y: scroll; margin-bottom: 5px;">
 
         <ul class="mynav nav nav-pills d-flex flex-column mb-auto mt-3" style="margin-right: 2px;">
             <li class="nav-item mb-1">
@@ -105,7 +105,7 @@
         </ul>
     </div>
     <hr class="mt-0 hr-custom">
-    <div class="d-flex user-custom mb-0 mt-2">
+    <div class="d-flex user-custom">
         <a href="/profile">
             @if (auth()->user()->foto == null)
                 <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
