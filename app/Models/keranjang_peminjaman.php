@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class keranjang_peminjaman extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'no_peminjaman',
+        'no_barang',
+        'kode_barcode',
+    ];
+
 }

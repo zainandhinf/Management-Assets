@@ -66,7 +66,7 @@
                     <tr>
                         <td>Keterangan</td>
                         <td>
-                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" required></textarea>
+                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5"></textarea>
                         </td>
                     </tr>
                 </table>

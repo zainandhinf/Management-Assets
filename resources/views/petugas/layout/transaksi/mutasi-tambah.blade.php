@@ -134,6 +134,7 @@
                             '=',
                             'detail_penempatans.no_penempatan',
                         )
+                        ->join('ruangans', 'ruangans.no_ruangan', '=', 'penempatans.no_ruangan')
                         ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
                         ->first();
                 @endphp
@@ -149,7 +150,7 @@
                     {{-- <td>{{ $keranjang->jenis_pengadaan }}</td> --}}
                     <td>{{ $keranjang->kondisi }}</td>
                     <td>{{ $keranjang->status }}</td>
-                    <td>{{ $lokasi->lokasi_penempatan }}</td>
+                    <td>{{ $lokasi->ruangan }}</td>
                     {{-- <td>Rp. {{ number_format($keranjang->harga) }}</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}

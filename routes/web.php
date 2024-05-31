@@ -94,24 +94,6 @@ Route::get('/getUserByNik', [SUController::class, 'getUserByNik']);
 // end end crud super user //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //petugas - Koordinator
 Route::get('/dashboard-koordinator', [PController::class, 'index']);
 Route::get('/petugas-koordinator', [PController::class, 'goPetugas']);
@@ -160,7 +142,7 @@ Route::post('/addpenempatan', [PController::class, 'addPenempatan']);
 Route::get('/peminjaman', [PController::class, 'goPeminjaman']);
 Route::get('/peminjaman-tambah', [PController::class, 'goPeminjamanTambah']);
 Route::post('/addkeranjangpeminjaman', [PController::class, 'addKeranjangPeminjaman']);
-Route::delete('/deletekeranjangpeminjaman', [PController::class, 'deleteKeranangPeminjaman']);
+Route::delete('/deletekeranjangpeminjaman', [PController::class, 'deleteKeranjangPeminjaman']);
 Route::post('/addpeminjaman', [PController::class, 'addPeminjaman']);
 // TRANSAKSI PEMINJAMAN END END//
 

@@ -47,7 +47,7 @@
                             ->first();
                             $pengguna = '(' . $pengguna->nik . ')' . $pengguna->nama_user;
                         }
-                        
+
                         $nama_ruangan = DB::table('ruangans')
                         ->select('ruangan')
                         ->where('no_ruangan', '=', $penempatan->no_ruangan)

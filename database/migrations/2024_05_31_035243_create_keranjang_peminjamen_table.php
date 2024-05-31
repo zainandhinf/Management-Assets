@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penempatans', function (Blueprint $table) {
+        Schema::create('keranjang_peminjamen', function (Blueprint $table) {
             $table->id();
-            $table->string('no_penempatan');
-            $table->date('tanggal_penempatan');
-            $table->string('no_ruangan');
-            $table->string('user_id')->nullable();
-            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('penempatans');
+        Schema::dropIfExists('keranjang_peminjamen');
     }
 };

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('no_mutasi');
             $table->date('tanggal_mutasi');
             $table->string('lokasi_terbaru');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

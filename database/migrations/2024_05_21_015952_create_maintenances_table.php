@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('tanggal_selesai')->nullable();
             $table->integer('biaya');
             $table->string('status');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->string('user_id');
             $table->timestamps();
         });
