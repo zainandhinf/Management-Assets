@@ -130,8 +130,9 @@
                     href = `/laporan-data-petugas/f=~${endDate}]`;
                 }
 
-                if (role && startDate == null || endDate == null) {
-                    href += (href.includes('?') ? '&' : (href ? '' : '')) + `${role}`;
+                if (role && startDate == null && endDate == null) {
+                    // href += (href.includes('?') ? '&' : (href ? '' : '')) + `${role}`;
+                    href += (href.includes('?') ? '&' : '') + `${role}`;
                 }else if (role){
                     href += (href.includes('?') ? '&' : (href ? '?role=' : '')) + `${role}`;
                 }

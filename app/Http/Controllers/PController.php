@@ -188,6 +188,7 @@ class PController extends Controller
             ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
             ->get();
 
+
         // dd($keranjang);
 
 
@@ -197,6 +198,7 @@ class PController extends Controller
             'barangs' => $detail_barang,
             'keranjangs' => $keranjangs,
             'total_harga' => $total_harga,
+            'pengadaans' => pengadaan::all(),
             'open' => 'yes-2',
         ]);
     }
@@ -579,11 +581,13 @@ class PController extends Controller
             'spesifikasi' => 'required|max:255',
             'kondisi' => 'required',
             'status' => 'required',
-            'harga' => 'required|numeric',
+            'harga' => 'required',
             'foto_barang' => '',
             'keterangan' => 'required|max:255',
         ]);
 
+        $harga = str_replace('.', '', $request->input('harga'));
+        $validatedData['harga'] = intval($harga);
 
         $validatedData['no_asset'] = $request->input('kode_awal') . '-' . $request->input('no_asset') . '-LC';
 
@@ -813,11 +817,15 @@ class PController extends Controller
         $cek2 = DB::table('detail_barangs')->where('kode_barcode', '=', $request->kode_barcode)->first();
 
         if ($cek1 == null) {
-            if ($cek2->status == "Sudah Ditempatkan") {
+            if ($cek2->status == "Belum Ditempatkan") {
                 $request->session()->flash('error', 'Barang belum ditempatkan!');
 
                 return redirect('/mutasi-tambah');
-            } else {
+            }else if($cek2->status == "Sudah Dihapus"){
+                $request->session()->flash('error', 'Barang sudah dihapus!');
+
+                return redirect('/mutasi-tambah');
+            }else {
                 $validatedData = $request->validate([
                     'no_mutasi' => 'required',
                     'kode_barcode' => 'required',

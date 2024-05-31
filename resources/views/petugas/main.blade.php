@@ -239,7 +239,14 @@
 
     {{-- end Masknumber --}}
     <script>
-
+        $(document).ready(function() {
+            $("#harga").keyup(function() {
+                $(this).maskNumber({
+                    integer: true,
+                    thousands: "."
+                })
+            })
+        });
 
         $(document).ready(function() {
             $('#data-tables').DataTable();

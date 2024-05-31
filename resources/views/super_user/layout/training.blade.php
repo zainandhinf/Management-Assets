@@ -5,11 +5,11 @@
         @if ($cek1 > 0 && $cek2 > 0)
             <div class="d-flex">
 
-                <a href="#" onclick="ShowModal1()" type="button"
-                    class="btn border-warning btn-sm w-100 me-1">
+                <a href="#" onclick="ShowModal1()" type="button" class="btn border-warning btn-sm w-100 me-1">
                     Training
                 </a>
-                <a href="/peserta-training" onclick="ShowModal1()" type="button" class="btn  btn-warning border-warning btn-sm w-100 ms-1">
+                <a href="/peserta-training" onclick="ShowModal1()" type="button"
+                    class="btn  btn-warning border-warning btn-sm w-100 ms-1">
                     Peserta
                 </a>
             </div>
@@ -49,31 +49,37 @@
                             ->where('id', '=', $training->id_petugas)
                             ->get();
 
-                            $total_peserta = DB::table('peserta_trainings')
-                                                ->select(
-                                                    'pegawais.foto',
-                                                    'pegawais.nik',
-                                                    'pegawais.nama_user',
-                                                    'pegawais.jenis_kelamin',
-                                                    'pegawais.no_telepon',
-                                                    'pegawais.organisasi',
-                                                    'peserta_trainings.id as id_peserta',
-                                                    'trainings.nama_training',
-                                                    'trainings.id as id_training',
-                                                )
-                                                ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
-                                                ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
-                                                ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
-                                                ->where('trainings.id', '=', $training->id)
-                                                ->count();
+                        $nama_training = DB::table('data_trainings')
+                            ->select('*')
+                            ->where('id', '=', $training->training_id)
+                            ->first();
+
+                        $total_peserta = DB::table('peserta_trainings')
+                            ->select(
+                                'pegawais.foto',
+                                'pegawais.nik',
+                                'pegawais.nama_user',
+                                'pegawais.jenis_kelamin',
+                                'pegawais.no_telepon',
+                                'pegawais.organisasi',
+                                'peserta_trainings.id as id_peserta',
+                                'trainings.nama_training',
+                                'trainings.id as id_training',
+                            )
+                            ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
+                            ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
+                            ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
+                            ->where('trainings.id', '=', $training->id)
+                            ->count();
                     @endphp
                     <tr>
                         <td>{{ $no++ }}</td>
                         {{-- <td>{{ $city->id }}</td> --}}
                         {{-- <td>lorem</td> --}}
-                        <td>{{ $training->nama_training }} <br> ({{ $training->keterangan }})</td>
+                        <td>{{ $nama_training->nama_training }} <br> ({{ $nama_training->keterangan }})</td>
                         <td>{{ $training->tanggal_mulai }} - {{ $training->tanggal_selesai }}</td>
-                        <td>{{ $training->waktu_mulai }} - {{ $training->waktu_selesai }}<br> {{ $tempat[0]->ruangan }}<br>(max: {{ $tempat[0]->kapasitas }})</td>
+                        <td>{{ $training->waktu_mulai }} - {{ $training->waktu_selesai }}<br>
+                            {{ $tempat[0]->ruangan }}<br>(max: {{ $tempat[0]->kapasitas }})</td>
                         <td>{{ $total_peserta }}
                             <a data-bs-toggle="modal" data-bs-target="#viewpeserta{{ $training->id }}"
                                 style="margin-right: 10px" class="border-none mr-2"><i class="fa fa-eye"></i></a>
@@ -84,9 +90,9 @@
                         {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                         <td>
                             <button data-bs-toggle="modal" data-bs-target="#editdata{{ $training->id }}"
-                            class="btn btn-warning"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                                class="btn btn-warning"><i class="fa-solid fa-clock-rotate-left"></i></button>
                             <button data-bs-toggle="modal" data-bs-target="#editinfotraining{{ $training->id }}"
-                            class="btn btn-success"><i class="fa fa-edit"></i></button>
+                                class="btn btn-success"><i class="fa fa-edit"></i></button>
                             <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $training->id }}"
                                 class="btn btn-danger mt-1">
                                 <i class="fa fa-trash"></i>
@@ -124,11 +130,30 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name" class="col-form-label">Nama Training :</label>
-                                    <input style="font-size: 14px;" type="text"
+                                    {{-- <input style="font-size: 14px;" type="text"
                                         class="form-control @error('nama_training')
                   is-invalid
               @enderror"
-                                        placeholder="Nama training.." id="name" name="nama_training">
+                                        placeholder="Nama training.." id="name" name="nama_training"> --}}
+                                    @php
+                                        $nama_trainings = DB::table('data_trainings')->select('*')->get();
+                                    @endphp
+                                    <label for="name" class="col-form-label">Pilih Training :</label>
+
+                                    <div class="input-group">
+                                        <select style="font-size: 14px;" id="training_id"
+                                            class="form-select @error('training_id')
+                                    is-invalid
+                                @enderror"
+                                            name="training_id">
+                                            @foreach ($nama_trainings as $nama_training)
+                                                <option value="{{ $nama_training->id }}">
+                                                    {{ $nama_training->nama_training }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
                                     @error('nama_training')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -179,7 +204,8 @@
                                 @enderror"
                                             name="no_ruangan">
                                             @foreach ($ruangans as $ruangan)
-                                                <option value="{{ $ruangan->no_ruangan }}">{{ $ruangan->ruangan }} ({{ $ruangan->lokasi }})
+                                                <option value="{{ $ruangan->no_ruangan }}">{{ $ruangan->ruangan }}
+                                                    ({{ $ruangan->lokasi }})
                                                 </option>
                                             @endforeach
                                         </select>
@@ -230,7 +256,8 @@
                                 @enderror"
                                             name="id_petugas">
                                             @foreach ($koordinators as $koordinator)
-                                                <option value="{{ $koordinator->id }}"> [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}
+                                                <option value="{{ $koordinator->id }}"> [ {{ $koordinator->nik }} ]
+                                                    {{ $koordinator->nama_user }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -240,7 +267,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <label for="name" class="col-form-label">Keterangan :</label>
+                                    {{-- <label for="name" class="col-form-label">Keterangan :</label>
                                     <textarea style="font-size: 14px;" type="text"
                                         class="form-control @error('keterangan')
                   is-invalid
@@ -250,7 +277,7 @@
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
-                                    @enderror
+                                    @enderror --}}
                                 </div>
                             </div>
                         </div>
@@ -272,6 +299,12 @@
 
     {{-- modal edit data WAKTU TRAINING --}}
     @foreach ($trainings as $training)
+        @php
+            $nama_training = DB::table('data_trainings')
+                ->select('*')
+                ->where('id', '=', $training->training_id)
+                ->first();
+        @endphp
         <div class="modal modal-blur fade" id="editdata{{ $training->id }}" tabindex="-1" role="dialog"
             aria-hidden="true" style="font-size: 14px;">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -294,7 +327,7 @@
                       is-invalid
                   @enderror"
                                             placeholder="Nama training.." id="name" name="nama_training"
-                                            value="{{ $training->nama_training }}">
+                                            value="{{ $nama_training->nama_training }}">
                                         @error('nama_training')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -377,12 +410,222 @@
                                     </div>
                                 </div>
                                 {{-- <div class="col-md-6"> --}}
-                                    <div class="form-group" style="display: none">
+                                <div class="form-group" style="display: none">
+                                    <label for="name" class="col-form-label">Instruktur :</label>
+                                    <input style="font-size: 14px;" type="text"
+                                        class="form-control @error('instruktur')
+                      is-invalid
+                  @enderror"
+                                        placeholder="Instruktur.." id="name" name="instruktur"
+                                        value="{{ $training->instruktur }}">
+                                    @error('instruktur')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <label for="name" class="col-form-label">Koordinator :</label>
+                                    @php
+                                        $koordinators = DB::table('users')
+                                            ->select('*')
+                                            ->where('role', '=', 'petugas')
+                                            ->get();
+
+                                    @endphp
+                                    <div class="input-group">
+                                        <select style="font-size: 14px;"
+                                            class="form-select @error('id_petugas')
+                                        is-invalid
+                                    @enderror"
+                                            name="id_petugas">
+                                            @foreach ($koordinators as $koordinator)
+                                                @if (old('id_petugas', $training->id_petugas) == $koordinator->id)
+                                                    <option value="{{ $koordinator->id }}" selected>
+                                                        [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}</option>
+                                                @else
+                                                    <option value="{{ $koordinator->id }}">
+                                                        [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}</option>
+                                                @endif
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+                                    @error('id_petugas')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <label for="name" class="col-form-label">Keterangan :</label>
+                                    <textarea style="font-size: 14px;" type="text"
+                                        class="form-control @error('keterangan')
+                      is-invalid
+                  @enderror"
+                                        placeholder="Keterangan.." id="name" name="keterangan">{{ $training->keterangan }}</textarea>
+                                    @error('keterangan')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                {{-- </div> --}}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                style="font-size: 14px;">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary" style="font-size: 14px;">Edit Data</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
+    {{-- end modal edit data WAKTU TRAINING --}}
+
+    {{-- modal edit INFO TRAINING / DETAIL --}}
+    @foreach ($trainings as $training)
+        <div class="modal modal-blur fade" id="editinfotraining{{ $training->id }}" tabindex="-1" role="dialog"
+            aria-hidden="true" style="font-size: 14px;">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fs-6">Edit {{ $title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/edit-infotraining" method="post">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" value="{{ $training->id }}" name="id_training">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name" class="col-form-label">Nama Training :</label>
+                                        <input style="font-size: 14px;" type="text"
+                                            class="form-control @error('nama_training')
+                   is-invalid
+               @enderror"
+                                            placeholder="Nama training.." id="name" name="nama_training"
+                                            value="{{ $training->nama_training }}">
+                                        @error('nama_training')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        @php
+                                            $nama_trainings = DB::table('data_trainings')->select('*')->get();
+                                        @endphp
+                                        {{-- <label for="name" class="col-form-label">Pilih Ruangan :</label> --}}
+
+                                        <div class="input-group" style="display: none">
+                                            <select style="font-size: 14px;" id="training_id"
+                                                class="form-select @error('training_id')
+                                        is-invalid
+                                    @enderror"
+                                                name="training_id">
+                                                @foreach ($nama_trainings as $nama_training)
+                                                    @if (old('training_id', $training->training_id) == $nama_training->id)
+                                                        <option value="{{ $nama_training->id }}" selected>
+                                                            {{ $nama_training->nama_training }}</option>
+                                                    @else
+                                                        <option value="{{ $nama_training->id }}">
+                                                            {{ $nama_training->nama_training }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+
+                                        
+                                        <div style="display: none">
+
+                                            <label for="name" class="col-form-label">Tanggal Training :</label>
+                                            <div class="d-flex">
+                                                <input style="font-size: 14px;" type="date" id="tanggal_mulai"
+                                                    class="form-control @error('tanggal_mulai')
+                   is-invalid
+               @enderror"
+                                                    id="name" name="tanggal_mulai"
+                                                    value="{{ $training->tanggal_mulai }}">
+                                                <i class="fa-solid fa-forward p-2 mt-1"></i>
+                                                <input style="font-size: 14px;" type="date" id="tanggal_selesai"
+                                                    class="form-control @error('tanggal_selesai')
+                   is-invalid
+               @enderror"
+                                                    id="name" name="tanggal_selesai"
+                                                    value="{{ $training->tanggal_selesai }}">
+                                            </div>
+                                            @error('tanggal_selesai')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                            <label for="name" class="col-form-label">Waktu :</label>
+                                            <div class="d-flex">
+                                                <input style="font-size: 14px;" type="time"
+                                                    class="form-control @error('waktu_mulai')
+                   is-invalid
+               @enderror"
+                                                    id="name" name="waktu_mulai"
+                                                    value="{{ $training->waktu_mulai }}">
+                                                <i class="fa-solid fa-forward p-2 mt-1"></i>
+                                                <input style="font-size: 14px;" type="time"
+                                                    class="form-control @error('waktu_selesai')
+                   is-invalid
+               @enderror"
+                                                    id="name" name="waktu_selesai"
+                                                    value="{{ $training->waktu_selesai }}">
+                                            </div>
+                                        </div>
+
+                                        @php
+                                            $ruangans = DB::table('ruangans')->select('*')->get();
+                                        @endphp
+                                        <label for="name" class="col-form-label">Pilih Ruangan :</label>
+
+                                        <div class="input-group">
+                                            <select style="font-size: 14px;" id="no_ruangan"
+                                                class="form-select @error('no_ruangan')
+                                     is-invalid
+                                 @enderror"
+                                                name="no_ruangan">
+                                                @foreach ($ruangans as $ruangan)
+                                                    @if (old('no_ruangan', $training->no_ruangan) == $ruangan->no_ruangan)
+                                                        <option value="{{ $ruangan->no_ruangan }}" selected>
+                                                            {{ $ruangan->no_ruangan }} ({{ $ruangan->lokasi }})</option>
+                                                    @else
+                                                        <option value="{{ $ruangan->no_ruangan }}">
+                                                            {{ $ruangan->no_ruangan }} ({{ $ruangan->lokasi }})</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                        @error('waktu_mulai')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        @error('waktu_selesai')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        @error('no_ruangan')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label for="name" class="col-form-label">Instruktur :</label>
                                         <input style="font-size: 14px;" type="text"
                                             class="form-control @error('instruktur')
-                      is-invalid
-                  @enderror"
+                   is-invalid
+               @enderror"
                                             placeholder="Instruktur.." id="name" name="instruktur"
                                             value="{{ $training->instruktur }}">
                                         @error('instruktur')
@@ -401,16 +644,18 @@
                                         <div class="input-group">
                                             <select style="font-size: 14px;"
                                                 class="form-select @error('id_petugas')
-                                        is-invalid
-                                    @enderror"
+                                     is-invalid
+                                 @enderror"
                                                 name="id_petugas">
                                                 @foreach ($koordinators as $koordinator)
                                                     @if (old('id_petugas', $training->id_petugas) == $koordinator->id)
                                                         <option value="{{ $koordinator->id }}" selected>
-                                                            [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}</option>
+                                                            [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}
+                                                        </option>
                                                     @else
                                                         <option value="{{ $koordinator->id }}">
-                                                            [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}</option>
+                                                            [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}
+                                                        </option>
                                                     @endif
                                                 @endforeach
 
@@ -424,8 +669,8 @@
                                         <label for="name" class="col-form-label">Keterangan :</label>
                                         <textarea style="font-size: 14px;" type="text"
                                             class="form-control @error('keterangan')
-                      is-invalid
-                  @enderror"
+                   is-invalid
+               @enderror"
                                             placeholder="Keterangan.." id="name" name="keterangan">{{ $training->keterangan }}</textarea>
                                         @error('keterangan')
                                             <div class="invalid-feedback">
@@ -433,7 +678,7 @@
                                             </div>
                                         @enderror
                                     </div>
-                                {{-- </div> --}}
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -448,191 +693,7 @@
             </div>
         </div>
     @endforeach
-    {{-- end modal edit data WAKTU TRAINING --}}
-
-     {{-- modal edit INFO TRAINING / DETAIL --}}
-     @foreach ($trainings as $training)
-     <div class="modal modal-blur fade" id="editinfotraining{{ $training->id }}" tabindex="-1" role="dialog"
-         aria-hidden="true" style="font-size: 14px;">
-         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-             <div class="modal-content">
-                 <div class="modal-header">
-                     <h5 class="modal-title fs-6">Edit {{ $title }}</h5>
-                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                 </div>
-                 <form action="/edit-infotraining" method="post">
-                     @csrf
-                     @method('PUT')
-                     <input type="hidden" value="{{ $training->id }}" name="id_training">
-                     <div class="modal-body">
-                         <div class="row">
-                             <div class="col-md-6">
-                                 <div class="form-group">
-                                     <label for="name" class="col-form-label">Nama Training :</label>
-                                     <input style="font-size: 14px;" type="text"
-                                         class="form-control @error('nama_training')
-                   is-invalid
-               @enderror"
-                                         placeholder="Nama training.." id="name" name="nama_training"
-                                         value="{{ $training->nama_training }}">
-                                     @error('nama_training')
-                                         <div class="invalid-feedback">
-                                             {{ $message }}
-                                         </div>
-                                     @enderror
-                                     <div style="display: none">
-
-                                     <label for="name" class="col-form-label">Tanggal Training :</label>
-                                     <div class="d-flex">
-                                         <input style="font-size: 14px;" type="date" id="tanggal_mulai"
-                                             class="form-control @error('tanggal_mulai')
-                   is-invalid
-               @enderror"
-                                             id="name" name="tanggal_mulai"
-                                             value="{{ $training->tanggal_mulai }}">
-                                         <i class="fa-solid fa-forward p-2 mt-1"></i>
-                                         <input style="font-size: 14px;" type="date" id="tanggal_selesai"
-                                             class="form-control @error('tanggal_selesai')
-                   is-invalid
-               @enderror"
-                                             id="name" name="tanggal_selesai"
-                                             value="{{ $training->tanggal_selesai }}">
-                                     </div>
-                                     @error('tanggal_selesai')
-                                         <div class="invalid-feedback">
-                                             {{ $message }}
-                                         </div>
-                                     @enderror
-                                     <label for="name" class="col-form-label">Waktu :</label>
-                                     <div class="d-flex">
-                                         <input style="font-size: 14px;" type="time"
-                                             class="form-control @error('waktu_mulai')
-                   is-invalid
-               @enderror"
-                                             id="name" name="waktu_mulai" value="{{ $training->waktu_mulai }}">
-                                         <i class="fa-solid fa-forward p-2 mt-1"></i>
-                                         <input style="font-size: 14px;" type="time"
-                                             class="form-control @error('waktu_selesai')
-                   is-invalid
-               @enderror"
-                                             id="name" name="waktu_selesai"
-                                             value="{{ $training->waktu_selesai }}">
-                                     </div>
-                                    </div>
-
-                                     @php
-                                         $ruangans = DB::table('ruangans')->select('*')->get();
-                                     @endphp
-                                     <label for="name" class="col-form-label">Pilih Ruangan :</label>
-
-                                     <div class="input-group">
-                                         <select style="font-size: 14px;" id="no_ruangan"
-                                             class="form-select @error('no_ruangan')
-                                     is-invalid
-                                 @enderror"
-                                             name="no_ruangan">
-                                             @foreach ($ruangans as $ruangan)
-                                                 @if (old('no_ruangan', $training->no_ruangan) == $ruangan->no_ruangan)
-                                                     <option value="{{ $ruangan->no_ruangan }}" selected>
-                                                         {{ $ruangan->no_ruangan }} ({{ $ruangan->lokasi }})</option>
-                                                 @else
-                                                     <option value="{{ $ruangan->no_ruangan }}">
-                                                         {{ $ruangan->no_ruangan }} ({{ $ruangan->lokasi }})</option>
-                                                 @endif
-                                             @endforeach
-                                         </select>
-
-                                     </div>
-                                     @error('waktu_mulai')
-                                         <div class="invalid-feedback">
-                                             {{ $message }}
-                                         </div>
-                                     @enderror
-                                     @error('waktu_selesai')
-                                         <div class="invalid-feedback">
-                                             {{ $message }}
-                                         </div>
-                                     @enderror
-                                     @error('no_ruangan')
-                                         <div class="invalid-feedback">
-                                             {{ $message }}
-                                         </div>
-                                     @enderror
-                                 </div>
-                             </div>
-                             <div class="col-md-6">
-                                 <div class="form-group">
-                                     <label for="name" class="col-form-label">Instruktur :</label>
-                                     <input style="font-size: 14px;" type="text"
-                                         class="form-control @error('instruktur')
-                   is-invalid
-               @enderror"
-                                         placeholder="Instruktur.." id="name" name="instruktur"
-                                         value="{{ $training->instruktur }}">
-                                     @error('instruktur')
-                                         <div class="invalid-feedback">
-                                             {{ $message }}
-                                         </div>
-                                     @enderror
-                                     <label for="name" class="col-form-label">Koordinator :</label>
-                                     @php
-                                         $koordinators = DB::table('users')
-                                             ->select('*')
-                                             ->where('role', '=', 'petugas')
-                                             ->get();
-
-                                     @endphp
-                                     <div class="input-group">
-                                         <select style="font-size: 14px;"
-                                             class="form-select @error('id_petugas')
-                                     is-invalid
-                                 @enderror"
-                                             name="id_petugas">
-                                             @foreach ($koordinators as $koordinator)
-                                                 @if (old('id_petugas', $training->id_petugas) == $koordinator->id)
-                                                     <option value="{{ $koordinator->id }}" selected>
-                                                         [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}</option>
-                                                 @else
-                                                     <option value="{{ $koordinator->id }}">
-                                                         [ {{ $koordinator->nik }} ] {{ $koordinator->nama_user }}</option>
-                                                 @endif
-                                             @endforeach
-
-                                         </select>
-                                     </div>
-                                     @error('id_petugas')
-                                         <div class="invalid-feedback">
-                                             {{ $message }}
-                                         </div>
-                                     @enderror
-                                     <label for="name" class="col-form-label">Keterangan :</label>
-                                     <textarea style="font-size: 14px;" type="text"
-                                         class="form-control @error('keterangan')
-                   is-invalid
-               @enderror"
-                                         placeholder="Keterangan.." id="name" name="keterangan">{{ $training->keterangan }}</textarea>
-                                     @error('keterangan')
-                                         <div class="invalid-feedback">
-                                             {{ $message }}
-                                         </div>
-                                     @enderror
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="modal-footer">
-                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                             style="font-size: 14px;">
-                             Cancel
-                         </button>
-                         <button type="submit" class="btn btn-primary" style="font-size: 14px;">Edit Data</button>
-                     </div>
-                 </form>
-             </div>
-         </div>
-     </div>
- @endforeach
- {{-- end modal edit data INFO TRAINING / DETAIL --}}
+    {{-- end modal edit data INFO TRAINING / DETAIL --}}
 
     {{-- modal delete data --}}
     @foreach ($trainings as $training)
@@ -698,7 +759,7 @@
                                         'pegawais.no_telepon',
                                         'pegawais.organisasi',
                                         'peserta_trainings.id as id_peserta',
-                                        'trainings.nama_training',
+                                        // 'trainings.nama_training',
                                         'trainings.id as id_training',
                                     )
                                     ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
@@ -715,7 +776,7 @@
                                     <th>Nama</th>
                                     <th>L/P</th>
                                     <th>No Telepon</th>
-                                    <th>Training</th>
+                                    {{-- <th>Training</th> --}}
                                 </tr>
                             </thead>
                             @php
@@ -723,17 +784,17 @@
                             @endphp
                             @foreach ($pesertas as $peserta)
                                 @php
-                                    $training = DB::table('trainings')
-                                        ->select('*')
-                                        ->where('id', '=', $peserta->id_training)
-                                        ->get();
+                                    // $training = DB::table('trainings')
+                                    //     ->select('*')
+                                    //     ->where('id', '=', $peserta->id_training)
+                                    //     ->get();
                                 @endphp
                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     {{-- <td>{{ $city->id }}</td> --}}
                                     {{-- <td>lorem</td> --}}
-                                    <td><img src="{{ asset('storage/' . $peserta->foto) }}" class="rounded rounded-circle"
-                                            style="width: 50px;" alt=""></td>
+                                    <td><img src="{{ asset('storage/' . $peserta->foto) }}"
+                                            class="rounded rounded-circle" style="width: 50px;" alt=""></td>
                                     <td>{{ $peserta->nik }}</td>
                                     <td>{{ $peserta->nama_user }}</td>
                                     <td>
@@ -744,9 +805,9 @@
                                         @endif
                                     </td>
                                     <td>{{ $peserta->no_telepon }}</td>
-                                    <td>{{ $training[0]->nama_training }}</td>
+                                    {{-- <td>{{ $training[0]->nama_training }}</td> --}}
                                 </tr>
-                                @endforeach
+                            @endforeach
                         </table>
 
                     </div>

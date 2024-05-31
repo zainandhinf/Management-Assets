@@ -70,7 +70,7 @@
                     <label for="">Rp./Harga Beli</label><br>
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">Rp.</span>
-                        <input type="number" name="harga" class="form-control" placeholder="000.000,00" required>
+                        <input type="text" name="harga" class="form-control" placeholder="000.000,00(opsional)" id="harga" required>
                     </div>
 
                     <label for="">Jenis Pengadaan</label><br>

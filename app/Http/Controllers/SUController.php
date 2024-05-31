@@ -15,6 +15,7 @@ use App\Models\image_ruangan;
 use App\Models\training;
 use App\Models\detail_barang;
 use App\Models\peserta_training;
+use App\Models\data_training;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Rules\SquareImage;
@@ -131,6 +132,15 @@ class SUController extends Controller
             'open' => 'yes',
         ]);
     }
+    public function goDataTraining()
+    {
+        return view('super_user.layout.detail-training')->with([
+            'title' => 'Data Training',
+            'active' => 'Data Training',
+            'trainings' => data_training::all(),
+            'open' => 'yes',
+        ]);
+    }
     public function goTraining()
     {
         $cek1 = DB::table('users')->where('role', '=', 'petugas')->count();
@@ -142,8 +152,8 @@ class SUController extends Controller
                     // dd($total_peserta);
 
         return view('super_user.layout.training')->with([
-            'title' => 'Data Training',
-            'active' => 'Data Training',
+            'title' => 'Data Jadwal Training',
+            'active' => 'Data Jadwal Training',
             'trainings' => training::all(),
             // 'total_peserta' => $total_peserta,
             'cek1' => $cek1,
@@ -158,7 +168,7 @@ class SUController extends Controller
         $cek_pegawai = DB::table('pegawais')->count();
 
         $pesertas = DB::table('peserta_trainings')
-            ->select('pegawais.foto', 'pegawais.nik', 'pegawais.nama_user', 'pegawais.jenis_kelamin', 'pegawais.no_telepon', 'pegawais.organisasi', 'peserta_trainings.id as id_peserta', 'trainings.nama_training', 'trainings.id as id_training')
+            ->select('pegawais.foto', 'pegawais.nik', 'pegawais.nama_user', 'pegawais.jenis_kelamin', 'pegawais.no_telepon', 'pegawais.organisasi', 'peserta_trainings.id as id_peserta', 'trainings.id as id_training')
             ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
             ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
             ->get();
@@ -285,6 +295,19 @@ class SUController extends Controller
         $request->session()->flash('error', $pesanFlash);
 
         return redirect('/tipe-ruangan');
+    }
+    public function addNamaTraining(Request $request)
+    {
+        $validatedData = $request->validate([
+            'nama_training' => 'required|max:255',
+            'keterangan' => 'required|max:255'
+        ]);
+
+        data_training::create($validatedData);
+
+        $request->session()->flash('success', 'Training baru telah ditambahkan!');
+
+        return redirect('/data-training');
     }
     //
 
@@ -909,7 +932,7 @@ class SUController extends Controller
 
 
             $validatedData = $request->validate([
-                'nama_training' => '',
+                'training_id' => '',
                 'tanggal_mulai' => '',
                 'tanggal_selesai' => 'nullable',
                 'waktu_mulai' => '',
@@ -1112,7 +1135,7 @@ class SUController extends Controller
 
         $cekPeserta = DB::table('peserta_trainings')
             ->join('trainings', 'peserta_trainings.id_training', '=', 'trainings.id')
-            ->where('peserta_trainings.nik', '=', $request->input('nik'))
+            ->where('peserta_trainings.id_training', '=', $request->input('id_training'))
             ->select('peserta_trainings.id')
             ->first();
 

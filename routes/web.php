@@ -192,3 +192,9 @@ Route::get('/laporan-data-petugas/f={filter}', [ReportController::class, 'goLapo
 Route::get('/profile-koordinator', [PController::class, 'goProfile']);
 //END END petugas - Koordinator
 
+
+
+Route::get('/data-training', [SUController::class, 'goDataTraining']);
+Route::post('/addnamatraining', [SUController::class, 'addNamaTraining']);
+
+

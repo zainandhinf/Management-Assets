@@ -18,43 +18,27 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    {{-- <th>Foto Profil</th> --}}
-                    <th>Kode</th>
-                    {{-- <th>Alamat</th> --}}
-                    {{-- <th>No Telepon</th> --}}
-                    <th>Merk</th>
+                    <th>No Pengadaan</th>
                     <th>Tanggal Pengadaan</th>
-                    {{-- <th>Jenis Pengadaan</th> --}}
-                    <th>Kondisi</th>
-                    {{-- <th>Status</th> --}}
-                    <th>Harga</th>
-                    {{-- <th>Keterangan</th> --}}
                     <th data-searchable="false">Action</th>
                 </tr>
             </thead>
             @php
                 $no = 1;
             @endphp
-            @foreach ($barangs as $barang)
+            @foreach ($pengadaans as $pengadaan)
                 <tr>
                     <td>{{ $no++ }}</td>
-                    {{-- <td>{{ $city->id }}</td> --}}
-                    {{-- <td>lorem</td> --}}
-                    <td>No Barang: <b>{{ $barang->no_barang }}</b> <br>Barcode: <b>{!! DNS1D::getBarcodeHTML($barang->kode_barcode, 'UPCA') !!}{{ $barang->kode_barcode }}</b> <br>No
-                        Asset: <b>{{ $barang->no_asset }}</b> </td>
-                    <td>{{ $barang->merk }}, {{ $barang->spesifikasi }}</td>
-                    <td>{{ $barang->tanggal_pengadaan }}</td>
-                    {{-- <td>{{ $barang->jenis_pengadaan }}</td> --}}
-                    <td>{{ $barang->kondisi }}</td>
-                    {{-- <td>{{ $barang->status }}</td> --}}
-                    <td>Rp. {{ number_format($barang->harga) }}</td>
-                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                    {{-- <td>{{ $barang->keterangan }}</td> --}}
+                    <td>{{ $pengadaan->no_pengadaan }}</td>
+                    <td>{{ $pengadaan->tanggal_pengadaan }}</td>
                     <td>
-                        {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $barang->id }}"
-                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button> --}}
-                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $barang->id }}"
+                        <button data-bs-toggle="modal" data-bs-target="#showdata{{ $pengadaan->id }}"
+                            class="btn btn-primary mt-1">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                        <button data-bs-toggle="modal" class="btn btn-warning mt-1"><i
+                                class="fa-solid fa-barcode"></i></button>
+                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $pengadaan->id }}"
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>
@@ -62,6 +46,7 @@
                 </tr>
             @endforeach
         </table>
+
     </div>
 
     {{-- modal --}}
@@ -112,26 +97,34 @@
                             }
 
                             $no_pengadaan =
-                                'PD-' . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') . $no_pengadaan_last;
+                                'PD-' .
+                                Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis') .
+                                $no_pengadaan_last;
                         @endphp
 
                         <div class="row">
                             <div class="col-md-6">
 
                                 <label style="font-size: 16px;"><b>No. Pengadaan</b></label><br>
-                                <input class="form-control mb-2" type="text" value="{{ $no_pengadaan }}" name="no_pengadaan" style="background: #eee" readonly>
+                                <input class="form-control mb-2" type="text" value="{{ $no_pengadaan }}"
+                                    name="no_pengadaan" style="background: #eee" readonly>
 
                                 <label style="font-size: 16px;">Tanggal Pengadaan</label><br>
-                                <input class="form-control mb-2" type="date" value="{{ now()->format('Y-m-d') }}" name="tanggal_pengadaan" style="background: #eee" readonly>
+                                <input class="form-control mb-2" type="date" value="{{ now()->format('Y-m-d') }}"
+                                    name="tanggal_pengadaan" style="background: #eee" readonly>
 
                             </div>
                             <div class="col-md-6">
 
                                 <label style="font-size: 16px;">Pemeriksa</label><br>
-                                <input class="form-control mb-2" type="text" value="[{{ auth()->user()->nik }}] {{  auth()->user()->nama_user }}" name="no_pengadaan" style="background: #eee" readonly>
+                                <input class="form-control mb-2" type="text"
+                                    value="[{{ auth()->user()->nik }}] {{ auth()->user()->nama_user }}" name="no_pengadaan"
+                                    style="background: #eee" readonly>
 
                                 <label style="font-size: 16px;">Total Harga (Rp.)</label><br>
-                                <input class="form-control mb-2" type="text" value="Rp. {{ number_format($total_harga) }}" name="total_harga" style="background: #eee" readonly>
+                                <input class="form-control mb-2" type="text"
+                                    value="Rp. {{ number_format($total_harga) }}" name="total_harga"
+                                    style="background: #eee" readonly>
 
                             </div>
                             <strong>*Harap kembali periksa dengan teliti...</strong>
@@ -183,6 +176,7 @@
                                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                                     <td>{{ $keranjang->keterangan }}</td>
                                     <td>
+
                                         <a data-bs-toggle="modal" data-bs-target="#deletedata{{ $keranjang->id }}"
                                             class="btn btn-danger mt-1">
                                             <i class="fa fa-trash"></i>
@@ -301,6 +295,80 @@
         </div>
     @endforeach
     {{-- end modal delete data detail --}}
+
+    {{-- modal view data --}}
+    {{-- modal view data --}}
+    @foreach ($pengadaans as $pengadaan)
+        @php
+            $detail_barangs = DB::table('detail_barangs')
+                ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+                ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
+                ->where('detail_barangs.no_pengadaan', '=', $pengadaan->no_pengadaan)
+                ->get();
+        @endphp
+        <div class="modal modal-blur fade" id="showdata{{ $pengadaan->id }}" tabindex="-1" role="dialog"
+            aria-hidden="true" style="font-size: 14px;">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <table class="table table-striped" id="data-tables">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    {{-- <th>Foto Profil</th> --}}
+                                    <th>Kode</th>
+                                    {{-- <th>Alamat</th> --}}
+                                    {{-- <th>No Telepon</th> --}}
+                                    <th>Merk</th>
+                                    <th>Tanggal Pengadaan</th>
+                                    {{-- <th>Jenis Pengadaan</th> --}}
+                                    <th>Kondisi</th>
+                                    {{-- <th>Status</th> --}}
+                                    <th>Harga</th>
+                                    {{-- <th>Keterangan</th> --}}
+                                    <th data-searchable="false">Action</th>
+                                </tr>
+                            </thead>
+                            @php
+                                $no = 1;
+                            @endphp
+                            @foreach ($detail_barangs as $detail_barang)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    {{-- <td>{{ $city->id }}</td> --}}
+                                    {{-- <td>lorem</td> --}}
+                                    <td>No Barang: <b>{{ $detail_barang->no_barang }}</b> <br>Barcode:
+                                        <b>{!! DNS1D::getBarcodeHTML($detail_barang->kode_barcode, 'UPCA') !!}{{ $detail_barang->kode_barcode }}</b> <br>No
+                                        Asset: <b>{{ $detail_barang->no_asset }}</b>
+                                    </td>
+                                    <td>{{ $detail_barang->merk }}, {{ $detail_barang->spesifikasi }}</td>
+                                    <td>{{ $detail_barang->tanggal_pengadaan }}</td>
+                                    {{-- <td>{{ $detail_barang->jenis_pengadaan }}</td> --}}
+                                    <td>{{ $detail_barang->kondisi }}</td>
+                                    {{-- <td>{{ $detail_barang->status }}</td> --}}
+                                    <td>Rp. {{ number_format($detail_barang->harga) }}</td>
+                                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
+                                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
+                                    {{-- <td>{{ $detail_barang->keterangan }}</td> --}}
+                                    <td>
+                                        {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $detail_barang->id }}"
+                                        style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button> --}}
+                                        <button data-bs-toggle="modal"
+                                            data-bs-target="#deletedata{{ $detail_barang->id }}"
+                                            class="btn btn-danger mt-1">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+    {{-- end modal view data --}}
 
     {{-- end modal --}}
 

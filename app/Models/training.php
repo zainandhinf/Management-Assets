@@ -10,7 +10,7 @@ class training extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_training',
+        'training_id',
         'tanggal_mulai',
         'tanggal_selesai',
         'waktu_mulai',
@@ -19,7 +19,7 @@ class training extends Model
         'total_peserta',
         'instruktur',
         'id_petugas',
-        'keterangan'
+        // 'keterangan'
 
     ];
 }

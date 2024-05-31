@@ -18,12 +18,12 @@ class Seed extends Seeder
     {
         DB::table('users')->insert([
             'nik' =>'50977',
-            'nama_user' =>'User',
+            'nama_user' =>'Super User',
             'jenis_kelamin' =>'L',
             'alamat' =>'',
             'no_telepon' =>'',
             'foto' =>'',
-            'username' =>'user',
+            'username' =>'super user',
             'password' => Hash::make('111'),
             'role' =>'super_user',
         ]);

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('trainings', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_training');
+            // $table->string('nama_training');
+            $table->string('training_id');
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai')->nullable();
             $table->time('waktu_mulai');
@@ -22,7 +23,7 @@ return new class extends Migration
             $table->integer('total_peserta');
             $table->string('instruktur');
             $table->string('id_petugas');
-            $table->text('keterangan');
+            // $table->text('keterangan');
             $table->timestamps();
         });
     }

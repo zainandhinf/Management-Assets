@@ -386,7 +386,7 @@
                         <div id="carouselExample{{ $ruangan->id }}" class="carousel slide">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    @if($image_view->isEmpty())
+                                    @if($image_view == null)
 
                                     No Png
                                     

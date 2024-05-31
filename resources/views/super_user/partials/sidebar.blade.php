@@ -88,10 +88,15 @@
                             <i class="fa-solid fa-door-closed"></i>Ruangan
                         </a>
                     </li>
+                    <li class="nav-item mb-1">
+                        <a href="/data-training" class="{{ $title === 'Data Training' ? 'active' : '' }}">
+                            <i class="fa-solid fa-chalkboard-user"></i>Training
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item mb-1 mt-1">
-                <a href="/training" class="{{ $title === 'Data Training' ? 'active' : '' }}">
+                <a href="/training" class="{{ $title === 'Data Jadwal Training' ? 'active' : '' }}">
                     <i class="fa-solid fa-chalkboard-user"></i>
                     Training / Programs
                 </a>
@@ -116,7 +121,7 @@
             @endif
         </a>
         <span style="margin-top: 4px;">
-            <h6 class="mt-1 mb-0">{{ auth()->user()->username }}</h6>
+            <h6 class="mt-1 mb-0" style="font-size: 14px;">{{ auth()->user()->username }}</h6>
             <div class="d-flex">
                 <small class="me-1">Super</small>
                 <small>User</small>

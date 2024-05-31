@@ -37,14 +37,19 @@
                         $training = DB::table('trainings')
                             ->select('*')
                             ->where('id', '=', $peserta->id_training)
-                            ->get();
+                            ->first();
+                        $nama_training = DB::table('data_trainings')
+                            ->select('*')
+                            ->where('id', '=', $training->training_id)
+                            ->first();
+                            
                     @endphp
                     <tr>
                         <td>{{ $no++ }}</td>
                         {{-- <td>{{ $city->id }}</td> --}}
                         {{-- <td>lorem</td> --}}
-                        <td><img src="{{ asset('storage/' . $peserta->foto) }}" style="width: 45px; height: 45px;" class="rounded rounded-circle"
-                                style="width: 50px;" alt=""></td>
+                        <td><img src="{{ asset('storage/' . $peserta->foto) }}" style="width: 45px; height: 45px;"
+                                class="rounded rounded-circle" style="width: 50px;" alt=""></td>
                         <td>{{ $peserta->nik }}</td>
                         <td>{{ $peserta->nama_user }}</td>
                         <td>
@@ -55,7 +60,7 @@
                             @endif
                         </td>
                         <td>{{ $peserta->organisasi }}</td>
-                        <td>{{ $training[0]->nama_training }}</td>
+                        <td>{{ $nama_training->nama_training }}</td>
                         <td>
                             {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id }}" style=""
                         class="btn btn-primary"><i class="fa-regular fa-eye"></i></button> --}}
@@ -100,8 +105,8 @@
 
                                     <label for="nik" class="col-form-label">NIK :</label>
                                     <input style="font-size: 14px;" type="text"
-                                        class="form-control @error('nik') is-invalid @enderror" placeholder="Tekan TAB setelah selesai input.."
-                                        id="nik" required>
+                                        class="form-control @error('nik') is-invalid @enderror"
+                                        placeholder="Tekan TAB setelah selesai input.." id="nik" required>
                                     {{-- @php
                                         $peserta_trainings = DB::table('pegawais')->select('*')->get();
                                     @endphp
@@ -128,7 +133,8 @@
                             </div>
                             <div class="col-6" style="display: flex; align-items: center; justify-content: center;">
 
-                                <img id="foto" src="" class="rounded rounded-circle" width="230px" height="230px"><br>
+                                <img id="foto" src="" class="rounded rounded-circle" width="230px"
+                                    height="230px"><br>
 
                             </div>
 
@@ -150,17 +156,26 @@
 
                         <center><b>
 
-                            <label for="id_training" class="col-form-label "><h5>
-                                    Judul Training</h5></label>
-                        </b></center>
+                                <label for="id_training" class="col-form-label ">
+                                    <h5>
+                                        Judul Training</h5>
+                                </label>
+                            </b></center>
                         @php
                             $trainings = DB::table('trainings')->select('*')->get();
+                            // dd($trainings);
                         @endphp
                         <div class="input-group">
                             <select style="font-size: 14px;"
                                 class="form-select @error('id_training') is-invalid @enderror" name="id_training">
                                 @foreach ($trainings as $training)
-                                    <option value="{{ $training->id }}">{{ $training->nama_training }}</option>
+                                    @php
+                                        $nama_training = DB::table('data_trainings')
+                                            ->select('*')
+                                            ->where('id', $training->training_id)
+                                            ->first();
+                                    @endphp
+                                    <option value="{{ $training->id }}">{{ $nama_training->nama_training }}</option>
                                 @endforeach
                             </select>
                         </div>
