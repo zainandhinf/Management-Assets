@@ -986,7 +986,7 @@ class PController extends Controller
             'no_peminjaman' => 'required',
             'tanggal_peminjaman' => '',
             'tanggal_kembali' => 'required',
-            'id_pegawai' => 'required',
+            'id_pegawai' => 'requir ed',
             'status_peminjaman' => '',
             'keterangan' => 'nullable',
         ]);
@@ -1004,7 +1004,7 @@ class PController extends Controller
 
         // $validatedData['tanggal_penempatan'] = now()->format('Y-m-d');
 
-        $kode_barcodes = DB::table('keranjang_penempatans')->select('kode_barcode')->get();
+        $kode_barcodes = DB::table('keranjang_peminjamans')->select('kode_barcode')->get();
         $validatedData['status_peminjaman'] = 'Dipinjam';
 
         // dd($validatedData);
@@ -1013,6 +1013,7 @@ class PController extends Controller
         $validatedDataStatus['status'] = "Dipinjam oleh: $nama";
         // dd($validatedDataStatus['status']);
         foreach ($kode_barcodes as $kode_barcode) {
+            return redirect('/jkbkhbd');
             DB::table('detail_barangs')
                 ->where('kode_barcode', $kode_barcode->kode_barcode)
                 ->update($validatedDataStatus);
@@ -1029,6 +1030,22 @@ class PController extends Controller
 
         return redirect('/peminjaman');
 
+    }
+
+    public function giveBackPeminjaman(Request $request, ruangan $ruangan)
+    {
+        // $validatedData['tanggal_selesai'] = now()->format('Y-m-d');
+        $validatedData['status_peminjaman'] = "Dikembalikan";
+
+
+        DB::table('peminjamans')
+            ->where('no_peminjaman', $request->input('no_peminjaman'))
+            ->update($validatedData);
+
+
+        $request->session()->flash('success', 'Peminjaman telah selesai Dikembalikan!');
+
+        return redirect('/peminjaman');
     }
 
 

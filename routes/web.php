@@ -144,6 +144,7 @@ Route::get('/peminjaman-tambah', [PController::class, 'goPeminjamanTambah']);
 Route::post('/addkeranjangpeminjaman', [PController::class, 'addKeranjangPeminjaman']);
 Route::delete('/deletekeranjangpeminjaman', [PController::class, 'deleteKeranjangPeminjaman']);
 Route::post('/addpeminjaman', [PController::class, 'addPeminjaman']);
+Route::put('/givebackpeminjaman', [PController::class, 'giveBackPeminjaman']);
 // TRANSAKSI PEMINJAMAN END END//
 
 // TRANSAKSI MAINTENANCE
