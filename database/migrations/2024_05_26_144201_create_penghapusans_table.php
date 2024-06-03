@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('no_penghapusan');
             $table->date('tanggal_penghapusan');
             $table->string('jenis_penghapusan');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

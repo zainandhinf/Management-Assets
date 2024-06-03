@@ -65,6 +65,8 @@
                                 // dd($pegawais);
                             @endphp
                             <select class="form-select" name="" id="peminjam">
+                                <option value="" selected>-- Pilih Peminjam --
+                                </option>
                                 @foreach ($pegawais as $pegawai)
                                     <option value="{{ $pegawai->nik }}">[ {{ $pegawai->nik }} ] {{ $pegawai->nama_user }} - {{ $pegawai->organisasi }}
                                     </option>
@@ -158,10 +160,12 @@
         <input type="hidden" id="input-barcode-2" name="kode_barcode">
         <input type="hidden" id="input-no-peminjaman-2" name="no_peminjaman" value="{{ $no_peminjaman }}">
     </form>
-    <form action="/addpeminjaman" method="POST" id="addpeminjaman" style="display: none;">
+    <form action="/addpeminjaman" method="POST" id="addpeminjaman" style="display: block;">
         @csrf
         <input type="hidden" id="input-no-peminjaman-2" name="no_peminjaman" value="{{ $no_peminjaman }}">
-        <input type="hidden" id="input-peminjam-2" name="id_petugas">
+        <input type="hidden" id="input-peminjam-2" name="id_pegawai">
+        <input type="hidden" id="tanggal_peminjaman2" name="tanggal_peminjaman">
+        <input type="hidden" id="tanggal_kembali2" name="tanggal_kembali">
         <input type="hidden" id="input-keterangan-2" name="keterangan">
     </form>
 
@@ -228,13 +232,27 @@
         }
 
         function addpeminjaman() {
+            console.log("haha");
             var peminjam = document.getElementById('peminjam');
-            var peminjam2 = document.getElementById('peminjam-2');
+            var peminjam2 = document.getElementById('input-peminjam-2');
+
+            var tanggal_peminjaman = document.getElementById('tanggal_peminjaman');
+            var tanggal_peminjaman2 = document.getElementById('tanggal_peminjaman2');
+
+            var tanggal_kembali = document.getElementById('tanggal_kembali');
+            var tanggal_kembali2 = document.getElementById('tanggal_kembali2');
+
             var keterangan = document.getElementById('keterangan');
             var keterangan2 = document.getElementById('input-keterangan-2');
             var formpeminjaman = document.getElementById('addpeminjaman');
 
+
+
             peminjam2.value = peminjam.value;
+
+            tanggal_peminjaman2.value = tanggal_peminjaman.value;
+            tanggal_kembali2.value = tanggal_kembali.value;
+
             keterangan2.value = keterangan.value;
 
             formpeminjaman.submit();

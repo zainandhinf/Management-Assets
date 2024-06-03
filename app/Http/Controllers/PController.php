@@ -327,13 +327,21 @@ class PController extends Controller
         ]);
     }
 
+    //PEMINJAMAN START
+
     public function goPeminjaman()
     {
 
         $detail_peminjaman = DB::table('detail_peminjamans')
             ->join('peminjamans', 'detail_peminjamans.no_peminjaman', '=', 'peminjamans.no_peminjaman')
             ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_peminjamans.kode_barcode')
-            ->select('peminjamans.tanggal_peminjaman', 'peminjamans.id_pegawai', 'peminjamans.keterangan', 'detail_barangs.*')
+            ->select('peminjamans.no_peminjaman', 'peminjamans.tanggal_peminjaman', 'peminjamans.tanggal_kembali', 'peminjamans.status_peminjaman', 'peminjamans.id_pegawai', 'peminjamans.keterangan', 'detail_barangs.*')
+            ->get();
+
+        // dd($detail_peminjaman);
+
+        $detail_barangs = DB::table('detail_barangs')
+            ->select('*')
             ->get();
 
         return view('petugas.layout.transaksi.peminjaman')->with([
@@ -341,6 +349,7 @@ class PController extends Controller
             'active' => 'Peminjaman',
             'data_peminjaman' => $detail_peminjaman,
             'open' => 'yes-2',
+            'barangs' => $detail_barangs
         ]);
 
     }
@@ -369,6 +378,9 @@ class PController extends Controller
             'open' => 'yes-2',
         ]);
     }
+
+    //PEMINJAMAN END END
+
 
     public function goMaintenance()
     {
@@ -464,7 +476,7 @@ class PController extends Controller
             'open' => 'yes-2',
         ]);
     }
-    
+
     public function goAssets()
     {
 
@@ -584,11 +596,12 @@ class PController extends Controller
             'status' => 'required',
             'harga' => 'required',
             'foto_barang' => '',
-            'keterangan' => 'required|max:255',
+            'keterangan' => 'max:255',
         ]);
 
         $harga = str_replace('.', '', $request->input('harga'));
         $validatedData['harga'] = intval($harga);
+        $validatedData['keterangan'] = 'Pengadaan barang untuk pendataan.';
 
         $validatedData['no_asset'] = $request->input('kode_awal') . '-' . $request->input('no_asset') . '-LC';
 
@@ -789,8 +802,14 @@ class PController extends Controller
             'no_penempatan' => '',
             'no_ruangan' => '',
             'user_id' => '',
-            'keterangan' => '',
+            'keterangan' => 'nullable',
         ]);
+
+        if ($request->keterangan == null) {
+
+            $validatedData['keterangan'] = 'Penempatan baru.';
+
+        }
 
         $validatedData['tanggal_penempatan'] = now()->format('Y-m-d');
 
@@ -940,8 +959,14 @@ class PController extends Controller
         $validatedData = $request->validate([
             'no_mutasi' => '',
             'no_ruangan' => '',
-            'keterangan' => '',
+            'keterangan' => 'nullable',
         ]);
+
+        if ($request->keterangan == null) {
+
+            $validatedData['keterangan'] = 'Mutasi baru.';
+
+        }
 
         $validatedData['tanggal_mutasi'] = now()->format('Y-m-d');
 
@@ -977,23 +1002,121 @@ class PController extends Controller
 
     public function addKeranjangPeminjaman(Request $request)
     {
+
         $validatedData = $request->validate([
             'no_peminjaman' => 'required',
             'kode_barcode' => 'required',
         ]);
 
         $no_barang = DB::table('detail_barangs')
-            ->select('no_barang')
+            ->select('no_barang', 'status')
             ->where('kode_barcode', '=', $request->input('kode_barcode'))
             ->first();
 
+        // dd($no_barang);
+
         $validatedData['no_barang'] = $no_barang->no_barang;
 
-        keranjang_peminjaman::create($validatedData);
+        if ($no_barang->status == 'Sudah Dihapus') {
+            $request->session()->flash('error', 'Barang tersebut sudah masuk dalam Daftar Penghapusan!');
+
+            return redirect('/peminjaman-tambah');
+
+        }
+
+        DB::table('keranjang_peminjamans')->insert($validatedData);
 
         $request->session()->flash('success', 'Barang masuk kedalam List Peminjaman!');
 
         return redirect('/peminjaman-tambah');
+    }
+
+    public function deleteKeranjangPeminjaman(Request $request)
+    {
+
+        $nama_barang = DB::table('keranjang_peminjamans')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_peminjamans.kode_barcode')
+            ->where('keranjang_peminjamans.no_peminjaman', '=', $request->input('no_peminjaman'))
+            ->first();
+
+        DB::table('keranjang_peminjamans')
+            ->where('no_peminjaman', $request->input('no_peminjaman'))->delete();
+
+        $pesanFlash = "Barang (Merk: *{$nama_barang->merk} ) telah berhasil dihapus dari list!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/peminjaman-tambah');
+    }
+
+    public function addPeminjaman(Request $request)
+    {
+
+        // dd($request);
+        $validatedData = $request->validate([
+            'no_peminjaman' => 'required',
+            'tanggal_peminjaman' => '',
+            'tanggal_kembali' => 'required',
+            'id_pegawai' => 'requir ed',
+            'status_peminjaman' => '',
+            'keterangan' => 'nullable',
+        ]);
+
+        $nama_peminjam = DB::table('pegawais')
+            ->where('nik', '=', $request->id_pegawai)
+            ->select('nama_user')
+            ->first();
+
+        $nama = $nama_peminjam->nama_user;
+
+        if ($request->keterangan == null) {
+            $validatedData['keterangan'] = 'Pegawai(' . $nama . ') melakukan Peminjaman.';
+        }
+
+        // $validatedData['tanggal_penempatan'] = now()->format('Y-m-d');
+
+        $kode_barcodes = DB::table('keranjang_peminjamans')->select('kode_barcode')->get();
+        $validatedData['status_peminjaman'] = 'Dipinjam';
+
+        // dd($validatedData);
+        DB::table('peminjamans')->insert($validatedData);
+
+        $validatedDataStatus['status'] = "Dipinjam oleh: $nama";
+        // dd($validatedDataStatus['status']);
+        foreach ($kode_barcodes as $kode_barcode) {
+            // return redirect('/jkbkhbd');
+            DB::table('detail_barangs')
+                ->where('kode_barcode', $kode_barcode->kode_barcode)
+                ->update($validatedDataStatus);
+        }
+
+
+        DB::statement("INSERT INTO detail_peminjamans (no_peminjaman, no_barang, kode_barcode)
+         SELECT '$request->no_peminjaman', no_barang, kode_barcode FROM keranjang_peminjamans");
+
+        DB::table('keranjang_peminjamans')->truncate();
+
+
+        $request->session()->flash('success', 'Peminjamaan telah berhasil Dilakukan!');
+
+        return redirect('/peminjaman');
+
+    }
+
+    public function giveBackPeminjaman(Request $request, ruangan $ruangan)
+    {
+        // $validatedData['tanggal_selesai'] = now()->format('Y-m-d');
+        $validatedData['status_peminjaman'] = "Dikembalikan";
+
+
+        DB::table('peminjamans')
+            ->where('no_peminjaman', $request->input('no_peminjaman'))
+            ->update($validatedData);
+
+
+        $request->session()->flash('success', 'Peminjaman telah selesai Dikembalikan!');
+
+        return redirect('/peminjaman');
     }
 
 
@@ -1024,18 +1147,20 @@ class PController extends Controller
         $cek1 = DB::table('maintenances')->where('kode_barcode', '=', $request->kode_barcode)->first();
         $cek2 = DB::table('detail_penempatans')->where('kode_barcode', '=', $request->kode_barcode)->first();
 
-        if ($cek1->status == "Sedang Diproses") {
 
-            $request->session()->flash('error', 'Barang sedang proses maintenance!');
-
-            return redirect('/maintenance');
-        } else {
+        if ($cek1 == null) {
             $validatedData = $request->validate([
                 'no_maintenance' => '',
                 'biaya' => 'required|numeric',
-                'keterangan' => 'required',
+                'keterangan' => 'nullable',
                 'kode_barcode' => 'required',
             ]);
+
+            if ($request->keterangan == null) {
+
+                $validatedData['keterangan'] = 'Maintenance baru untuk pemeliharaan.';
+
+            }
 
             $no_barang = DB::table('detail_barangs')->select('no_barang')->where('kode_barcode', '=', $request->kode_barcode)->first();
 
@@ -1064,6 +1189,11 @@ class PController extends Controller
 
 
             $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
+
+            return redirect('/maintenance');
+        } else if ($cek1->status == "Sedang Diproses") {
+
+            $request->session()->flash('error', 'Barang sedang proses maintenance!');
 
             return redirect('/maintenance');
         }
@@ -1146,8 +1276,14 @@ class PController extends Controller
         $validatedData = $request->validate([
             'no_penghapusan' => '',
             'jenis_penghapusan' => '',
-            'keterangan' => '',
+            'keterangan' => 'nullable',
         ]);
+
+        if ($request->keterangan == null) {
+
+            $validatedData['keterangan'] = 'Penghapusan permanen karena: ' . $request->jenis_penghapusan . '.';
+
+        }
 
         $validatedData['tanggal_penghapusan'] = now()->format('Y-m-d');
 

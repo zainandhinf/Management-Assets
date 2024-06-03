@@ -31,8 +31,19 @@
             @endphp
             @foreach ($penempatans as $penempatan)
                 @php
-                    $lokasi = DB::table('ruangans')
-                        ->select('*')
+                    $lokasi = DB::table('ruangans')->select('*')->where('no_ruangan','=',$penempatan->no_ruangan)->get();
+                    if ($penempatan->user_id == null) {
+                        $pengguna = 'Tidak ada pengguna';
+                    } else {
+                        $pengguna = DB::table('pegawais')
+                            ->select('*')
+                            ->where('id', '=', $penempatan->user_id)
+                            ->first();
+                        $pengguna = '(' . $pengguna->nik . ')' . $pengguna->nama_user;
+                    }
+
+                    $nama_ruangan = DB::table('ruangans')
+                        ->select('ruangan')
                         ->where('no_ruangan', '=', $penempatan->no_ruangan)
                         ->first();
                     $pengguna = DB::table('pegawais')
@@ -219,7 +230,6 @@
                 ->where('detail_barangs.kode_barcode', '=', $penempatan->kode_barcode)
                 ->get();
             // dd($penempatans);
-
         @endphp
         <div class="modal modal-blur fade" id="showdata{{ $penempatan->id }}" tabindex="-1" role="dialog"
             aria-hidden="true" style="font-size: 14px;">

@@ -92,7 +92,7 @@
                         style="display: none;" id="img-preview"> <br>
 
                     <label for="">Keterangan</label><br>
-                    <textarea class="form-control mb-4" name="keterangan" cols="10" rows="3" placeholder="Keterangan.." required></textarea>
+                    <textarea class="form-control mb-4" name="keterangan" cols="10" rows="3" placeholder="Keterangan.."></textarea>
 
                     <button type="submit" class="btn btn-primary mt-2 w-100" style="font-size: 14px;"><i class="fa fa-list me-2"></i>+ Tambah ke List</button>
                 </form>

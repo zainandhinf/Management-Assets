@@ -84,13 +84,10 @@
                                 <td>{{ $barang->nama_barang }}</td>
                                 <td>{{ $barang->nama_kategori }}</td>
                                 <td>{{ $qty }}</td>
-                                <td style="float: right;">
-                                    {{-- <button style="margin-right: 10px" class="btn btn-info mr-2">
-                                        <i class="fa fa-eye"></i>
-                                    </button> --}}
+                                <td style="weight: 100%;">
 
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-warning select-barang"
+
+                                    <button type="button" style="float: right;" class="btn btn-sm btn-warning select-barang"
                                         data-no-barang="{{ $barang->no_barang }}">
                                         <i class="fa fa-plus"></i> Pilih Barang
                                     </button>

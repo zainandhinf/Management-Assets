@@ -161,7 +161,6 @@
                             ->where('mutasis.no_mutasi', '=', $mutasi->no_mutasi)
                             ->first();
                     }
-
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>

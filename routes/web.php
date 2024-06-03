@@ -94,24 +94,6 @@ Route::get('/getUserByNik', [SUController::class, 'getUserByNik']);
 // end end crud super user //
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //petugas - Koordinator
 Route::get('/dashboard-koordinator', [PController::class, 'index']);
 Route::get('/petugas-koordinator', [PController::class, 'goPetugas']);
@@ -138,7 +120,7 @@ Route::post('/addmutasi', [PController::class, 'addMutasi']);
 Route::get('/pengadaan', [PController::class, 'goPengadaan']);
 Route::get('/pengadaan-tambah', [PController::class, 'goPengadaanTambah']);
 Route::post('/pengadaan-tambah-barang', [PController::class, 'select']);
-Route::post('/pengadaan-tambah-data', [PController::class, 'goPengadaanData']);
+Route::get('/pengadaan-tambah-data', [PController::class, 'goPengadaanData']);
 Route::post('/addkeranjang', [PController::class, 'addKeranjang']);
 Route::delete('/deletekeranjang', [PController::class, 'deleteKeranjang']);
 Route::post('/addpengadaan', [PController::class, 'addPengadaan']);
@@ -159,8 +141,9 @@ Route::post('/addpenempatan', [PController::class, 'addPenempatan']);
 Route::get('/peminjaman', [PController::class, 'goPeminjaman']);
 Route::get('/peminjaman-tambah', [PController::class, 'goPeminjamanTambah']);
 Route::post('/addkeranjangpeminjaman', [PController::class, 'addKeranjangPeminjaman']);
-Route::delete('/deletekeranjangpeminjaman', [PController::class, 'deleteKeranangPeminjaman']);
+Route::delete('/deletekeranjangpeminjaman', [PController::class, 'deleteKeranjangPeminjaman']);
 Route::post('/addpeminjaman', [PController::class, 'addPeminjaman']);
+Route::put('/givebackpeminjaman', [PController::class, 'giveBackPeminjaman']);
 // TRANSAKSI PEMINJAMAN END END//
 
 // TRANSAKSI MAINTENANCE
