@@ -31,7 +31,8 @@
             @endphp
             @foreach ($penempatans as $penempatan)
                 @php
-                    $lokasi = DB::table('ruangans')->select('*')->where('no_ruangan','=',$penempatan->no_ruangan)->get();
+                    $lokasi = DB::table('ruangans')->select('*')->where('no_ruangan','=',$penempatan->no_ruangan)->first();
+                    // dd($lokasi);
                     if ($penempatan->user_id == null) {
                         $pengguna = 'Tidak ada pengguna';
                     } else {
@@ -67,7 +68,7 @@
                             class="btn btn-primary mt-1">
                             <i class="fa fa-eye"></i>
                         </button>
-                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $penempatan->id }}"
+                        <button data-bs-toggle="modal" data-bs-target="#deletePenempatan{{ $penempatan->id }}"
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>
@@ -187,9 +188,9 @@
                     <div class="modal-footer">
                         <div class="w-100">
                             <div class="row">
-                                <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal"
+                                <div class="col"><button class="btn w-100 mb-2" onclick="refresh()" data-bs-dismiss="modalehdgae"
                                         aria-label="Close">
-                                        Cancel
+                                        Canceloooo
                                     </button></div>
                                 <form action="/deletedetail" method="post">
                                     @csrf
@@ -229,12 +230,25 @@
                 )
                 ->where('detail_barangs.kode_barcode', '=', $penempatan->kode_barcode)
                 ->get();
-            // dd($penempatans);
+
+            $room = DB::table('penempatans')
+                            ->join('ruangans', 'ruangans.no_ruangan', '=', 'penempatans.no_ruangan')
+                            ->where('ruangans.no_ruangan', '=', $penempatan->no_ruangan)
+                            ->select('ruangans.ruangan', 'penempatans.tanggal_penempatan')
+                            ->first();
         @endphp
         <div class="modal modal-blur fade" id="showdata{{ $penempatan->id }}" tabindex="-1" role="dialog"
             aria-hidden="true" style="font-size: 14px;">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between">
+                        <h5 class="modal-title">
+                        Penempatan untuk: {{ $room->ruangan }}
+                    </h5>
+                        <h6 class="modal-title">
+                        Tgl Penempatan: {{ $room->tanggal_penempatan }}
+                    </h6>
+                    </div>
                     <div class="modal-body">
                         <table class="table table-striped" id="data-tables">
                             <thead>
@@ -245,9 +259,9 @@
                                     {{-- <th>Alamat</th> --}}
                                     {{-- <th>No Telepon</th> --}}
                                     <th>Merk</th>
-                                    <th>Tanggal Penempatan</th>
+                                    {{-- <th>Tanggal Penempatan</th> --}}
                                     {{-- <th>Jenis Pengadaan</th> --}}
-                                    <th>Lokasi Penempatan</th>
+                                    {{-- <th>Lokasi Penempatan</th> --}}
                                     <th>Pengguna</th>
                                     {{-- <th>Status</th> --}}
                                     <th>Keterangan</th>
@@ -284,9 +298,9 @@
                                         Asset: <b>{{ $detail_barang->no_asset }}</b>
                                     </td>
                                     <td>{{ $detail_barang->merk }}, {{ $detail_barang->spesifikasi }}</td>
-                                    <td>{{ $detail_barang->tanggal_penempatan }}</td>
+                                    {{-- <td>{{ $detail_barang->tanggal_penempatan }}</td> --}}
                                     {{-- <td>{{ $detail_barang->jenis_pengadaan }}</td> --}}
-                                    <td>{{ $nama_ruangan->ruangan }}</td>
+                                    {{-- <td>{{ $nama_ruangan->ruangan }}</td> --}}
                                     <td>{{ $pengguna }}</td>
                                     <td>{{ $detail_barang->keterangan_penempatan }}</td>
                                     {{-- <td>Rp. {{ number_format($detail_barang->harga) }}</td> --}}
@@ -299,7 +313,7 @@
                                         <button data-bs-toggle="modal" class="btn btn-warning mt-1"><i
                                                 class="fa-solid fa-barcode"></i></button>
                                         <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $detail_barang->id }}"
-                                            class="btn btn-danger mt-1">
+                                            class="btn btn-danger mt-1" onclick="dnonemodal({{ $penempatan->id }})">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </td>
@@ -320,5 +334,18 @@
         $(document).ready(function() {
             $('#data-tables-keranjang').DataTable();
         });
+
+        function dnonemodal(modalid) {
+            var id = "showdata" + modalid;
+            var modal = document.getElementById(id);
+            console.log(id);
+
+
+            modal.style.display = "none";
+        }
+
+        function refresh() {
+            location.reload();
+        }
     </script>
 @endsection

@@ -581,14 +581,27 @@ class PController extends Controller
     public function addKeranjang(Request $request)
     {
 
+        $na = $request->input('kode_awal') . '-' . $request->input('no_asset') . '-LC';
+        $cek = DB::table('keranjang_pengadaans')
+                    ->where('no_asset', '=', $na)
+                    ->count();
+        // dd($cek);
 
+        if ($cek > 0) {
+            $a = $request->no_asset;
+            $pesanFlash = "No. Asset: ". $a ." Sudah terdaftar! Pilih Nomor lain.";
+            $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/pengadaan-tambah');
+
+        } else {
 
 
         $validatedData = $request->validate([
             'no_pengadaan' => 'nullable',
             'no_barang' => 'required',
             'kode_barcode' => 'required',
-            'no_asset' => 'required',
+            'no_asset' => 'required|unique:keranjang_pengadaans',
             'merk' => 'required|max:255',
             'jenis_pengadaan' => 'required',
             'spesifikasi' => 'required|max:255',
@@ -621,6 +634,8 @@ class PController extends Controller
         return redirect('/pengadaan');
     }
 
+    }
+
     public function deleteKeranjang(Request $request)
     {
 
@@ -632,7 +647,7 @@ class PController extends Controller
         DB::table('keranjang_pengadaans')
             ->where('id', $request->input('id_keranjang'))->delete();
 
-        $pesanFlash = "Barang (Merk: *{$nama_barang[0]->merk} ) telah berhasil dihapus!";
+        $pesanFlash = "Barang (Merk: *{$nama_barang[0]->merk} ) telah berhasil dihapus dari Keranjang!";
 
         $request->session()->flash('error', $pesanFlash);
 
@@ -732,6 +747,49 @@ class PController extends Controller
 
         return redirect('/pengadaan');
     }
+    public function deletePengadaan(Request $request)
+    {
+        // $np = DB::table('detil_barangs')
+        // ->where('no_pengadaan', '=', $request->no_pengadaan)
+        // ->select('no_pengadaan')
+        // ->get();
+
+        // foreach ($np as $np) {
+        $keyword = $request->konfirmasi;
+
+        if ($keyword == "KONFIRMASI") {
+
+            DB::table('detail_barangs')
+                ->where('no_pengadaan', $request->no_pengadaan)
+                ->delete();
+        // }
+        // $np = DB::table('detail_barangs')
+        //     ->where('no_pengadaan', '=', $request->input('no_pengadaan'))
+        //     ->select('*')
+        //     ->first();
+            // dd($request->input('no_pengadaan'));
+
+        DB::table('detail_barangs')->where('no_pengadaan', $request->input('no_pengadaan'))->delete();
+        DB::table('pengadaans')->where('no_pengadaan', $request->input('no_pengadaan'))->delete();
+
+        $pesanFlash = "Semua Barang (No. Pengadaan: *{$request->no_pengadaan} ) telah berhasil dihapus!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/pengadaan');
+    } else {
+
+        $pesanFlash = "Keyword tidak Cocok! GAGAL Menghapus Data..";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/pengadaan');
+
+
+    }
+
+    }
+
     // End End Transaksi PENGADAAN
 
     // Transaksi Penempatan
@@ -790,7 +848,7 @@ class PController extends Controller
         DB::table('keranjang_penempatans')
             ->where('no_penempatan', $request->input('no_penempatan'))->delete();
 
-        $pesanFlash = "Barang (Merk: *{$nama_barang->merk} ) telah berhasil dihapus dari list!";
+        $pesanFlash = "Barang (Merk: *{$nama_barang->merk} ) telah berhasil dihapus dari list Penempatan!";
 
         $request->session()->flash('error', $pesanFlash);
 
@@ -798,6 +856,22 @@ class PController extends Controller
     }
     public function addPenempatan(Request $request)
     {
+
+        $cek = DB::table('penempatans')
+                    ->where('no_penempatan', '=', $request->no_penempatan)
+                    ->count();
+
+                    // dd($cek);
+
+        if ($cek > 0) {
+            $pesanFlash = "Data dengan (No. Penempatan: *{$request->no_penempatan} ) Sudah ada sebelumnya!";
+
+            $request->session()->flash('error', $pesanFlash);
+
+            return redirect('/penempatan-tambah');
+        } else {
+
+
         $validatedData = $request->validate([
             'no_penempatan' => '',
             'no_ruangan' => '',
@@ -833,9 +907,11 @@ class PController extends Controller
         DB::table('keranjang_penempatans')->truncate();
 
 
-        $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
+        $request->session()->flash('success', 'Penempatan Baru telah berhasil ditambahkan!');
 
         return redirect('/penempatan');
+    }
+
     }
     //End Transaksi Penempatan
     public function addKeranjangMutasi(Request $request)
@@ -845,7 +921,7 @@ class PController extends Controller
 
         if ($cek1 == null) {
             if ($cek2->status == "Belum Ditempatkan") {
-                $request->session()->flash('error', 'Barang belum ditempatkan!');
+                $request->session()->flash('error', 'Barang belum ditempatkan! Pilih barang yang sudah ditempatkan sebelumnya..');
 
                 return redirect('/mutasi-tambah');
             } else if ($cek2->status == "Sudah Dihapus") {
@@ -1081,7 +1157,7 @@ class PController extends Controller
         // dd($validatedData);
         DB::table('peminjamans')->insert($validatedData);
 
-        $validatedDataStatus['status'] = "Dipinjam oleh: $nama";
+        $validatedDataStatus['status_pinjam'] = "Dipinjam oleh: $nama";
         // dd($validatedDataStatus['status']);
         foreach ($kode_barcodes as $kode_barcode) {
             // return redirect('/jkbkhbd');

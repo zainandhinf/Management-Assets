@@ -32,9 +32,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
-            
+
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    
+
 }

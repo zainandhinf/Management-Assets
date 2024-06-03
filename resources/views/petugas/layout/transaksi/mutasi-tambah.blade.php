@@ -88,7 +88,8 @@
                 <label for="">Scan Barcode / Kode Barang</label>
                 <input type="text" value="" class="form-control" id="input-barcode-1"
                     placeholder="Tekan TAB setelah selesai input.." onchange="addkeranjangmutasi()">
-            </div>
+                </div>
+                <strong class="mt-1">*Barang yang belum ditempatkan tidak bisa dimutasi</strong>
         </div>
 
 

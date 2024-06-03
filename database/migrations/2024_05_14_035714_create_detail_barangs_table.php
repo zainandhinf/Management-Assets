@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('spesifikasi'); // Intel Core i7 Ram 16 SSD
             $table->string('kondisi'); // Baik - Rusak
             $table->string('status'); //  Belum Ditempatkan atau Sudah Ditempatkan di Ruangan sekian
+            $table->string('status_pinjam')->nullable(); //  Belum Ditempatkan atau Sudah Ditempatkan di Ruangan sekian
             $table->integer('harga')->nullable(); // Rp. 20.000,00
             $table->integer('foto_barang')->nullable(); // FOTONYA
             // $table->string('kode_aktiva');
