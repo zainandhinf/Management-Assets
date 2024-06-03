@@ -11,14 +11,34 @@
                     Filter
                 </button>
             </div>
-            <div class="col-md-8">
-                <a href="/print-petugas" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
+            {{-- <div class="col-md-8">
+                <a href="/print-petugas" target="blank" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
                     <i class="fa-solid fa-print"></i>
                     Print
                 </a>
+            </div> --}}
+            <div class="col-md-8">
+                <!-- Form untuk mengirimkan data saat print -->
+                <form action="/print-data-petugas-pdf" method="GET" target="_blank" id="printForm">
+                    @if ($requests == null)
+                      
+                    @else
+                        <input type="hidden" name="date" id="requestsInput" value="{{ $requests->query('date') }}">
+                        <input type="hidden" name="role" id="requestsInput" value="{{ $requests->query('role') }}">
+                    @endif
+                    <button type="submit" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
+                        <i class="fa-solid fa-print"></i>
+                        Print
+                    </button>
+                </form>
             </div>
         </div>
 
+
+        @php
+            $no = 1;
+            // dd($requests);
+        @endphp
         <table class="table table-striped" id="data-tables">
             <thead>
                 <tr>
@@ -34,9 +54,6 @@
                     {{-- <th data-searchable="false">Action</th> --}}
                 </tr>
             </thead>
-            @php
-                $no = 1;
-            @endphp
             @foreach ($petugass as $petugas)
                 <tr>
                     <td>{{ $no++ }}</td>
@@ -120,22 +137,31 @@
                 const startDate = startDateInput.value;
                 const endDate = endDateInput.value;
                 const role = roleInput.value;
-                let href = '/laporan-data-petugas/f=';
+                let href = '/laporan-data-petugas/f=hah';
 
-                if (startDate && endDate) {
-                    href = `/laporan-data-petugas/f=${startDate}~${endDate}`;
+                if (startDate && endDate && role) {
+                    href = `/laporan-data-petugas/f=?date=${startDate}_${endDate}&role=${role}`;
+                } else if (role) {
+                    href = `/laporan-data-petugas/f=?role=${role}`;
+                } else if (role && startDate) {
+                    href = `/laporan-data-petugas/f=?date=${startDate}&role=${role}`;
+                } else if (role && endDate) {
+                    href = `/laporan-data-petugas/f=?date=${endDate}&role=${role}`;
+                    // } else if (startDate && endDate) {
+                    //     href = `/laporan-data-petugas/f=?date=${startDate}_${endDate}&role=${role}`;
                 } else if (startDate) {
-                    href = `/laporan-data-petugas/f=${startDate}`;
+                    href = `/laporan-data-petugas/f=?date=${startDate}`;
                 } else if (endDate) {
-                    href = `/laporan-data-petugas/f=~${endDate}]`;
+                    href = `/laporan-data-petugas/f=?date=${endDate}]`;
+                    // href = `/laporan-data-petugas/f=_${endDate}]`;
                 }
 
-                if (role && startDate == null && endDate == null) {
-                    // href += (href.includes('?') ? '&' : (href ? '' : '')) + `${role}`;
-                    href += (href.includes('?') ? '&' : '') + `${role}`;
-                }else if (role){
-                    href += (href.includes('?') ? '&' : (href ? '?role=' : '')) + `${role}`;
-                }
+                // if (role && startDate == null && endDate == null) {
+                //     // href += (href.includes('?') ? '&' : (href ? '' : '')) + `${role}`;
+                //     href += (href.includes('?') ? '&' : '') + `${role}`;
+                // }else if (role){
+                //     href += (href.includes('?') ? '&' : (href ? '?role=' : '')) + `${role}`;
+                // }
 
                 filterBtn.href = href;
             }

@@ -297,7 +297,6 @@
     {{-- end modal delete data detail --}}
 
     {{-- modal view data --}}
-    {{-- modal view data --}}
     @foreach ($pengadaans as $pengadaan)
         @php
             $detail_barangs = DB::table('detail_barangs')
@@ -353,6 +352,8 @@
                                     <td>
                                         {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $detail_barang->id }}"
                                         style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button> --}}
+                                        <button data-bs-toggle="modal" class="btn btn-warning mt-1"><i
+                                            class="fa-solid fa-barcode"></i></button>
                                         <button data-bs-toggle="modal"
                                             data-bs-target="#deletedata{{ $detail_barang->id }}"
                                             class="btn btn-danger mt-1">

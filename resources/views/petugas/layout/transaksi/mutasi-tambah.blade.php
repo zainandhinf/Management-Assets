@@ -61,7 +61,8 @@
                             @endphp
                             <select class="form-select" name="" id="lokasi-mutasi">
                                 @foreach ($ruangans as $ruangan)
-                                    <option value="{{ $ruangan->ruangan }}">{{ $ruangan->ruangan }} ({{ $ruangan->lokasi }})
+                                    <option value="{{ $ruangan->no_ruangan }}">{{ $ruangan->ruangan }}
+                                        ({{ $ruangan->lokasi }})
                                     </option>
                                 @endforeach
                             </select>
@@ -70,7 +71,8 @@
                     <tr>
                         <td>Keterangan</td>
                         <td>
-                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" required></textarea>
+                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5"
+                                placeholder="keterangan.." required></textarea>
                         </td>
                     </tr>
                 </table>
@@ -85,15 +87,15 @@
             <div class="form-group">
                 <label for="">Scan Barcode / Kode Barang</label>
                 <input type="text" value="" class="form-control" id="input-barcode-1"
-                    onchange="addkeranjangmutasi()">
+                    placeholder="Tekan TAB setelah selesai input.." onchange="addkeranjangmutasi()">
             </div>
         </div>
 
-        <button class="btn btn-primary mt-1" onclick="addmutasi()">
-            <i class="fa fa-plus me-2 mt-2"></i>Create Data
-        </button>
 
         <hr>
+        <button class="btn btn-primary mt-1" onclick="addmutasi()">
+            <i class="fa fa-plus me-2 mt-2"></i>Buat Mutasi
+        </button>
 
         <h5>
             <strong class="fs-6">List Mutasi Barang</strong>
@@ -111,7 +113,7 @@
                     {{-- <th>Tanggal Pengadaan</th> --}}
                     <th>Kondisi</th>
                     <th>Status</th>
-                    <th>Lokasi Lama</th>
+                    <th>Lokasi Terakhir</th>
                     {{-- <th>Harga</th> --}}
                     <th data-searchable="false">Action</th>
                 </tr>
@@ -122,20 +124,44 @@
             @endphp
             @foreach ($keranjangs as $keranjang)
                 @php
-                    $penempatan = DB::table('detail_penempatans')
-                        ->join('penempatans', 'penempatans.no_penempatan', '=', 'detail_penempatans.no_penempatan')
-                        ->where('detail_penempatans.kode_barcode', '=', $keranjang->kode_barcode)
+                    $cek = DB::table('detail_mutasis')
+                        ->where('detail_mutasis.kode_barcode', '=', $keranjang->kode_barcode)
                         ->first();
 
-                    $lokasi = DB::table('penempatans')
-                        ->join(
-                            'detail_penempatans',
-                            'penempatans.no_penempatan',
-                            '=',
-                            'detail_penempatans.no_penempatan',
-                        )
-                        ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
-                        ->first();
+                    if ($cek == null) {
+                        $penempatan = DB::table('detail_penempatans')
+                            ->join('penempatans', 'penempatans.no_penempatan', '=', 'detail_penempatans.no_penempatan')
+                            ->where('detail_penempatans.kode_barcode', '=', $keranjang->kode_barcode)
+                            ->first();
+
+                        $lokasi = DB::table('penempatans')
+                            ->join(
+                                'detail_penempatans',
+                                'penempatans.no_penempatan',
+                                '=',
+                                'detail_penempatans.no_penempatan',
+                            )
+                            ->join('ruangans', 'penempatans.no_ruangan', '=', 'ruangans.no_ruangan')
+                            ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
+                            ->first();
+                    } else {
+                        $mutasi = DB::table('detail_mutasis')
+                            ->join('mutasis', 'mutasis.no_mutasi', '=', 'detail_mutasis.no_mutasi')
+                            ->where('detail_mutasis.kode_barcode', '=', $keranjang->kode_barcode)
+                            ->first();
+
+                        $lokasi = DB::table('mutasis')
+                            ->join(
+                                'detail_mutasis',
+                                'mutasis.no_mutasi',
+                                '=',
+                                'detail_mutasis.no_mutasi',
+                            )
+                            ->join('ruangans', 'mutasis.no_ruangan', '=', 'ruangans.no_ruangan')
+                            ->where('mutasis.no_mutasi', '=', $mutasi->no_mutasi)
+                            ->first();
+                    }
+
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
@@ -149,7 +175,7 @@
                     {{-- <td>{{ $keranjang->jenis_pengadaan }}</td> --}}
                     <td>{{ $keranjang->kondisi }}</td>
                     <td>{{ $keranjang->status }}</td>
-                    <td>{{ $lokasi->lokasi_penempatan }}</td>
+                    <td>{{ $lokasi->ruangan }}</td>
                     {{-- <td>Rp. {{ number_format($keranjang->harga) }}</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
@@ -175,7 +201,7 @@
     <form action="/addmutasi" method="POST" id="addmutasi" style="display: none;">
         @csrf
         <input type="hidden" id="input-no-mutasi-2" name="no_mutasi" value="{{ $no_mutasi }}">
-        <input type="hidden" id="input-lokasi-2" name="lokasi_terbaru">
+        <input type="hidden" id="input-lokasi-2" name="no_ruangan">
         <input type="hidden" id="input-keterangan-2" name="keterangan">
     </form>
 

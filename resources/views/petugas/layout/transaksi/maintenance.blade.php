@@ -4,7 +4,7 @@
     <div class="card p-4" style="font-size: 14px;">
         <div class="row">
             <div class="col-md-4"> <button onclick="ShowModal1()" type="button" class="btn btn-warning btn-sm mt-2 mb-2 w-100"
-                    data-bs-toggle="modal" data-bs-target="#adddata">
+                    data-bs-toggle="modal" data-bs-target="#listdata">
                     <i class="fa-solid fa-cart-flatbed"></i>
                     List Barang
                 </button></div>
@@ -79,7 +79,7 @@
     {{-- modal --}}
 
     {{-- modal add data --}}
-    <div class="modal modal-blur fade" id="adddata" tabindex="-1" role="dialog" aria-hidden="true"
+    <div class="modal modal-blur fade" id="listdata" tabindex="-1" role="dialog" aria-hidden="true"
         style="font-size: 14px;">
         <div class="modal-dialog modal-fullscreen modal-dialog-scrollable" role="document">
             <div class="modal-content">

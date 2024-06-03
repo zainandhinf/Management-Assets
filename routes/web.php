@@ -120,7 +120,6 @@ Route::get('/barang-koordinator', [PController::class, 'goBarang']);
 Route::get('/kategori-barang-koordinator', [PController::class, 'goKBarang']);
 Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
-Route::get('/data-aktiva-fasilitas', [PController::class, 'goAktiva']);
 Route::get('/data-assets', [PController::class, 'goAssets']);
 Route::get('/profile-koordinator', [PController::class, 'goKProfile']);
 Route::get('/training-koordinator', [PController::class, 'goSchedule']);
@@ -185,8 +184,17 @@ Route::post('/addpenghapusan', [PController::class, 'addPenghapusan']);
 
 //LAPORAN DATA PETUGAS
 Route::get('/laporan-data-petugas', [ReportController::class, 'goLaporanPetugas']);
-Route::get('/laporan-data-petugas/f={filter}', [ReportController::class, 'goLaporanPetugasFilter']);
+// Route::get('/laporan-data-petugas/f={filter}', [ReportController::class, 'goLaporanPetugasFilter']);
+Route::get('/laporan-data-petugas/f=', [ReportController::class, 'goLaporanPetugasFilter']);
+// Route::get('/print/laporan-data-petugas/f=', [ReportController::class, 'goLaporanPetugasPdf']);
+Route::get('/print-data-petugas-pdf', [ReportController::class, 'goLaporanPetugasPdf']);
+// Route::get('/print-petugas', [ReportController::class, 'goLaporanPetugasPdf']);
 //END LAPORAN DATA PETUGAS
+
+//LAPORAN DATA AKTIVA
+Route::get('/data-aktiva-fasilitas', [ReportController::class, 'goAktiva']);
+Route::get('/print/aktiva', [ReportController::class, 'goLaporanAktivaPdf']);
+//END LAPORAN DATA AKTIVA
 
 
 Route::get('/profile-koordinator', [PController::class, 'goProfile']);

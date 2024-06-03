@@ -59,14 +59,14 @@
                         <td>
                             <select class="form-select" name="" id="jenis-penghapusan">
                                 <option value="Rusak Total">Rusak Total</option>
-                                <option value="Kadaluarsa">Kadaluarsa</option>
+                                <option value="Kadaluarsa">Habis Masa Pemakaian</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>Keterangan</td>
                         <td>
-                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" required></textarea>
+                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" placeholder="keterangan.." required></textarea>
                         </td>
                     </tr>
                 </table>
@@ -80,16 +80,16 @@
         <div class="row">
             <div class="form-group">
                 <label for="">Scan Barcode / Kode Barang</label>
-                <input type="text" value="" class="form-control" id="input-barcode-1"
+                <input type="text" value="" class="form-control" id="input-barcode-1" placeholder="Tekan TAB setelah selesai input.."
                     onchange="addkeranjangpenghapusan()">
             </div>
         </div>
 
-        <button class="btn btn-primary mt-1" onclick="addpenghapusan()">
-            <i class="fa fa-plus me-2 mt-2"></i>Create Data
-        </button>
-
+        
         <hr>
+        <button class="btn btn-primary mt-1" onclick="addpenghapusan()">
+            <i class="fa fa-plus me-2 mt-2"></i>Buat Penghapusan
+        </button>
 
         <h5>
             <strong class="fs-6">List Penghapusan Barang</strong>

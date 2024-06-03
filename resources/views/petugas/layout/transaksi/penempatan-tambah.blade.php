@@ -85,7 +85,7 @@
                     <tr>
                         <td>Keterangan</td>
                         <td>
-                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" required></textarea>
+                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" placeholder="keterangan.." required></textarea>
                         </td>
                     </tr>
                 </table>
@@ -99,16 +99,16 @@
         <div class="row">
             <div class="form-group">
                 <label for="">Scan Barcode / Kode Barang</label>
-                <input type="text" value="" class="form-control" id="input-barcode-1"
+                <input type="text" value="" class="form-control" id="input-barcode-1" placeholder="Tekan TAB setelah selesai input.."
                     onchange="addkeranjangpenempatan()">
             </div>
         </div>
 
+        <hr>
         <button class="btn btn-primary mt-1" onclick="addpenempatan()">
-            <i class="fa fa-plus me-2 mt-2"></i>Create Data
+            <i class="fa fa-plus me-2 mt-2"></i>Buat Penempatan
         </button>
 
-        <hr>
 
         <h5>
             <strong class="fs-6">List Penempatan Barang</strong>
@@ -125,7 +125,7 @@
                     <th>Merk</th>
                     {{-- <th>Tanggal Pengadaan</th> --}}
                     <th>Kondisi</th>
-                    <th>Status</th>
+                    {{-- <th>Status</th> --}}
                     {{-- <th>Harga</th> --}}
                     <th data-searchable="false">Action</th>
                 </tr>
@@ -145,7 +145,7 @@
                     <td>{{ $keranjang->merk }}, {{ $keranjang->spesifikasi }}</td>
                     {{-- <td>{{ $keranjang->jenis_pengadaan }}</td> --}}
                     <td>{{ $keranjang->kondisi }}</td>
-                    <td>{{ $keranjang->status }}</td>
+                    {{-- <td>{{ $keranjang->status }}</td> --}}
                     {{-- <td>Rp. {{ number_format($keranjang->harga) }}</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}

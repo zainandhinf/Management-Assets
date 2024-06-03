@@ -126,7 +126,7 @@
         @include('petugas.partials.sidebar')
 
         <div class="bg-light flex-fill overflow-auto" style="width: 200px">
-            <div class="p-2 d-md-none d-flex text-white bg-success">
+            <div class="p-2 d-md-none d-flex text-white" style="background-color: #0d3b66">
                 <a href="#" class="text-white" data-bs-toggle="offcanvas" data-bs-target="#bdSidebar">
                     <i class="fa-solid fa-bars"></i>
                 </a>

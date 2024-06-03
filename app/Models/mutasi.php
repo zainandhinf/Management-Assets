@@ -12,7 +12,7 @@ class mutasi extends Model
     protected $fillable = [
         'no_mutasi',
         'tanggal_mutasi',
-        'lokasi_terbaru',
+        'no_ruangan',
         'keterangan',
     ];
 }

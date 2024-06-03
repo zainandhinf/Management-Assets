@@ -4,7 +4,7 @@
     <div class="card p-4" style="font-size: 14px;">
         <div class="row">
             <div class="col-md-4"> <button onclick="ShowModal1()" type="button" class="btn btn-warning btn-sm mt-2 mb-2 w-100"
-                    data-bs-toggle="modal" data-bs-target="#adddata">
+                    data-bs-toggle="modal" data-bs-target="#listdata">
                     <i class="fa-solid fa-cart-flatbed"></i>
                     List Barang
                 </button></div>
@@ -18,19 +18,12 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    {{-- <th>Foto Profil</th> --}}
-                    <th>Kode</th>
-                    {{-- <th>Alamat</th> --}}
-                    {{-- <th>No Telepon</th> --}}
-                    <th>Merk</th>
+                    <th>No Penempatan</th>
                     <th>Tanggal Penempatan</th>
-                    {{-- <th>Jenis Pengadaan</th> --}}
                     <th>Lokasi Penempatan</th>
                     <th>Pengguna</th>
-                    {{-- <th>Status</th> --}}
                     <th>Keterangan</th>
-                    {{-- <th>Keterangan</th> --}}
-                    {{-- <th data-searchable="false">Action</th> --}}
+                    <th data-searchable="false">Action</th>
                 </tr>
             </thead>
             @php
@@ -38,56 +31,46 @@
             @endphp
             @foreach ($penempatans as $penempatan)
                 @php
-                    if ($penempatan->user_id == null) {
-                        $pengguna = 'Tidak ada pengguna';
-                    } else {
-                        $pengguna = DB::table('pegawais')
-                            ->select('*')
-                            ->where('id', '=', $penempatan->user_id)
-                            ->first();
-                            $pengguna = '(' . $pengguna->nik . ')' . $pengguna->nama_user;
-                        }
-                        
-                        $nama_ruangan = DB::table('ruangans')
-                        ->select('ruangan')
+                    $lokasi = DB::table('ruangans')
+                        ->select('*')
                         ->where('no_ruangan', '=', $penempatan->no_ruangan)
+                        ->first();
+                    $pengguna = DB::table('pegawais')
+                        ->select('*')
+                        ->where('id', '=', $penempatan->user_id)
                         ->first();
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
-                    {{-- <td>{{ $city->id }}</td> --}}
-                    {{-- <td>lorem</td> --}}
-                    <td>No Barang: <b>{{ $penempatan->no_barang }}</b> <br>Barcode:
-                        <b>{!! DNS1D::getBarcodeHTML($penempatan->kode_barcode, 'UPCA') !!}{{ $penempatan->kode_barcode }}</b> <br>No
-                        Asset: <b>{{ $penempatan->no_asset }}</b>
-                    </td>
-                    <td>{{ $penempatan->merk }}, {{ $penempatan->spesifikasi }}</td>
+                    <td>{{ $penempatan->no_penempatan }}</td>
                     <td>{{ $penempatan->tanggal_penempatan }}</td>
-                    {{-- <td>{{ $penempatan->jenis_pengadaan }}</td> --}}
-                    <td>{{ $nama_ruangan->ruangan }}</td>
-                    <td>{{ $pengguna }}</td>
-                    <td>{{ $penempatan->keterangan_penempatan }}</td>
-                    {{-- <td>Rp. {{ number_format($penempatan->harga) }}</td> --}}
-                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
-                    {{-- <td>{{ $penempatan->keterangan }}</td> --}}
-                    {{-- <td>
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $penempatan->id }}"
-                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
+                    <td>{{ $lokasi->ruangan }}</td>
+                    @if ($pengguna == null)
+                        <td>Tidak Ada Pengguna</td>
+                    @else
+                        <td>({{ $pengguna->nik }}) {{ $pengguna->nama_user }}</td>
+                    @endif
+                    <td>{{ $penempatan->keterangan }}</td>
+                    <td>
+                        <button data-bs-toggle="modal" data-bs-target="#showdata{{ $penempatan->id }}"
+                            class="btn btn-primary mt-1">
+                            <i class="fa fa-eye"></i>
+                        </button>
                         <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $penempatan->id }}"
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>
-                    </td> --}}
+                    </td>
                 </tr>
             @endforeach
         </table>
+
     </div>
 
     {{-- modal --}}
 
-    {{-- modal add data --}}
-    <div class="modal modal-blur fade" id="adddata" tabindex="-1" role="dialog" aria-hidden="true"
+    {{-- modal list data --}}
+    <div class="modal modal-blur fade" id="listdata" tabindex="-1" role="dialog" aria-hidden="true"
         style="font-size: 14px;">
         <div class="modal-dialog modal-fullscreen modal-dialog-scrollable" role="document">
             <div class="modal-content">
@@ -97,8 +80,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <hr>
-
                     <table class="table table-striped" id="data-tables-keranjang">
                         <thead>
                             <tr>
@@ -140,8 +121,9 @@
                                 {{-- <td>{{ $barang->tanggal_pengadaan }}</td> --}}
                                 <td>{{ $barang->jenis_pengadaan }}</td>
                                 <td>{{ $barang->kondisi }}</td>
-                                <td class="@if ($barang->status == 'Belum Ditempatkan') bg-warning @else bg-success @endif text-white">
-                                    {{ $barang->status }}</td>
+                                <td><button
+                                        class="btn btn-sm rounded-pill @if ($barang->status == 'Belum Ditempatkan') btn-warning @elseif ($barang->status == 'Sudah Dihapus') btn-danger @else btn-success @endif text-white"
+                                        style="cursor: default;">{{ $barang->status }}</button></td>
                                 <td>Rp. {{ number_format($barang->harga) }}</td>
                                 {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                                 {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
@@ -215,6 +197,112 @@
         </div>
     @endforeach
     {{-- end modal delete data detail --}}
+
+    {{-- modal view data --}}
+    @foreach ($penempatans as $penempatan)
+        @php
+            // $detail_barangs = DB::table('detail_barangs')
+            //     ->join('penempatans', 'detail_barangs.kode_barcode', '=', 'penempatans.kode_barcode')
+            //     ->select('penempatans.tanggal_penempatan', 'detail_barangs.*')
+            //     ->where('detail_barangs.barcode', '=', $penempatan->barcode)
+            //     ->get();
+            $detail_barangs = DB::table('detail_penempatans')
+                ->join('penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
+                ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
+                ->select(
+                    'penempatans.user_id',
+                    'penempatans.tanggal_penempatan',
+                    'penempatans.no_ruangan',
+                    'penempatans.keterangan as keterangan_penempatan',
+                    'detail_barangs.*',
+                )
+                ->where('detail_barangs.kode_barcode', '=', $penempatan->kode_barcode)
+                ->get();
+            // dd($penempatans);
+
+        @endphp
+        <div class="modal modal-blur fade" id="showdata{{ $penempatan->id }}" tabindex="-1" role="dialog"
+            aria-hidden="true" style="font-size: 14px;">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <table class="table table-striped" id="data-tables">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    {{-- <th>Foto Profil</th> --}}
+                                    <th>Kode</th>
+                                    {{-- <th>Alamat</th> --}}
+                                    {{-- <th>No Telepon</th> --}}
+                                    <th>Merk</th>
+                                    <th>Tanggal Penempatan</th>
+                                    {{-- <th>Jenis Pengadaan</th> --}}
+                                    <th>Lokasi Penempatan</th>
+                                    <th>Pengguna</th>
+                                    {{-- <th>Status</th> --}}
+                                    <th>Keterangan</th>
+                                    {{-- <th>Keterangan</th> --}}
+                                    <th data-searchable="false">Action</th>
+                                </tr>
+                            </thead>
+                            @php
+                                $no = 1;
+                            @endphp
+                            @foreach ($detail_barangs as $detail_barang)
+                                @php
+                                    if ($detail_barang->user_id == null) {
+                                        $pengguna = 'Tidak ada pengguna';
+                                    } else {
+                                        $pengguna = DB::table('pegawais')
+                                            ->select('*')
+                                            ->where('id', '=', $detail_barang->user_id)
+                                            ->first();
+                                        $pengguna = '(' . $pengguna->nik . ')' . $pengguna->nama_user;
+                                    }
+
+                                    $nama_ruangan = DB::table('ruangans')
+                                        ->select('ruangan')
+                                        ->where('no_ruangan', '=', $detail_barang->no_ruangan)
+                                        ->first();
+                                @endphp
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    {{-- <td>{{ $city->id }}</td> --}}
+                                    {{-- <td>lorem</td> --}}
+                                    <td>No Barang: <b>{{ $detail_barang->no_barang }}</b> <br>Barcode:
+                                        <b>{!! DNS1D::getBarcodeHTML($detail_barang->kode_barcode, 'UPCA') !!}{{ $detail_barang->kode_barcode }}</b> <br>No
+                                        Asset: <b>{{ $detail_barang->no_asset }}</b>
+                                    </td>
+                                    <td>{{ $detail_barang->merk }}, {{ $detail_barang->spesifikasi }}</td>
+                                    <td>{{ $detail_barang->tanggal_penempatan }}</td>
+                                    {{-- <td>{{ $detail_barang->jenis_pengadaan }}</td> --}}
+                                    <td>{{ $nama_ruangan->ruangan }}</td>
+                                    <td>{{ $pengguna }}</td>
+                                    <td>{{ $detail_barang->keterangan_penempatan }}</td>
+                                    {{-- <td>Rp. {{ number_format($detail_barang->harga) }}</td> --}}
+                                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
+                                    {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
+                                    {{-- <td>{{ $detail_barang->keterangan }}</td> --}}
+                                    <td>
+                                        {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $detail_barang->id }}"
+                                        style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button> --}}
+                                        <button data-bs-toggle="modal" class="btn btn-warning mt-1"><i
+                                                class="fa-solid fa-barcode"></i></button>
+                                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $detail_barang->id }}"
+                                            class="btn btn-danger mt-1">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+    {{-- end modal view data --}}
 
     {{-- end modal --}}
 
