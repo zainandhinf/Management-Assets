@@ -43,8 +43,8 @@ class Seed extends Seeder
         ]);
         DB::table('barangs')->insert([
             'no_barang' =>'BRG0001',
-            'kode_awal' =>'MO',
-            'nama_barang' =>'Monitor',
+            'kode_awal' =>'LP',
+            'nama_barang' =>'Laptop',
             'id_kategori' =>'1',
             'qty' =>'0',
         ]);
@@ -68,7 +68,7 @@ class Seed extends Seeder
         ]);
         DB::table('pegawais')->insert([
             'nik' =>'1111',
-            'nama_user' =>'Pegawai Satu',
+            'nama_user' =>'Toni Kroos',
             'jenis_kelamin' =>'L',
             'alamat' =>'Bandung, JL. Braga No. 10',
             'no_telepon' =>'0812345678910',
@@ -77,7 +77,7 @@ class Seed extends Seeder
         ]);
         DB::table('pegawais')->insert([
             'nik' =>'2222',
-            'nama_user' =>'Pegawai Dua',
+            'nama_user' =>'Erling Haaland',
             'jenis_kelamin' =>'L',
             'alamat' =>'Bandung, JL. Asia Afrika No. 11',
             'no_telepon' =>'088811112234',
@@ -87,7 +87,7 @@ class Seed extends Seeder
         ]);
         DB::table('pegawais')->insert([
             'nik' =>'3333',
-            'nama_user' =>'Pegawai Tiga',
+            'nama_user' =>'Asep Jamaludin',
             'jenis_kelamin' =>'P',
             'alamat' =>'Bandung, JL. Asia Afrika No. 12',
             'no_telepon' =>'081123456789',
@@ -97,7 +97,7 @@ class Seed extends Seeder
         ]);
         DB::table('pegawais')->insert([
             'nik' =>'4444',
-            'nama_user' =>'Pegawai Empat',
+            'nama_user' =>'Febri Hariadi',
             'jenis_kelamin' =>'P',
             'alamat' =>'Bandung, JL. Asia Afrika No. 14',
             'no_telepon' =>'081243546576',

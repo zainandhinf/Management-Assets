@@ -124,6 +124,7 @@ Route::post('/addkeranjang', [PController::class, 'addKeranjang']);
 Route::delete('/deletekeranjang', [PController::class, 'deleteKeranjang']);
 Route::post('/addpengadaan', [PController::class, 'addPengadaan']);
 Route::delete('/deletedetail', [PController::class, 'deleteDetail']);
+Route::delete('/deletepengadaan', [PController::class, 'deletePengadaan']);
 // TRANSAKSI PENGADAAN END END//
 
 // TRANSAKSI PENEMPATAN //
