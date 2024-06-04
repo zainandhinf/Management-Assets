@@ -194,7 +194,7 @@ class ReportController extends Controller
                 'petugass' => $petugas,
             ];
         }
-        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-petugas-pdf', $data);
+        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-petugas-pdf', $data)->setPaper('a4', 'portrait');
         // return $pdf->download('invoice.pdf');
         return $pdf->stream('laporan-data-petugas.pdf');
     }
@@ -254,8 +254,98 @@ class ReportController extends Controller
             'no_ruangan' => $request->query('no_ruangan'),
             'count' => $assets_count
         ];
-        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-aktiva-ruangan-pdf', $data);
+        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-aktiva-ruangan-pdf', $data)->setPaper('a4', 'portrait');
         return $pdf->stream('laporan-data-petugas.pdf');
     }
     //END AKTIVA
+
+    //ASSETS
+    public function goAssets()
+    {
+
+        $barang = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
+            ->select('barangs.*', 'kategori_barangs.nama_kategori')
+            ->get();
+
+        return view('petugas.layout.assets')->with([
+            'title' => 'Data Assets',
+            'active' => 'Data Assets',
+            'barangs' => $barang,
+            'open' => 'no',
+        ]);
+    }
+    public function goLaporanAssetsPdf(Request $request)
+    {
+        $assets = DB::table('barangs')
+            ->select('*')
+            ->join(
+                'detail_barangs',
+                'detail_barangs.no_barang',
+                '=',
+                'barangs.no_barang',
+            )
+            ->where('detail_barangs.no_barang', $request->query('no_barang'))
+            ->get();
+        $assets_count = DB::table('barangs')
+            ->select('*')
+            ->join(
+                'detail_barangs',
+                'detail_barangs.no_barang',
+                '=',
+                'barangs.no_barang',
+            )
+            ->where('detail_barangs.no_barang', $request->query('no_barang'))
+            ->count();
+
+        $data = [
+            'assets' => $assets,
+            'no_barang' => $request->query('no_barang'),
+            'count' => $assets_count
+        ];
+        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-assets-pdf', $data)->setPaper('a4', 'portrait');
+        return $pdf->stream('laporan-data-asset.pdf');
+    }
+    //END ASSETS
+
+    //BARCODE
+    public function goBarcodeAllPdf(Request $request)
+    {
+        if ($request->query('no_pengadaan')) {
+            $assets = DB::table('detail_barangs')
+                ->select('*')
+                ->where('no_pengadaan', '=', $request->query('no_pengadaan'))
+                ->get();
+            // $assets_count = DB::table('detail_barangs')
+            // ->select('*')
+            // ->where('no_pengadaan','=', $request->query('no_pengadaan'))
+            // ->count();
+
+            // dd($request->query('no_pengadaan'));
+            $data = [
+                'assets' => $assets,
+                // 'count' => $assets_count
+            ];
+            $pdf = Pdf::loadView('petugas.layout.laporan.barcode-pdf', $data)->setPaper('a4', 'landscape');
+            return $pdf->stream('barcode.pdf');
+        } else {
+            $assets = DB::table('detail_barangs')
+                ->select('*')
+                ->where('kode_barcode', '=', $request->query('barcode'))
+                ->get();
+            // $assets_count = DB::table('detail_barangs')
+            // ->select('*')
+            // ->where('no_pengadaan','=', $request->query('no_pengadaan'))
+            // ->count();
+
+            // dd($request->query('no_pengadaan'));
+            $data = [
+                'assets' => $assets,
+                // 'count' => $assets_count
+            ];
+            $pdf = Pdf::loadView('petugas.layout.laporan.barcode-pdf', $data)->setPaper('a4', 'landscape');
+            return $pdf->stream('barcode.pdf');
+        }
+
+    }
+    //END BARCODE
 }

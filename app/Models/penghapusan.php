@@ -15,4 +15,7 @@ class penghapusan extends Model
         'jenis_penghapusan',
         'keterangan',
     ];
+
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 }

@@ -41,8 +41,9 @@
 
                         <button data-bs-toggle="modal" data-bs-target="#showdata{{ $barang->no_barang }}"
                             style="margin-right: 10px" class="btn btn-primary mr-2"><i class="fa fa-eye"></i></button>
-                        <button data-bs-toggle="modal" style="margin-right: 10px" class="btn btn-warning mr-2"><i
-                                class="fa-solid fa-print"></i></button>
+                        <a href="/print/assets?no_barang={{ $barang->no_barang }}" target="blank"
+                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa-solid fa-print"></i></a>
+
 
 
 
@@ -56,16 +57,16 @@
 
     {{-- modal --}}
 
-    @php
+    {{-- @php
         $assets = DB::table('detail_penempatans')
             ->select('*')
             ->join('penempatans', 'penempatans.no_penempatan', '=', 'detail_penempatans.no_penempatan')
             // ->groupBy('no_ruangan')
             ->get();
-            @endphp
+    @endphp --}}
     {{-- modal view data --}}
-    @foreach ($assets as $asset)
-        <div class="modal modal-blur fade" id="showdata{{ $asset->no_barang }}" tabindex="-1" role="dialog"
+    @foreach ($barangs as $barang)
+        <div class="modal modal-blur fade" id="showdata{{ $barang->no_barang }}" tabindex="-1" role="dialog"
             aria-hidden="true" style="font-size: 14px;">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
@@ -89,18 +90,22 @@
                             </thead>
                             @php
                                 $no = 1;
-                                $assets = DB::table('detail_penempatans')
+                                $assets = DB::table('barangs')
                                     ->select('*')
-                                    ->join('penempatans', 'penempatans.no_penempatan', '=', 'detail_penempatans.no_penempatan')
-                                    ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
-                                    ->where('detail_penempatans.no_barang',$asset->no_barang)
+                                    ->join(
+                                        'detail_barangs',
+                                        'detail_barangs.no_barang',
+                                        '=',
+                                        'barangs.no_barang',
+                                    )
+                                    ->where('detail_barangs.no_barang', $barang->no_barang)
                                     // ->groupBy('no_ruangan')
                                     ->get();
                             @endphp
                             @foreach ($assets as $asset)
-                            @php
+                                @php
                                     $nama_barang = DB::table('barangs')
-                                    ->select('*')
+                                        ->select('*')
                                         ->where('no_barang', '=', $asset->no_barang)
                                         ->first();
                                 @endphp
@@ -116,12 +121,12 @@
                                     <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td>
                                     {{-- <td>{{ $asset->tanggal_pengadaan }}</td> --}}
                                     <td>{{ $asset->kondisi }}</td>
-                                    {{-- <td class="@if($asset->status == "Belum Ditempatkan")bg-warning @else bg-success @endif text-white">{{ $asset->status }}</td> --}}
+                                    {{-- <td class="@if ($asset->status == 'Belum Ditempatkan')bg-warning @else bg-success @endif text-white">{{ $asset->status }}</td> --}}
                                     <td>Rp. {{ number_format($asset->harga) }}</td>
                                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                                     {{-- <td>{{ $asset->keterangan }}</td> --}}
-    
+
                                 </tr>
                             @endforeach
                         </table>
@@ -134,5 +139,4 @@
     {{-- end modal view data --}}
 
     {{-- end modal --}}
-
 @endsection

@@ -14,4 +14,7 @@ class detail_penempatan extends Model
         'no_barang',
         'kode_barcode',
     ];
+
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 }

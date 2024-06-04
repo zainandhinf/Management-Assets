@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Laporan Data Aktiva / Fasilitas Ruangan PDF</title>
+    <title>Laporan Data Assets PDF</title>
     <style>
         .page-break {
             page-break-after: always;
@@ -60,12 +60,12 @@
             font-size: 8px;
             /* font-weight: bold; */
         }
-        
+
         .judul h1 {
             margin-bottom: -8px;
             font-size: 20px;
         }
-        
+
         .judul p {
             font-size: 14px;
             margin-top: -8px;
@@ -125,9 +125,13 @@
         </div>
     </div>
     <div class="judul">
-        <div style="width: 100%; text-align: center;"><h1>DAFTAR AKTIVA TETAP RUANGAN</h1></div>
+        <div style="width: 100%; text-align: center;">
+            <h1>DAFTAR ASSETS BERDASARKAN JENIS BARANG</h1>
+        </div>
         <hr>
-        <div style="width: 100%; text-align: center;"><p>Ref: KP Nomor: 77-KP-001 & AP Nomor 77-AP-001</p></div>
+        <div style="width: 100%; text-align: center;">
+            <p>Ref: KP Nomor: 77-KP-001 & AP Nomor 77-AP-001</p>
+        </div>
     </div>
     <div class="keterangan">
         <p style="margin-left: -55px;">UNIT ORGANISASI</p>
@@ -136,8 +140,8 @@
         <p style="margin-top: -20px; margin-left: 150px;">:HD3000 (Dept. Pendidikan dan Pelatihan)</p>
         <p style="margin-left: -55px;">NAMA GEDUNG</p>
         <p style="margin-top: -20px; margin-left: 150px;">: K-TC (Kantor Training Center)</p>
-        <p style="margin-left: -55px;">NOMOR RUANGAN </p>
-        <p style="margin-top: -20px; margin-left: 150px;">: {{ $no_ruangan }}</p>
+        <p style="margin-left: -55px;">NOMOR BARANG </p>
+        <p style="margin-top: -20px; margin-left: 150px;">: {{ $no_barang }}</p>
     </div>
     <div class="table">
         <table class="table table-striped" id="data-tables-keranjang">
@@ -153,14 +157,21 @@
             </thead>
             @foreach ($assets as $asset)
                 @php
-                    $nama_barang = DB::table('barangs')
+                    $no_penempatan = DB::table('detail_penempatans')
                         ->select('*')
-                        ->where('no_barang', '=', $asset->no_barang)
+                        ->where('kode_barcode', '=', $asset->kode_barcode)
                         ->first();
-                    $pengguna = DB::table('pegawais')
-                        ->select('*')
-                        ->where('id', '=', $asset->user_id)
-                        ->first();
+
+                    if ($no_penempatan != null) {
+                        $user_id = DB::table('penempatans')
+                            ->select('*')
+                            ->where('no_penempatan', '=', $no_penempatan->no_penempatan)
+                            ->first();
+                        $pengguna = DB::table('pegawais')
+                            ->select('*')
+                            ->where('id', '=', $user_id->user_id)
+                            ->first();
+                    }
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
@@ -168,17 +179,23 @@
                         <b>{!! DNS1D::getBarcodeHTML($asset->kode_barcode, 'UPCA') !!}{{ $asset->kode_barcode }}</b> <br>No Asset:
                         <b>{{ $asset->no_asset }}</b>
                     </td>
-                    <td>{{ $nama_barang->nama_barang }}</td>
+                    <td>{{ $asset->nama_barang }}</td>
                     <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td>
                     <td style="text-align: center;">{{ $asset->kondisi }}</td>
-                    <td>{{ $pengguna->nama_user }}</td>
+                    @if ($user_id->user_id == null)
+                        <td></td>
+                    @elseif ($no_penempatan == null)
+                        <td></td>
+                    @else
+                        <td>{{ $pengguna->nama_user }}</td>
+                    @endif
                 </tr>
             @endforeach
         </table>
     </div>
 
-    @if ($count > 7)
-    <div class="page-break"></div>
+    @if ($count > 4)
+        <div class="page-break"></div>
     @endif
     <div class="footer">
         <div class="left">

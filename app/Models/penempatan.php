@@ -16,4 +16,7 @@ class penempatan extends Model
         'user_id',
         'keterangan',
     ];
+
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 }

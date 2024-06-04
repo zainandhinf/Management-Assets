@@ -102,7 +102,6 @@ Route::get('/barang-koordinator', [PController::class, 'goBarang']);
 Route::get('/kategori-barang-koordinator', [PController::class, 'goKBarang']);
 Route::get('/ruangan-koordinator', [PController::class, 'goRuangan']);
 Route::get('/tipe-ruangan-koordinator', [PController::class, 'goTRuangan']);
-Route::get('/data-assets', [PController::class, 'goAssets']);
 Route::get('/profile-koordinator', [PController::class, 'goKProfile']);
 Route::get('/training-koordinator', [PController::class, 'goSchedule']);
 Route::get('/peserta-training-koordinator', [PController::class, 'goPeserta']);
@@ -178,6 +177,16 @@ Route::get('/print-data-petugas-pdf', [ReportController::class, 'goLaporanPetuga
 Route::get('/data-aktiva-fasilitas', [ReportController::class, 'goAktiva']);
 Route::get('/print/aktiva', [ReportController::class, 'goLaporanAktivaPdf']);
 //END LAPORAN DATA AKTIVA
+
+//LAPORAN DATA ASSETS
+Route::get('/data-assets', [ReportController::class, 'goAssets']);
+Route::get('/print/assets', [ReportController::class, 'goLaporanAssetsPdf']);
+//END LAPORAN DATA ASSETS
+
+//PRINT BARCODE
+Route::get('/print/barcode-all', [ReportController::class, 'goBarcodeAllPdf']);
+Route::get('/print/barcode', [ReportController::class, 'goBarcodeAllPdf']);
+//END PRINT BARCODE
 
 
 Route::get('/profile-koordinator', [PController::class, 'goProfile']);

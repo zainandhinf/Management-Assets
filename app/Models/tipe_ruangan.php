@@ -13,4 +13,7 @@ class tipe_ruangan extends Model
         'nama_tipe',
         'keterangan',
     ];
+
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 }

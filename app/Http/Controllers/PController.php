@@ -477,20 +477,7 @@ class PController extends Controller
         ]);
     }
 
-    public function goAssets()
-    {
-
-        $barang = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
-            ->select('barangs.*', 'kategori_barangs.nama_kategori')
-            ->get();
-
-        return view('petugas.layout.assets')->with([
-            'title' => 'Data Assets',
-            'active' => 'Data Assets',
-            'barangs' => $barang,
-            'open' => 'no',
-        ]);
-    }
+    
     //end route view
 
 

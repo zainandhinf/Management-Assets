@@ -13,4 +13,7 @@ class image_ruangan extends Model
         'image',
         'no_ruangan',
     ];
+
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 }

@@ -17,4 +17,7 @@ class peminjaman extends Model
         'status_peminjaman',
         'keterangan',
     ];
+
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 }

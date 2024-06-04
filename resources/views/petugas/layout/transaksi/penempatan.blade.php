@@ -296,8 +296,8 @@
                                     <td>
                                         {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $detail_barang->id }}"
                                         style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button> --}}
-                                        <button data-bs-toggle="modal" class="btn btn-warning mt-1"><i
-                                                class="fa-solid fa-barcode"></i></button>
+                                        <a href="/print/barcode?barcode={{ $detail_barang->kode_barcode }}" target="blank" class="btn btn-warning mt-1"><i
+                                            class="fa-solid fa-barcode"></i></a>
                                         <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $detail_barang->id }}"
                                             class="btn btn-danger mt-1">
                                             <i class="fa fa-trash"></i>

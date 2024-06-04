@@ -270,8 +270,8 @@
                                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                                     {{-- <td>{{ $detail_mutasi->keterangan }}</td> --}}
                                     <td>
-                                        <button data-bs-toggle="modal" class="btn btn-warning mt-1"><i
-                                                class="fa-solid fa-barcode"></i></button>
+                                        <a href="/print/barcode?barcode={{ $detail_mutasi->kode_barcode }}" target="blank" class="btn btn-warning mt-1"><i
+                                            class="fa-solid fa-barcode"></i></a>
                                         <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $detail_mutasi->id }}"
                                             class="btn btn-danger mt-1">
                                             <i class="fa fa-trash"></i>

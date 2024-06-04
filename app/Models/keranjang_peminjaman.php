@@ -15,4 +15,7 @@ class keranjang_peminjaman extends Model
         'kode_barcode',
     ];
 
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+
 }

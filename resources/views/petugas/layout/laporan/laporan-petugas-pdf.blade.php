@@ -59,23 +59,15 @@
             font-size: 8px;
             /* font-weight: bold; */
         }
-
+        
         .judul h1 {
+            font-size: 20px;
             margin-bottom: -8px;
         }
-
+        
         .judul p {
-            margin-top: -8px;
-        }
-
-        .judul h1 {
-            margin-left: 250px;
-            font-size: 20px;
-        }
-
-        .judul p {
-            margin-left: 180px;
             font-size: 14px;
+            margin-top: -8px;
         }
 
         .keterangan {
@@ -102,9 +94,9 @@
         </div>
     </div>
     <div class="judul">
-        <h1>DAFTAR PETUGAS</h1>
+        <div style="width: 100%; text-align: center;"><h1>DAFTAR PETUGAS</h1></div>
         <hr>
-        <p>Ref: KP Nomor: 77-KP-001 & AP Nomor 77-AP-001</p>
+        <div style="width: 100%; text-align: center;"><p>Ref: KP Nomor: 77-KP-001 & AP Nomor 77-AP-001</p></div>
     </div>
     <div class="keterangan">
         <p style="margin-left: -55px;">UNIT ORGANISASI</p>
