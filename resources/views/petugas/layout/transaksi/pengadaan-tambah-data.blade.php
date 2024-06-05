@@ -85,7 +85,7 @@
                         <option value="Lainnya">Lainnya</option>
                     </select>
 
-                    <label for="">Foto Barang</label>
+                    <label for="">Foto Barang(opsional)</label>
                     <input type="file" class="form-control" name="foto_barang" id="foto_barang" onchange="previewImage()">
                     *preview
                     <img class="img-preview img-fluid col-6"
