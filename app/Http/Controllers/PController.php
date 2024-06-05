@@ -238,7 +238,7 @@ class PController extends Controller
 
         $penempatans = DB::table('penempatans')
             ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
-            ->select('*')
+            ->select('penempatans.*', 'detail_penempatans.kode_barcode')
             ->get();
 
         return view('petugas.layout.transaksi.penempatan')->with([
@@ -477,7 +477,7 @@ class PController extends Controller
         ]);
     }
 
-    
+
     //end route view
 
 
@@ -715,7 +715,7 @@ class PController extends Controller
 
         DB::table('keranjang_pengadaans')->truncate();
 
-        $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
+        $request->session()->flash('success', 'Pengadaan BERHASIL Dilakukan!');
 
         return redirect('/pengadaan');
     }
@@ -899,6 +899,43 @@ class PController extends Controller
         return redirect('/penempatan');
     }
 
+    }
+    public function deleteDetailPenempatan(Request $request)
+    {
+        $data = DB::table('detail_penempatans')
+            // ->select('merk')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
+            ->where('no_penempatan', '=', $request->input('no_penempatan'))
+            ->select('detail_barangs.merk', 'detail_penempatans.*')
+            ->first();
+
+        $room = DB::table('penempatans')
+                    ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
+                    ->where('penempatans.no_penempatan', '=', $request->no_penempatan)
+                    ->select('penempatans.no_ruangan')
+                    ->first();
+
+        $roomName = DB::table('ruangans')
+                            ->join('penempatans', 'penempatans.no_ruangan', '=', 'ruangans.no_ruangan')
+                            ->where('ruangans.no_ruangan', '=', $room->no_ruangan)
+                            ->select('ruangans.ruangan')
+                            ->first();
+            // dd($roomName);
+
+        DB::table('detail_penempatans')->where('kode_barcode', $request->input('kode_barcode'))->delete();
+
+        $updateStatus['status'] = "Belum Ditempatkan";
+
+
+        DB::table('detail_barangs')
+                ->where('kode_barcode', $request->kode_barcode)
+                ->update($updateStatus);
+
+        $pesanFlash = "Barang (Merk: *{$data->nama_barang} ) BERHASIL dihapus dari Ruangan: {$roomName->ruangan}!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/penempatan');
     }
     //End Transaksi Penempatan
     public function addKeranjangMutasi(Request $request)

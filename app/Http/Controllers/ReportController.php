@@ -16,9 +16,6 @@ use App\Models\detail_barang;
 use App\Models\peserta_training;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-
-
-
 class ReportController extends Controller
 {
     //PETUGAS

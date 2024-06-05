@@ -164,51 +164,7 @@
 
     {{-- end modal edit data --}}
 
-    {{-- modal delete data detail --}}
-    @foreach ($barangs as $barang)
-        <div class="modal modal-blur fade" id="deletedata{{ $barang->id }}" tabindex="-1" role="dialog"
-            aria-hidden="true">
-            <div class="modal-dialog w-50 modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-status bg-danger"></div>
-                    <div class="modal-body text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
-                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path
-                                d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
-                            <path d="M12 9v4" />
-                            <path d="M12 17h.01" />
-                        </svg>
-                        <h6>Are you sure?</h6>
-                        <div class="text-muted">Yakin? Anda akan menghapus data ini <br> (Merk:
-                            *<b>{{ $barang->merk }}</b>)...</div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="w-100">
-                            <div class="row">
-                                <div class="col"><button class="btn w-100 mb-2" onclick="refresh()" data-bs-dismiss="modalehdgae"
-                                        aria-label="Close">
-                                        Canceloooo
-                                    </button></div>
-                                <form action="/deletedetail" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="id_detail" value="{{ $barang->id }}">
-                                    {{-- <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
-                                    <button class="btn btn-danger w-100">
-                                        Yakin
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-    {{-- end modal delete data detail --}}
+   
 
     {{-- modal view data --}}
     @foreach ($penempatans as $penempatan)
@@ -325,6 +281,86 @@
                 </div>
             </div>
         </div>
+
+
+ {{-- modal delete data detail --}}
+
+    @foreach ($barangs as $detail_barang)
+    @php
+     $brg = DB::table('detail_barangs')
+                    ->join('detail_penempatans', 'detail_penempatans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                    ->where('detail_barangs.kode_barcode', '=', $detail_barang->kode_barcode)
+                    ->select('detail_barangs.merk', 'detail_penempatans.no_penempatan', 'detail_barangs.kode_barcode')
+                    ->first();
+
+    // dd($detail_barang);
+
+
+    // $penempatans = DB::table('penempatans')
+    //         ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
+    //         ->select('penempatans.*', 'detail_penempatans.kode_barcode')
+    //         ->get();
+
+    //         $room = DB::table('penempatans')
+    //                         ->join('ruangans', 'ruangans.no_ruangan', '=', 'penempatans.no_ruangan')
+    //                         ->where('ruangans.no_ruangan', '=', $penempatan->no_ruangan)
+    //                         ->select('ruangans.ruangan', 'penempatans.tanggal_penempatan')
+    //                         ->first();
+
+                    // dd($room);
+    @endphp
+    @if($brg != null)
+
+        <div class="modal modal-blur fade" id="deletedata{{ $detail_barang->id }}" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog w-50 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-status bg-danger"></div>
+                    <div class="modal-body text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                            <path d="M12 9v4" />
+                            <path d="M12 17h.01" />
+                        </svg>
+                        <h6>Are you sure?</h6>
+                        <div class="text-muted">Yakin? Anda akan menghapus Penempatan untuk <br> (Merk:
+                            *<b>{{ $brg->merk }}</b>) dari Ruangan {{ $room->ruangan }}</b>...</div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col"><button class="btn w-100 mb-2" onclick="refresh()" data-bs-dismiss="modalehdgae"
+                                        aria-label="Close">
+                                        Cancel
+                                    </button></div>
+                                <form action="/deletedetailpenempatan" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="id_detail" value="{{ $detail_barang->id }}">
+                                    <input type="hidden" name="no_penempatan" value="{{ $brg->no_penempatan }}">
+                                    <input type="hidden" name="kode_barcode" value="{{ $brg->kode_barcode }}">
+                                    {{-- <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
+                                    <button class="btn btn-danger w-100">
+                                        Yakin
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @endforeach
+    {{-- end modal delete data detail --}}
+
+
+
     @endforeach
     {{-- end modal view data --}}
 
