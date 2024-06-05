@@ -76,7 +76,7 @@ function toggleDataDropdown4() {
         dataDropdown4.style.display = 'block';
         dataDropdown.style.display = 'none';
         dataDropdown5.style.display = 'none';
-    }else if (dataDropdown4.style.display == 'none' && dataDropdown.style.display == 'none' && dataDropdown5.style.display == 'none') {
+    } else if (dataDropdown4.style.display == 'none' && dataDropdown.style.display == 'none' && dataDropdown5.style.display == 'none') {
         dataDropdown4.style.display = 'block';
     } else if (dataDropdown.style.display == 'none') {
         dataDropdown4.style.display = 'none';
@@ -103,10 +103,6 @@ function toggleDataDropdown5() {
         dataDropdown.style.display = 'none';
         dataDropdown4.style.display = 'none';
         dataDropdown5.style.display = 'block';
-    }
-    else if (dataDropdown5.style.display == 'none' && dataDropdown.style.display == 'none' || dataDropdown4.style
-        .display == 'none') {
-        dataDropdown5.style.display = 'block';
     } else if (dataDropdown5.style.display == 'block' && dataDropdown.style.display == 'none' && dataDropdown4.style.display == 'none') {
         dataDropdown.style.display = 'none';
         dataDropdown4.style.display = 'none';
@@ -114,6 +110,10 @@ function toggleDataDropdown5() {
         // else if (dataDropdown.style.display === 'block') {
         //     dataDropdown.style.display = 'none';
         //     dataDropdown4.style.display = 'block';
+    }
+    else if (dataDropdown5.style.display == 'none' && dataDropdown.style.display == 'none' || dataDropdown4.style
+        .display == 'none') {
+        dataDropdown5.style.display = 'block';
     }
     else {
         dataDropdown.style.display = 'block';

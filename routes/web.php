@@ -174,6 +174,18 @@ Route::get('/print-data-petugas-pdf', [ReportController::class, 'goLaporanPetuga
 // Route::get('/print-petugas', [ReportController::class, 'goLaporanPetugasPdf']);
 //END LAPORAN DATA PETUGAS
 
+//LAPORAN DATA PEGAWAI
+Route::get('/laporan-data-pegawai', [ReportController::class, 'goLaporanPegawai']);
+Route::get('/laporan-data-pegawai/f=', [ReportController::class, 'goLaporanPegawaiFilter']);
+Route::get('/print-data-pegawai-pdf', [ReportController::class, 'goLaporanPegawaiPdf']);
+//END LAPORAN DATA PEGAWAI
+
+//LAPORAN DATA BARANG
+Route::get('/laporan-data-barang', [ReportController::class, 'goLaporanBarang']);
+Route::get('/laporan-data-barang/f=', [ReportController::class, 'goLaporanBarangFilter']);
+Route::get('/print-data-barang-pdf', [ReportController::class, 'goLaporanBarangPdf']);
+//END LAPORAN DATA BARANG
+
 //LAPORAN DATA AKTIVA
 Route::get('/data-aktiva-fasilitas', [ReportController::class, 'goAktiva']);
 Route::get('/print/aktiva', [ReportController::class, 'goLaporanAktivaPdf']);

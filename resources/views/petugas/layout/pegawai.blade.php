@@ -17,11 +17,11 @@
                 {{-- <th data-searchable="false">Action</th> --}}
             </tr>
         </thead>
-         @foreach ($pegawais as $pegawai)
         @php
             $no = 1;
         @endphp
          <tr>
+         @foreach ($pegawais as $pegawai)
              <td>{{ $no++ }}</td>
              {{-- <td>{{ $city->id }}</td> --}}
              {{-- <td>lorem</td> --}}

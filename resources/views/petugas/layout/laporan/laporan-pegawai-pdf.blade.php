@@ -94,17 +94,17 @@
         </div>
     </div>
     <div class="judul">
-        <div style="width: 100%; text-align: center;"><h1>DAFTAR PETUGAS</h1></div>
+        <div style="width: 100%; text-align: center;"><h1>DAFTAR PEGAWAI</h1></div>
         <hr>
         <div style="width: 100%; text-align: center;"><p>Ref: KP Nomor: 77-KP-001 & AP Nomor 77-AP-001</p></div>
     </div>
     <div class="keterangan">
-        <p style="margin-left: -55px;">UNIT ORGANISASI</p>
-        <p style="margin-top: -20px; margin-left: 150px;">:HD0000 (Divisi Pengembangan Sumber Daya Manusia)-DU</p>
-        <p style="margin-left: -55px;">DEPARTEMEN</p>
-        <p style="margin-top: -20px; margin-left: 150px;">:HD3000 (Dept. Pendidikan dan Pelatihan)</p>
-        <p style="margin-left: -55px;">NAMA GEDUNG</p>
-        <p style="margin-top: -20px; margin-left: 150px;">: K-TC (Kantor Training Center)</p>
+        {{-- <p style="margin-left: -55px;">UNIT ORGANISASI</p> --}}
+        {{-- <p style="margin-top: -20px; margin-left: 150px;">:HD0000 (Divisi Pengembangan Sumber Daya Manusia)-DU</p> --}}
+        {{-- <p style="margin-left: -55px;">DEPARTEMEN</p> --}}
+        {{-- <p style="margin-top: -20px; margin-left: 150px;">:HD3000 (Dept. Pendidikan dan Pelatihan)</p> --}}
+        {{-- <p style="margin-left: -55px;">NAMA GEDUNG</p> --}}
+        {{-- <p style="margin-top: -20px; margin-left: 150px;">: K-TC (Kantor Training Center)</p> --}}
         {{-- <p style="margin-left: -55px;">NOMOR RUANGAN </p> --}}
         {{-- <p style="margin-top: -20px; margin-left: 150px;">: 02-021</p> --}}
     </div>
@@ -115,29 +115,23 @@
                 <th>NIK</th>
                 <th>Nama</th>
                 <th>Gender</th>
-                <th>Username</th>
-                <th>Role</th>
+                <th>No. Telp</th>
+                <th>Organisasi</th>
             </tr>
-            @foreach ($petugass as $petugas)
+            @foreach ($pegawais as $pegawai)
                 <tr>
                     <td>{{ $no++ }}</td>
-                    <td>{{ $petugas->nik }}</td>
-                    <td>{{ $petugas->nama_user }}</td>
+                    <td>{{ $pegawai->nik }}</td>
+                    <td>{{ $pegawai->nama_user }}</td>
                     <td>
-                        @if ($petugas->jenis_kelamin === 'L')
+                        @if ($pegawai->jenis_kelamin === 'L')
                             Laki-Laki
                         @else
                             Perempuan
                         @endif
                     </td>
-                    <td>{{ $petugas->username }}</td>
-                    <td>
-                        @if ($petugas->role == 'super_user')
-                            Super User
-                        @else
-                            Koordinator
-                        @endif
-                    </td>
+                    <td>{{ $pegawai->no_telepon }}</td>
+                    <td>{{ $pegawai->organisasi }}</td>
                 </tr>
             @endforeach
         </table>

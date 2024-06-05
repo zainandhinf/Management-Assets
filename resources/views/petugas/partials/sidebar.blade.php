@@ -213,7 +213,7 @@
 
                 <button onclick="toggleDataDropdown5()" href="">
                     <div class="customtoogle">
-                        <i class="fa-solid fa-database button-icon mt-1"></i>
+                        <i class="fa-solid fa-scroll button-icon mt-1"></i>
                         Laporan
                     </div>
                     <i class="fa-solid fa-chevron-down down mt-1"></i>
@@ -255,6 +255,13 @@
                                     class="{{ $title === 'Laporan Data Pegawai' ? 'active' : '' }}">
                                     <i class="fa-solid fa-users"></i>
                                     Laporan Data Pegawai
+                                </a>
+                            </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-barang"
+                                    class="{{ $title === 'Laporan Data Barang' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-computer"></i>
+                                    Laporan Data Barang
                                 </a>
                             </li>
                         </ul>
