@@ -136,3 +136,18 @@ function toggleDataDropdown6() {
         dataDropdown6.style.display = 'none';
     }
 }
+
+function toggleDataDropdown7() {
+    // console.log("berhasil");
+    var dataDropdown = document.getElementById('dataDropdown');
+    var dataDropdown4 = document.getElementById('dataDropdown4');
+    var dataDropdown5 = document.getElementById('dataDropdown5');
+    var dataDropdown7 = document.getElementById('dataDropdown7');
+
+    // Toggle display dari <ul> ketika tautan diklik
+    if (dataDropdown7.style.display == 'none') {
+        dataDropdown7.style.display = 'block';
+    } else {
+        dataDropdown7.style.display = 'none';
+    }
+}

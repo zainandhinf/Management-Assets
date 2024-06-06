@@ -188,6 +188,18 @@ Route::get('/laporan-data-barang/f=', [ReportController::class, 'goLaporanBarang
 Route::get('/print-data-barang-pdf', [ReportController::class, 'goLaporanBarangPdf']);
 //END LAPORAN DATA BARANG
 
+//LAPORAN DATA RUANGAN
+Route::get('/laporan-data-ruangan', [ReportController::class, 'goLaporanRuangan']);
+Route::get('/laporan-data-ruangan/f=', [ReportController::class, 'goLaporanRuanganFilter']);
+Route::get('/print-data-ruangan-pdf', [ReportController::class, 'goLaporanRuanganPdf']);
+//END LAPORAN DATA RUANGAN
+
+//LAPORAN DATA TRANSAKSI PENGADAAN
+Route::get('/laporan-data-pengadaan', [ReportController::class, 'goLaporanPengadaan']);
+Route::get('/laporan-data-pengadaan/f=', [ReportController::class, 'goLaporanPengadaanFilter']);
+Route::get('/print-data-pengadaan-pdf', [ReportController::class, 'goLaporanPengadaanPdf']);
+//END LAPORAN DATA TRANSAKSI PENGADAAN
+
 //LAPORAN DATA AKTIVA
 Route::get('/data-aktiva-fasilitas', [ReportController::class, 'goAktiva']);
 Route::get('/print/aktiva', [ReportController::class, 'goLaporanAktivaPdf']);
