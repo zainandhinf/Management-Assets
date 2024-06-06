@@ -136,6 +136,7 @@ Route::post('/addkeranjangpenempatan', [PController::class, 'addKeranjangPenempa
 Route::delete('/deletekeranjangpenempatan', [PController::class, 'deleteKeranjangPenempatan']);
 Route::post('/addpenempatan', [PController::class, 'addPenempatan']);
 Route::delete('/deletedetailpenempatan', [PController::class, 'deleteDetailPenempatan']);
+Route::delete('/deletepenempatan', [PController::class, 'deletePenempatan']);
 // TRANSAKSI PENEMPATAN END END//
 
 // TRANSAKSI PEMINJAMAN //
