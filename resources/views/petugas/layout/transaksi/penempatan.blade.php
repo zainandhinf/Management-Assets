@@ -29,7 +29,7 @@
             @php
                 $no = 1;
             @endphp
-            @foreach ($penempatans as $penempatan)
+            @foreach ($data_penempatans as $penempatan)
                 @php
                     $lokasi = DB::table('ruangans')->select('*')->where('no_ruangan','=',$penempatan->no_ruangan)->first();
                     // dd($lokasi);
@@ -164,7 +164,7 @@
 
     {{-- end modal edit data --}}
 
-   
+
 
     {{-- modal view data --}}
     @foreach ($penempatans as $penempatan)
@@ -182,16 +182,24 @@
                     'penempatans.tanggal_penempatan',
                     'penempatans.no_ruangan',
                     'penempatans.keterangan as keterangan_penempatan',
-                    'detail_barangs.*',
+                    'detail_penempatans.*',
+                    'detail_barangs.no_asset',
+                    'detail_barangs.merk',
+                    'detail_barangs.spesifikasi'
                 )
-                ->where('detail_barangs.kode_barcode', '=', $penempatan->kode_barcode)
                 ->get();
+
+                // dd($detail_barangs);
 
             $room = DB::table('penempatans')
                             ->join('ruangans', 'ruangans.no_ruangan', '=', 'penempatans.no_ruangan')
                             ->where('ruangans.no_ruangan', '=', $penempatan->no_ruangan)
                             ->select('ruangans.ruangan', 'penempatans.tanggal_penempatan')
                             ->first();
+
+                            // dd($room);
+
+
         @endphp
         <div class="modal modal-blur fade" id="showdata{{ $penempatan->id }}" tabindex="-1" role="dialog"
             aria-hidden="true" style="font-size: 14px;">
@@ -293,21 +301,12 @@
                     ->select('detail_barangs.merk', 'detail_penempatans.no_penempatan', 'detail_barangs.kode_barcode')
                     ->first();
 
-    // dd($detail_barang);
-
-
-    // $penempatans = DB::table('penempatans')
-    //         ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
-    //         ->select('penempatans.*', 'detail_penempatans.kode_barcode')
-    //         ->get();
-
-    //         $room = DB::table('penempatans')
-    //                         ->join('ruangans', 'ruangans.no_ruangan', '=', 'penempatans.no_ruangan')
-    //                         ->where('ruangans.no_ruangan', '=', $penempatan->no_ruangan)
-    //                         ->select('ruangans.ruangan', 'penempatans.tanggal_penempatan')
-    //                         ->first();
-
-                    // dd($room);
+    $nama_ruangan = DB::table('penempatans')
+                            ->join('ruangans', 'ruangans.no_ruangan', '=', 'penempatans.no_ruangan')
+                            ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
+                            ->where('ruangans.no_ruangan', '=', $penempatan->no_ruangan)
+                            ->select('ruangans.ruangan', 'penempatans.tanggal_penempatan', 'detail_penempatans.*')
+                            ->first();
     @endphp
     @if($brg != null)
 
@@ -328,7 +327,7 @@
                         </svg>
                         <h6>Are you sure?</h6>
                         <div class="text-muted">Yakin? Anda akan menghapus Penempatan untuk <br> (Merk:
-                            *<b>{{ $brg->merk }}</b>) dari Ruangan {{ $room->ruangan }}</b>...</div>
+                            *<b>{{ $brg->merk }}</b>)</b>...</div>
                     </div>
                     <div class="modal-footer">
                         <div class="w-100">
@@ -363,6 +362,64 @@
 
     @endforeach
     {{-- end modal view data --}}
+
+    {{-- modal delete Pengadaan --}}
+    @foreach ($penempatans as $penempatan)
+    @php
+          $room = DB::table('penempatans')
+                            ->join('ruangans', 'ruangans.no_ruangan', '=', 'penempatans.no_ruangan')
+                            ->where('ruangans.no_ruangan', '=', $penempatan->no_ruangan)
+                            ->select('ruangans.ruangan', 'penempatans.tanggal_penempatan')
+                            ->first();
+    @endphp
+    <div class="modal modal-blur fade" id="deletePenempatan{{ $penempatan->id }}" tabindex="-1" role="dialog"
+        aria-hidden="true">
+        <div class="modal-dialog w-50 modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-status bg-danger"></div>
+                <div class="modal-body text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
+                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path
+                            d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                        <path d="M12 9v4" />
+                        <path d="M12 17h.01" />
+                    </svg>
+                    <h6>PERINGATAN !!</h6>
+                    <div class="text-muted">Menghapus <b>{{ $penempatan->no_penempatan }}</b> ini akan menghapus <b>SEMUA</b> Penempatan properti yang sebelumnya ditempatkan pada Ruangan: <b>{{ $room->ruangan }}</b>!</div>
+                    <hr>
+                    <form action="/deletepenempatan" method="post">
+                        @csrf
+                        @method('DELETE')
+                    <div class="form-group">
+                        <label for="">Ketik "KONFIRMASI" untuk Menghapus</label>
+                        <input type="text" name="konfirmasi" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    Cancel
+                                </button></div>
+
+                                <input type="hidden" name="no_penempatan" value="{{ $penempatan->no_penempatan }}">
+                                {{-- <sinput type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
+                                <button class="btn btn-danger w-100">
+                                    Yakin
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+    {{-- end modal delete Pengadaan --}}
 
     {{-- end modal --}}
 

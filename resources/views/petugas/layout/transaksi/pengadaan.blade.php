@@ -390,6 +390,7 @@
                     </svg>
                     <h6>PERINGATAN !!</h6>
                     <div class="text-muted">Menghapus <b>{{ $pengadaan->no_pengadaan }}</b> ini akan menghapus <b>SEMUA</b> Properti yang ada pada Pengadaan ini akan Terhapus!</div>
+                    <hr>
                     <form action="/deletepengadaan" method="post">
                         @csrf
                         @method('DELETE')
