@@ -264,6 +264,39 @@
                                     Laporan Data Barang
                                 </a>
                             </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-ruangan"
+                                    class="{{ $title === 'Laporan Data Ruangan' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-door-closed"></i>
+                                    Laporan Data Ruangan
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li
+                        class="nav-item mb-0 dropdown-custom-child {{ $active === 'data' ? 'dropdown-active-custom' : '' }}">
+                        <button onclick="toggleDataDropdown7()" href=""
+                            class="{{ $active === 'data' ? 'active-custom' : '' }}">
+                            <div class="customtoogle">
+                                <i class="fa-solid fa-share-from-square ms-1"></i>
+                                Data Transaksi {{-- Jangan Panjang Panhjang ntar rusak --}}
+                            </div>
+                            <i class="fa-solid fa-chevron-down down mt-1"></i>
+                        </button>
+                        <ul id="dataDropdown7" class="ms-2" @if ($open == 'yes-3') style="display: block;"
+                        @elseif ($open == 'yes-2')
+                            style="display: none;"
+                        @elseif ($open == 'yes-1')
+                            style="display: none;"
+                        @else
+                            style="display: none;" @endif>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-pengadaan"
+                                    class="{{ $title === 'Laporan Data Pengadaan' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                    Laporan Data Pengadaan
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

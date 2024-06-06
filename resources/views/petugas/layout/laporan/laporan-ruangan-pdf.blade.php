@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Laporan Barang PDF</title>
+    <title>Laporan Data Ruangan PDF</title>
     <style>
         .page-break {
             page-break-after: always;
@@ -114,7 +114,7 @@
 </head>
 
 <body>
-    @foreach ($barangs as $barang)
+    @foreach ($ruangans as $ruangan)
         @php
             $no = 1;
         @endphp
@@ -127,7 +127,7 @@
         </div>
         <div class="judul">
             <div style="width: 100%; text-align: center;">
-                <h1>DAFTAR BARANG</h1>
+                <h1>DAFTAR RUANGAN</h1>
             </div>
             <hr>
             <div style="width: 100%; text-align: center;">
@@ -139,12 +139,35 @@
         <p style="margin-top: -20px; margin-left: 150px;">:HD0000 (Divisi Pengembangan Sumber Daya Manusia)-DU</p>
         <p style="margin-left: -55px;">DEPARTEMEN</p>
         <p style="margin-top: -20px; margin-left: 150px;">:HD3000 (Dept. Pendidikan dan Pelatihan)</p> --}}
-            <p style="margin-left: -55px;">NAMA BARANG</p>
-            <p style="margin-top: -20px; margin-left: 150px;">: {{ $barang->nama_barang }}</p>
-            <p style="margin-left: -55px;">NOMOR BARANG </p>
-            <p style="margin-top: -20px; margin-left: 150px;">: {{ $barang->no_barang }}</p>
+            <p style="margin-left: -55px;">NAMA RUANGAN</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $ruangan->ruangan }}</p>
+            <p style="margin-left: -55px;">NOMOR RUANGAN</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $ruangan->no_ruangan }}</p>
+            <p style="margin-left: -55px;">LOKASI</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $ruangan->lokasi }}</p>
+            <p style="margin-left: -55px;">KAPASITAS</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $ruangan->kapasitas }}</p>
+            <p style="margin-left: -55px;">TIPE RUANGAN</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $ruangan->nama_tipe }}</p>
+            <p style="margin-left: -55px; margin-top: 30px;">FOTO RUANGAN</p>
+            @php
+                $images = DB::table('image_ruangans')
+                    ->select('*')
+                    ->where('no_ruangan', $ruangan->no_ruangan)
+                    ->limit(4)
+                    ->get();
+            @endphp
+            @if ($images->isEmpty())
+                <h3>No Image</h3>
+            @else
+                <div style="margin-left: -55px;">
+                    @foreach ($images as $image)
+                        <img src="storage/{{ $image->image }}" alt="" height="200px" class="mb-1">
+                    @endforeach
+                </div>
+            @endif
         </div>
-        <div class="table">
+        {{-- <div class="table">
             <table class="table table-striped" id="data-tables-keranjang">
                 <thead>
                     <tr>
@@ -214,13 +237,13 @@
                     </tr>
                 @endforeach
             </table>
-        </div>
+        </div> --}}
 
         @php
-            $count = DB::table('detail_barangs')
+            $count = DB::table('ruangans')
                 ->select('*')
-                ->join('pengadaans', 'pengadaans.no_pengadaan', '=', 'detail_barangs.no_pengadaan')
-                ->where('detail_barangs.no_barang', $barang->no_barang)
+                // ->join('pengadaans', 'pengadaans.no_pengadaan', '=', 'detail_barangs.no_pengadaan')
+                ->where('no_ruangan', $ruangan->no_ruangan)
                 // ->groupBy('no_ruangan')
                 ->count();
         @endphp

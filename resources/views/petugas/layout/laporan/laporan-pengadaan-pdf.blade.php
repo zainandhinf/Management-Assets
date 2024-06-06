@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Laporan Barang PDF</title>
+    <title>Laporan Data Pengadaan PDF</title>
     <style>
         .page-break {
             page-break-after: always;
@@ -114,7 +114,7 @@
 </head>
 
 <body>
-    @foreach ($barangs as $barang)
+    @foreach ($pengadaans as $pengadaan)
         @php
             $no = 1;
         @endphp
@@ -127,7 +127,7 @@
         </div>
         <div class="judul">
             <div style="width: 100%; text-align: center;">
-                <h1>DAFTAR BARANG</h1>
+                <h1>DAFTAR PENGADAAN</h1>
             </div>
             <hr>
             <div style="width: 100%; text-align: center;">
@@ -139,10 +139,10 @@
         <p style="margin-top: -20px; margin-left: 150px;">:HD0000 (Divisi Pengembangan Sumber Daya Manusia)-DU</p>
         <p style="margin-left: -55px;">DEPARTEMEN</p>
         <p style="margin-top: -20px; margin-left: 150px;">:HD3000 (Dept. Pendidikan dan Pelatihan)</p> --}}
-            <p style="margin-left: -55px;">NAMA BARANG</p>
-            <p style="margin-top: -20px; margin-left: 150px;">: {{ $barang->nama_barang }}</p>
-            <p style="margin-left: -55px;">NOMOR BARANG </p>
-            <p style="margin-top: -20px; margin-left: 150px;">: {{ $barang->no_barang }}</p>
+            <p style="margin-left: -55px;">NO PENGADAAN</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $pengadaan->no_pengadaan }}</p>
+            <p style="margin-left: -55px;">TANGGAL PENGADAAN</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $pengadaan->tanggal_pengadaan }}</p>
         </div>
         <div class="table">
             <table class="table table-striped" id="data-tables-keranjang">
@@ -154,13 +154,14 @@
                         <th>Merk</th>
                         <th>Kondisi</th>
                         <th>Nama Pengguna</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 @php
                     $assets = DB::table('detail_barangs')
                         ->select('*')
                         ->join('pengadaans', 'pengadaans.no_pengadaan', '=', 'detail_barangs.no_pengadaan')
-                        ->where('detail_barangs.no_barang', $barang->no_barang)
+                        ->where('pengadaans.no_pengadaan', $pengadaan->no_pengadaan)
                         // ->groupBy('no_ruangan')
                         ->get();
                 @endphp
@@ -185,13 +186,15 @@
                                 ->select('*')
                                 ->where('id', '=', $user_id->user_id)
                                 ->first();
+                        } else {
+                            $user_id = null;
                         }
                     @endphp
                     @php
                         $count = DB::table('detail_barangs')
                             ->select('*')
                             ->join('pengadaans', 'pengadaans.no_pengadaan', '=', 'detail_barangs.no_pengadaan')
-                            ->where('detail_barangs.no_barang', $barang->no_barang)
+                            ->where('pengadaans.no_pengadaan', $pengadaan->no_pengadaan)
                             // ->groupBy('no_ruangan')
                             ->count();
                     @endphp
@@ -204,23 +207,22 @@
                         <td>{{ $nama_barang->nama_barang }}</td>
                         <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td>
                         <td style="text-align: center;">{{ $asset->kondisi }}</td>
-                        @if ($user_id->user_id == null)
-                            <td></td>
-                        @elseif ($no_penempatan == null)
-                            <td></td>
+                        @if ($user_id == null || $user_id->user_id == null || $no_penempatan == null)
+                        <td></td>
                         @else
                             <td>{{ $pengguna->nama_user }}</td>
                         @endif
+                        <td style="text-align: center;">{{ $asset->status }}</td>
                     </tr>
                 @endforeach
             </table>
         </div>
 
         @php
-            $count = DB::table('detail_barangs')
+            $count = DB::table('pengadaans')
                 ->select('*')
-                ->join('pengadaans', 'pengadaans.no_pengadaan', '=', 'detail_barangs.no_pengadaan')
-                ->where('detail_barangs.no_barang', $barang->no_barang)
+                // ->join('pengadaans', 'pengadaans.no_pengadaan', '=', 'detail_barangs.no_pengadaan')
+                ->where('no_pengadaan', $pengadaan->no_pengadaan)
                 // ->groupBy('no_ruangan')
                 ->count();
         @endphp

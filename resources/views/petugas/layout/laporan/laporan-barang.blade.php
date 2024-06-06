@@ -63,7 +63,7 @@
 
                         <button data-bs-toggle="modal" data-bs-target="#showdata{{ $barang->id }}"
                             style="margin-right: 10px" class="btn btn-primary mr-2"><i class="fa fa-eye"></i></button>
-                        <a href="/print/barang?no_barang={{ $barang->no_barang }}" target="blank" style="margin-right: 10px"
+                        <a href="/print-data-barang-pdf?no_barang={{ $barang->no_barang }}" target="blank" style="margin-right: 10px"
                             class="btn btn-warning mr-2"><i class="fa-solid fa-print"></i></a>
 
 
