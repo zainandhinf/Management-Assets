@@ -968,18 +968,19 @@ class PController extends Controller
         // ->where('no_pengadaan', '=', $request->no_pengadaan)
         // ->select('no_pengadaan')
         // ->get();
-        $a = DB::table('detail_penempatans')
+        $detail = DB::table('detail_penempatans')
+        // ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
         ->where('no_penempatan', '=', $request->no_penempatan)
         ->select('kode_barcode')
         ->get();
 
-        dd($b);
+        // dd($detail);
 
-        $detail = DB::table('detail_barangs')
-                            ->join('detail_penempatans', 'detail_penempatans.kode_barcode', '=', 'detail_barangs.kode_barcode')
-                            ->where('detail_barangs.kode_barcode', '=', $a->kode_barcode)
-                            ->select('detail_barangs.kode_barcode')
-                            ->get();
+        // $detail = DB::table('detail_barangs')
+        //                     ->join('detail_penempatans', 'detail_penempatans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+        //                     ->where('detail_barangs.kode_barcode', '=', $a->kode_barcode)
+        //                     ->select('detail_barangs.kode_barcode')
+        //                     ->get();
         // foreach ($np as $np) {
         $keyword = $request->konfirmasi;
 
@@ -995,7 +996,7 @@ class PController extends Controller
         //     ->first();
             // dd($request->input('no_pengadaan'));
 
-            dd($detail);
+            // dd($detail);
         DB::table('detail_penempatans')->where('no_penempatan', $request->input('no_penempatan'))->delete();
         DB::table('penempatans')->where('no_penempatan', $request->input('no_penempatan'))->delete();
 
@@ -1003,9 +1004,8 @@ class PController extends Controller
 
 
             foreach ($detail as $kode_barcode) {
-
                 DB::table('detail_barangs')
-                        ->where('kode_barcode', $request->kode_barcode)
+                        ->where('kode_barcode', '=', $kode_barcode->kode_barcode)
                         ->update($updateStatus);
             }
 
