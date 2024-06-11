@@ -747,9 +747,10 @@ class PController extends Controller
             ->count();
         // dd($cek2);
         $cek3 = DB::table('keranjang_peminjamans')
-            ->where('kode_barcode', '=', $request->kode_barcode)
-            ->count();
-        dd($cek3);
+
+                        ->where('kode_barcode', '=', $request->kode_barcode)
+                        ->count();
+                        // dd($cek3);
         $cek4 = DB::table('keranjang_penghapusans')
             ->where('kode_barcode', '=', $request->kode_barcode)
             ->count();
@@ -1083,7 +1084,7 @@ class PController extends Controller
                 ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
                 ->first();
 
-            $pesanFlash = "GAGAL Menghapus! Barang (Merk: *{$brg_cek1->merk}, barcode: *{$brg_cek1->kode_barcode} ) sedang berada di List Peminjaman!";
+            $pesanFlash = "GAGAL Menghapus! Barang (Merk: *{$brg_cek1->merk}, barcode: *{$brg_cek1->kode_barcode} ) sedang berada di List Mutasi!";
 
             $request->session()->flash('error', $pesanFlash);
 
@@ -1369,34 +1370,86 @@ class PController extends Controller
                         $request->session()->flash('error', 'Data GAGAL ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
 
                         return redirect('/mutasi-tambah');
+                            // $request->session()->flash('error', 'Data gagal ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+
+                            // // return redirect('/mutasi-tambah');
+                            // if ($lokasi->no_ruangan == $request->no_ruangan) {
+                            //     $request->session()->flash('error', 'Data GAGAL ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+
+                            //     return redirect('/mutasi-tambah');
+                            // }
+                        }
                     }
                 }
             }
 
-            //     // dd($mutasi);
+        //     //     // dd($mutasi);
 
-            //     $lokasi = DB::table('penempatans')
-            //         ->join(
-            //             'detail_penempatans',
-            //             'penempatans.no_penempatan',
-            //             '=',
-            //             'detail_penempatans.no_penempatan',
-            //         )->join(
-            //             'ruangans',
-            //             'penempatans.no_ruangan',
-            //             '=',
-            //             'ruangans.no_ruangan',
-            //         )
-            //         ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
-            //         ->first();
+        //     //     $lokasi = DB::table('penempatans')
+        //     //         ->join(
+        //     //             'detail_penempatans',
+        //     //             'penempatans.no_penempatan',
+        //     //             '=',
+        //     //             'detail_penempatans.no_penempatan',
+        //     //         )->join(
+        //     //             'ruangans',
+        //     //             'penempatans.no_ruangan',
+        //     //             '=',
+        //     //             'ruangans.no_ruangan',
+        //     //         )
+        //     //         ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
+        //     //         ->first();
 
-            //         return redirect('/mutasi-tambah');
-            //     }
-            // }
-            // }
+        // $keranjangs = DB::table('keranjang_mutasis')
+        //     ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_mutasis.kode_barcode')
+        //     ->get();
+        // // dd($keranjangs);
+        // foreach ($keranjangs as $keranjang) {
+        //     $penempatan = DB::table('detail_penempatans')
+        //         ->join('penempatans', 'penempatans.no_penempatan', '=', 'detail_penempatans.no_penempatan')
+        //         ->where('detail_penempatans.kode_barcode', '=', $keranjang->kode_barcode)
+        //         ->first();
+
+        //     //         return redirect('/mutasi-tambah');
+        //     //     }
+        //     // }
+        //     // }
 
 
-        }
+        // }
+        // //     $lokasibaru = DB::table('mutasis')
+        // //         ->join(
+        // //             'detail_mutasis',
+        // //             'mutasis.no_mutasi',
+        // //             '=',
+        // //             'detail_mutasis.no_mutasi',
+        // //         )->join(
+        // //             'ruangans',
+        // //             'mutasis.no_ruangan',
+        // //             '=',
+        // //             'ruangans.no_ruangan',
+        // //         )
+        // //         ->where('mutasis.no_mutasi', '=',
+        // //          $mutasi->no_mutasi)
+        // //         ->first();
+
+        //     // dd($mutasi);
+
+        //     $lokasi = DB::table('penempatans')
+        //         ->join(
+        //             'detail_penempatans',
+        //             'penempatans.no_penempatan',
+        //             '=',
+        //             'detail_penempatans.no_penempatan',
+        //         )->join(
+        //             'ruangans',
+        //             'penempatans.no_ruangan',
+        //             '=',
+        //             'ruangans.no_ruangan',
+        //         )
+        //         ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
+        //         ->first();
+
         //     $lokasibaru = DB::table('mutasis')
         //         ->join(
         //             'detail_mutasis',
@@ -1465,6 +1518,11 @@ class PController extends Controller
         $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
 
         return redirect('/mutasi');
+
+
+
+
+
 
     }
     // End Transaksi Penempatan
