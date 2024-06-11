@@ -150,6 +150,7 @@
                     } else {
                         $mutasi = DB::table('detail_mutasis')
                             ->join('mutasis', 'mutasis.no_mutasi', '=', 'detail_mutasis.no_mutasi')
+                            ->orderBy('detail_mutasis.no_mutasi', 'DESC')
                             ->where('detail_mutasis.kode_barcode', '=', $keranjang->kode_barcode)
                             ->first();
 

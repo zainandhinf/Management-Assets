@@ -739,29 +739,29 @@ class PController extends Controller
 
 
         $cek1 = DB::table('keranjang_penempatans')
-                        ->where('kode_barcode', '=', $request->kode_barcode)
-                        ->count();
-                        // dd($cek1);
+            ->where('kode_barcode', '=', $request->kode_barcode)
+            ->count();
+        // dd($cek1);
         $cek2 = DB::table('keranjang_mutasis')
-                        ->where('kode_barcode', '=', $request->kode_barcode)
-                        ->count();
-                        // dd($cek2);
+            ->where('kode_barcode', '=', $request->kode_barcode)
+            ->count();
+        // dd($cek2);
         $cek3 = DB::table('keranjang_peminjamans')
-                        ->where('kode_barcode', '=', $request->kode_barcode)
-                        ->count();
-                        dd($cek3);
+            ->where('kode_barcode', '=', $request->kode_barcode)
+            ->count();
+        dd($cek3);
         $cek4 = DB::table('keranjang_penghapusans')
-                        ->where('kode_barcode', '=', $request->kode_barcode)
-                        ->count();
-                        // dd($cek1);
+            ->where('kode_barcode', '=', $request->kode_barcode)
+            ->count();
+        // dd($cek1);
         if ($cek1 > 0) {
 
             // return redirect('/ljdadh');
-              $brg_cek1 = DB::table('detail_barangs')
-                        ->leftjoin('keranjang_penempatans', 'keranjang_penempatans.kode_barcode', '=', 'detail_barangs.kode_barcode')
-                        ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
-                        ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
-                        ->first();
+            $brg_cek1 = DB::table('detail_barangs')
+                ->leftjoin('keranjang_penempatans', 'keranjang_penempatans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
+                ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
+                ->first();
 
 
 
@@ -771,13 +771,13 @@ class PController extends Controller
 
             return redirect('/pengadaan-tambah');
 
-        } else if($cek2 > 0){
+        } else if ($cek2 > 0) {
 
             $brg_cek1 = DB::table('detail_barangs')
-                        ->leftjoin('keranjang_mutasis', 'keranjang_mutasis.kode_barcode', '=', 'detail_barangs.kode_barcode')
-                        ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
-                        ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
-                        ->first();
+                ->leftjoin('keranjang_mutasis', 'keranjang_mutasis.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
+                ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
+                ->first();
 
 
 
@@ -787,13 +787,13 @@ class PController extends Controller
 
             return redirect('/pengadaan-tambah');
 
-        } else if($cek3 > 0) {
+        } else if ($cek3 > 0) {
 
             $brg_cek1 = DB::table('detail_barangs')
-            ->leftjoin('keranjang_peminjamans', 'keranjang_peminjamans.kode_barcode', '=', 'detail_barangs.kode_barcode')
-            ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
-            ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
-            ->first();
+                ->leftjoin('keranjang_peminjamans', 'keranjang_peminjamans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
+                ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
+                ->first();
 
             $pesanFlash = "GAGAL Menghapus! Barang (Merk: *{$brg_cek1->merk}, barcode: *{$brg_cek1->kode_barcode} ) sedang berada di List Peminjaman!";
 
@@ -801,13 +801,13 @@ class PController extends Controller
 
             return redirect('/pengadaan-tambah');
 
-        } else if($cek4 > 0) {
+        } else if ($cek4 > 0) {
 
             $brg_cek1 = DB::table('detail_barangs')
-            ->leftjoin('keranjang_penghapusans', 'keranjang_penghapusans.kode_barcode', '=', 'detail_barangs.kode_barcode')
-            ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
-            ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
-            ->first();
+                ->leftjoin('keranjang_penghapusans', 'keranjang_penghapusans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
+                ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
+                ->first();
 
             $pesanFlash = "GAGAL Menghapus! Barang (Merk: *{$brg_cek1->merk}, barcode: *{$brg_cek1->kode_barcode} ) sedang berada di List Barang yang akan Dihapus!";
 
@@ -820,18 +820,18 @@ class PController extends Controller
         } else {
 
 
-        $nama_barang = DB::table('detail_barangs')
-            ->select('merk')
-            ->where('id', '=', $request->input('id_detail'))
-            ->get();
+            $nama_barang = DB::table('detail_barangs')
+                ->select('merk')
+                ->where('id', '=', $request->input('id_detail'))
+                ->get();
 
-        DB::table('detail_barangs')->where('id', $request->input('id_detail'))->delete();
+            DB::table('detail_barangs')->where('id', $request->input('id_detail'))->delete();
 
-        $pesanFlash = "Barang (Merk: *{$nama_barang[0]->merk} ) telah BERHASIL dihapus!";
+            $pesanFlash = "Barang (Merk: *{$nama_barang[0]->merk} ) telah BERHASIL dihapus!";
 
-        $request->session()->flash('error', $pesanFlash);
+            $request->session()->flash('error', $pesanFlash);
 
-        return redirect('/pengadaan');
+            return redirect('/pengadaan');
 
         }
 
@@ -845,39 +845,39 @@ class PController extends Controller
         // dd($request);
 
         $a = DB::table('pengadaans')
-                        ->join('detail_barangs', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
-                        ->where('pengadaans.no_pengadaan', '=', $request->no_pengadaan)
-                        ->select('detail_barangs.kode_barcode')
-                        ->get();
+            ->join('detail_barangs', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+            ->where('pengadaans.no_pengadaan', '=', $request->no_pengadaan)
+            ->select('detail_barangs.kode_barcode')
+            ->get();
 
-                        foreach ($a as $a) {
+        foreach ($a as $a) {
 
-                            dd($a->kode_barcode);
-                            $cek1 = DB::table('keranjang_penempatans')
-                        ->where('kode_barcode', '=', $a->kode_barcode)
-                        ->count();
-                        dd($cek1);
-                        $cek2 = DB::table('keranjang_mutasis')
-                                        ->where('kode_barcode', '=', $a->kode_barcode)
-                                        ->count();
-                                        // dd($cek2);
-                        $cek3 = DB::table('keranjang_peminjamans')
-                                        ->where('kode_barcode', '=', $a->kode_barcode)
-                                        ->count();
-                                        // dd($cek3);
-                        $cek4 = DB::table('keranjang_penghapusans')
-                                        ->where('kode_barcode', '=', $a->kode_barcode)
-                                        ->count();
-                                        // dd($cek1);
-                        // dd($cek1);
+            dd($a->kode_barcode);
+            $cek1 = DB::table('keranjang_penempatans')
+                ->where('kode_barcode', '=', $a->kode_barcode)
+                ->count();
+            dd($cek1);
+            $cek2 = DB::table('keranjang_mutasis')
+                ->where('kode_barcode', '=', $a->kode_barcode)
+                ->count();
+            // dd($cek2);
+            $cek3 = DB::table('keranjang_peminjamans')
+                ->where('kode_barcode', '=', $a->kode_barcode)
+                ->count();
+            // dd($cek3);
+            $cek4 = DB::table('keranjang_penghapusans')
+                ->where('kode_barcode', '=', $a->kode_barcode)
+                ->count();
+            // dd($cek1);
+            // dd($cek1);
 
-                        }
+        }
 
 
 
 
         $a = DB::table('barangs')
-                    ->join('detail_barangs', 'detail_barangs.');
+            ->join('detail_barangs', 'detail_barangs.');
 
         // foreach ($np as $np) {
         $keyword = $request->konfirmasi;
@@ -1064,24 +1064,24 @@ class PController extends Controller
         //                 ->count();
         //                 // dd($cek1);
         $cek2 = DB::table('keranjang_mutasis')
-                        ->where('kode_barcode', '=', $request->kode_barcode)
-                        ->count();
-                        // dd($cek2);
+            ->where('kode_barcode', '=', $request->kode_barcode)
+            ->count();
+        // dd($cek2);
         $cek3 = DB::table('keranjang_peminjamans')
-                        ->where('kode_barcode', '=', $request->kode_barcode)
-                        ->count();
-                        // dd($cek3);
+            ->where('kode_barcode', '=', $request->kode_barcode)
+            ->count();
+        // dd($cek3);
         $cek4 = DB::table('keranjang_penghapusans')
-                        ->where('kode_barcode', '=', $request->kode_barcode)
-                        ->count();
-                        // dd($cek1);
+            ->where('kode_barcode', '=', $request->kode_barcode)
+            ->count();
+        // dd($cek1);
         if ($cek2 > 0) {
 
             $brg_cek1 = DB::table('detail_barangs')
-            ->leftjoin('keranjang_peminjamans', 'keranjang_peminjamans.kode_barcode', '=', 'detail_barangs.kode_barcode')
-            ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
-            ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
-            ->first();
+                ->leftjoin('keranjang_peminjamans', 'keranjang_peminjamans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
+                ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
+                ->first();
 
             $pesanFlash = "GAGAL Menghapus! Barang (Merk: *{$brg_cek1->merk}, barcode: *{$brg_cek1->kode_barcode} ) sedang berada di List Peminjaman!";
 
@@ -1092,10 +1092,10 @@ class PController extends Controller
         } else if ($cek3 > 0) {
 
             $brg_cek1 = DB::table('detail_barangs')
-            ->leftjoin('keranjang_peminjamans', 'keranjang_peminjamans.kode_barcode', '=', 'detail_barangs.kode_barcode')
-            ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
-            ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
-            ->first();
+                ->leftjoin('keranjang_peminjamans', 'keranjang_peminjamans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
+                ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
+                ->first();
 
             $pesanFlash = "GAGAL Menghapus! Barang (Merk: *{$brg_cek1->merk}, barcode: *{$brg_cek1->kode_barcode} ) sedang berada di List Peminjaman!";
 
@@ -1105,10 +1105,10 @@ class PController extends Controller
         } else if ($cek4 > 0) {
 
             $brg_cek1 = DB::table('detail_barangs')
-            ->leftjoin('keranjang_penghapusans', 'keranjang_penghapusans.kode_barcode', '=', 'detail_barangs.kode_barcode')
-            ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
-            ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
-            ->first();
+                ->leftjoin('keranjang_penghapusans', 'keranjang_penghapusans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
+                ->select('detail_barangs.merk', 'detail_barangs.kode_barcode')
+                ->first();
 
             $pesanFlash = "GAGAL Menghapus! Barang (Merk: *{$brg_cek1->merk}, barcode: *{$brg_cek1->kode_barcode} ) sedang berada di List Barang yang akan Dihapus!";
 
@@ -1120,44 +1120,44 @@ class PController extends Controller
 
 
 
-        $data = DB::table('detail_penempatans')
-            // ->select('merk')
-            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
-            ->where('detail_barangs.kode_barcode', '=', $request->input('kode_barcode'))
-            ->select('detail_barangs.merk', 'detail_penempatans.*')
-            ->first();
+            $data = DB::table('detail_penempatans')
+                // ->select('merk')
+                ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
+                ->where('detail_barangs.kode_barcode', '=', $request->input('kode_barcode'))
+                ->select('detail_barangs.merk', 'detail_penempatans.*')
+                ->first();
 
-        // dd($data);
+            // dd($data);
 
-        $room = DB::table('penempatans')
-            ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
-            ->where('penempatans.no_penempatan', '=', $request->no_penempatan)
-            ->select('penempatans.no_ruangan')
-            ->first();
+            $room = DB::table('penempatans')
+                ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
+                ->where('penempatans.no_penempatan', '=', $request->no_penempatan)
+                ->select('penempatans.no_ruangan')
+                ->first();
 
-        $roomName = DB::table('ruangans')
-            ->join('penempatans', 'penempatans.no_ruangan', '=', 'ruangans.no_ruangan')
-            ->where('ruangans.no_ruangan', '=', $room->no_ruangan)
-            ->select('ruangans.ruangan')
-            ->first();
-        // dd($roomName);
+            $roomName = DB::table('ruangans')
+                ->join('penempatans', 'penempatans.no_ruangan', '=', 'ruangans.no_ruangan')
+                ->where('ruangans.no_ruangan', '=', $room->no_ruangan)
+                ->select('ruangans.ruangan')
+                ->first();
+            // dd($roomName);
 
-        DB::table('detail_penempatans')->where('kode_barcode', $request->input('kode_barcode'))->delete();
+            DB::table('detail_penempatans')->where('kode_barcode', $request->input('kode_barcode'))->delete();
 
-        $updateStatus['status'] = "Belum Ditempatkan";
+            $updateStatus['status'] = "Belum Ditempatkan";
 
 
-        DB::table('detail_barangs')
-            ->where('kode_barcode', $request->kode_barcode)
-            ->update($updateStatus);
+            DB::table('detail_barangs')
+                ->where('kode_barcode', $request->kode_barcode)
+                ->update($updateStatus);
 
-        $pesanFlash = "Barang (Merk: *{$data->merk} ) BERHASIL dihapus dari Ruangan: {$roomName->ruangan}!";
+            $pesanFlash = "Barang (Merk: *{$data->merk} ) BERHASIL dihapus dari Ruangan: {$roomName->ruangan}!";
 
-        $request->session()->flash('error', $pesanFlash);
+            $request->session()->flash('error', $pesanFlash);
 
-        return redirect('/penempatan');
+            return redirect('/penempatan');
 
-    }
+        }
 
     }
 
@@ -1171,10 +1171,10 @@ class PController extends Controller
         // ->get();
 
         $detail = DB::table('detail_penempatans')
-        // ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
-        ->where('no_penempatan', '=', $request->no_penempatan)
-        ->select('kode_barcode')
-        ->get();
+            // ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
+            ->where('no_penempatan', '=', $request->no_penempatan)
+            ->select('kode_barcode')
+            ->get();
 
         // dd($detail);
 
@@ -1199,16 +1199,16 @@ class PController extends Controller
             // dd($request->input('no_pengadaan'));
 
             // dd($detail);
-        DB::table('detail_penempatans')->where('no_penempatan', $request->input('no_penempatan'))->delete();
-        DB::table('penempatans')->where('no_penempatan', $request->input('no_penempatan'))->delete();
+            DB::table('detail_penempatans')->where('no_penempatan', $request->input('no_penempatan'))->delete();
+            DB::table('penempatans')->where('no_penempatan', $request->input('no_penempatan'))->delete();
 
             $updateStatus['status'] = "Belum Ditempatkan";
 
 
             foreach ($detail as $kode_barcode) {
                 DB::table('detail_barangs')
-                        ->where('kode_barcode', '=', $kode_barcode->kode_barcode)
-                        ->update($updateStatus);
+                    ->where('kode_barcode', '=', $kode_barcode->kode_barcode)
+                    ->update($updateStatus);
             }
 
             $pesanFlash = "Semua Penempatan (No. Penempatan: *{$request->no_penempatan} ) telah berhasil dihapus!";
@@ -1310,21 +1310,21 @@ class PController extends Controller
 
             if ($mutasi == null) {
                 $lokasi = DB::table('penempatans')
-                ->join(
-                    'detail_penempatans',
-                    'penempatans.no_penempatan',
-                    '=',
-                    'detail_penempatans.no_penempatan',
-                )->join(
-                    'ruangans',
-                    'penempatans.no_ruangan',
-                    '=',
-                    'ruangans.no_ruangan',
-                )
-                ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
-                ->first();
+                    ->join(
+                        'detail_penempatans',
+                        'penempatans.no_penempatan',
+                        '=',
+                        'detail_penempatans.no_penempatan',
+                    )->join(
+                        'ruangans',
+                        'penempatans.no_ruangan',
+                        '=',
+                        'ruangans.no_ruangan',
+                    )
+                    ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
+                    ->first();
 
-            // dd($request->no_ruangan);
+                // dd($request->no_ruangan);
 
                 if ($lokasi->no_ruangan == $request->no_ruangan) {
                     $request->session()->flash('error', 'Data gagal ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
@@ -1333,69 +1333,69 @@ class PController extends Controller
                 }
             } else {
                 $lokasi = DB::table('penempatans')
-                ->join(
-                    'detail_penempatans',
-                    'penempatans.no_penempatan',
-                    '=',
-                    'detail_penempatans.no_penempatan',
-                )->join(
-                    'ruangans',
-                    'penempatans.no_ruangan',
-                    '=',
-                    'ruangans.no_ruangan',
-                )
-                ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
-                ->first();
-            $lokasibaru = DB::table('mutasis')
-                ->join(
-                    'detail_mutasis',
-                    'mutasis.no_mutasi',
-                    '=',
-                    'detail_mutasis.no_mutasi',
-                )->join(
-                    'ruangans',
-                    'mutasis.no_ruangan',
-                    '=',
-                    'ruangans.no_ruangan',
-                )
-                ->where('mutasis.no_mutasi', '=', $mutasi->no_mutasi)
-                ->first();
+                    ->join(
+                        'detail_penempatans',
+                        'penempatans.no_penempatan',
+                        '=',
+                        'detail_penempatans.no_penempatan',
+                    )->join(
+                        'ruangans',
+                        'penempatans.no_ruangan',
+                        '=',
+                        'ruangans.no_ruangan',
+                    )
+                    ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
+                    ->first();
+                $lokasibaru = DB::table('mutasis')
+                    ->join(
+                        'detail_mutasis',
+                        'mutasis.no_mutasi',
+                        '=',
+                        'detail_mutasis.no_mutasi',
+                    )->join(
+                        'ruangans',
+                        'mutasis.no_ruangan',
+                        '=',
+                        'ruangans.no_ruangan',
+                    )
+                    ->where('mutasis.no_mutasi', '=', $mutasi->no_mutasi)
+                    ->first();
 
                 if ($lokasibaru->no_ruangan == $request->no_ruangan) {
-                            // $request->session()->flash('error', 'Data gagal ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
-            
-                            // return redirect('/mutasi-tambah');
-                            if ($lokasi->no_ruangan == $request->no_ruangan) {
-                                $request->session()->flash('error', 'Data GAGAL ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
-            
-                                return redirect('/mutasi-tambah');
-                            }
-                        }
+                    // $request->session()->flash('error', 'Data gagal ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+
+                    // return redirect('/mutasi-tambah');
+                    if ($lokasi->no_ruangan == $request->no_ruangan) {
+                        $request->session()->flash('error', 'Data GAGAL ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+
+                        return redirect('/mutasi-tambah');
                     }
+                }
+            }
 
-        //     // dd($mutasi);
+            //     // dd($mutasi);
 
-        //     $lokasi = DB::table('penempatans')
-        //         ->join(
-        //             'detail_penempatans',
-        //             'penempatans.no_penempatan',
-        //             '=',
-        //             'detail_penempatans.no_penempatan',
-        //         )->join(
-        //             'ruangans',
-        //             'penempatans.no_ruangan',
-        //             '=',
-        //             'ruangans.no_ruangan',
-        //         )
-        //         ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
-        //         ->first();
+            //     $lokasi = DB::table('penempatans')
+            //         ->join(
+            //             'detail_penempatans',
+            //             'penempatans.no_penempatan',
+            //             '=',
+            //             'detail_penempatans.no_penempatan',
+            //         )->join(
+            //             'ruangans',
+            //             'penempatans.no_ruangan',
+            //             '=',
+            //             'ruangans.no_ruangan',
+            //         )
+            //         ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
+            //         ->first();
 
             //         return redirect('/mutasi-tambah');
             //     }
             // }
             // }
 
-            
+
         }
         //     $lokasibaru = DB::table('mutasis')
         //         ->join(
