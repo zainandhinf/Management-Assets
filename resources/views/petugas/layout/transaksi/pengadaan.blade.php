@@ -36,8 +36,8 @@
                             class="btn btn-primary mt-1">
                             <i class="fa fa-eye"></i>
                         </button>
-                        <a href="/print/barcode-all?no_pengadaan={{ $pengadaan->no_pengadaan }}" target="blank" class="btn btn-warning mt-1"><i
-                                class="fa-solid fa-barcode"></i></a>
+                        <a href="/print/barcode-all?no_pengadaan={{ $pengadaan->no_pengadaan }}" target="blank"
+                            class="btn btn-warning mt-1"><i class="fa-solid fa-barcode"></i></a>
                         <button data-bs-toggle="modal" data-bs-target="#deletePengadaan{{ $pengadaan->id }}"
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
@@ -163,7 +163,8 @@
                                     {{-- <td>lorem</td> --}}
                                     <td>No Barang: <b>{{ $keranjang->no_barang }}</b> <br>Barcode:
                                         <b>{!! DNS1D::getBarcodeHTML($keranjang->kode_barcode, 'UPCA') !!}{{ $keranjang->kode_barcode }}</b> <br>No Asset:
-                                        <b>{{ $keranjang->no_asset }}</b>
+                                        <b>{{ $keranjang->no_asset }}</b><br>Nomor
+                                        Kodifikasi: <b>{{ $keranjang->nomor_kodifikasi }}</b>
                                     </td>
                                     <td>{{ $keranjang->nama_barang }}</td>
                                     <td>{{ $keranjang->merk }}, {{ $keranjang->spesifikasi }}</td>
@@ -338,7 +339,8 @@
                                     {{-- <td>lorem</td> --}}
                                     <td>No Barang: <b>{{ $detail_barang->no_barang }}</b> <br>Barcode:
                                         <b>{!! DNS1D::getBarcodeHTML($detail_barang->kode_barcode, 'UPCA') !!}{{ $detail_barang->kode_barcode }}</b> <br>No
-                                        Asset: <b>{{ $detail_barang->no_asset }}</b>
+                                        Asset: <b>{{ $detail_barang->no_asset }}</b><br>Nomor
+                                        Kodifikasi: <b>{{ $detail_barang->nomor_kodifikasi }}</b>
                                     </td>
                                     <td>{{ $detail_barang->merk }}, {{ $detail_barang->spesifikasi }}</td>
                                     <td>{{ $detail_barang->tanggal_pengadaan }}</td>
@@ -352,7 +354,8 @@
                                     <td>
                                         {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $detail_barang->id }}"
                                         style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button> --}}
-                                        <a href="/print/barcode?barcode={{ $detail_barang->kode_barcode }}" target="blank" class="btn btn-warning mt-1"><i
+                                        <a href="/print/barcode?barcode={{ $detail_barang->kode_barcode }}"
+                                            target="blank" class="btn btn-warning mt-1"><i
                                                 class="fa-solid fa-barcode"></i></a>
                                         <button data-bs-toggle="modal"
                                             data-bs-target="#deletedata{{ $detail_barang->id }}"
@@ -373,52 +376,53 @@
 
     {{-- modal delete Pengadaan --}}
     @foreach ($pengadaans as $pengadaan)
-    <div class="modal modal-blur fade" id="deletePengadaan{{ $pengadaan->id }}" tabindex="-1" role="dialog"
-        aria-hidden="true">
-        <div class="modal-dialog w-50 modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-status bg-danger"></div>
-                <div class="modal-body text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
-                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path
-                            d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
-                        <path d="M12 9v4" />
-                        <path d="M12 17h.01" />
-                    </svg>
-                    <h6>PERINGATAN !!</h6>
-                    <div class="text-muted">Menghapus <b>{{ $pengadaan->no_pengadaan }}</b> ini akan menghapus <b>SEMUA</b> Properti yang ada pada Pengadaan ini akan Terhapus!</div>
-                    <hr>
-                    <form action="/deletepengadaan" method="post">
-                        @csrf
-                        @method('DELETE')
-                    <div class="form-group">
-                        <label for="">Ketik "KONFIRMASI" untuk Menghapus</label>
-                        <input type="text" name="konfirmasi" class="form-control" required>
+        <div class="modal modal-blur fade" id="deletePengadaan{{ $pengadaan->id }}" tabindex="-1" role="dialog"
+            aria-hidden="true">
+            <div class="modal-dialog w-50 modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-status bg-danger"></div>
+                    <div class="modal-body text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                            <path d="M12 9v4" />
+                            <path d="M12 17h.01" />
+                        </svg>
+                        <h6>PERINGATAN !!</h6>
+                        <div class="text-muted">Menghapus <b>{{ $pengadaan->no_pengadaan }}</b> ini akan menghapus
+                            <b>SEMUA</b> Properti yang ada pada Pengadaan ini akan Terhapus!</div>
+                        <hr>
+                        <form action="/deletepengadaan" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <div class="form-group">
+                                <label for="">Ketik "KONFIRMASI" untuk Menghapus</label>
+                                <input type="text" name="konfirmasi" class="form-control" required>
+                            </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="w-100">
-                        <div class="row">
-                            <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                    Cancel
-                                </button></div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                        Cancel
+                                    </button></div>
 
                                 <input type="hidden" name="no_pengadaan" value="{{ $pengadaan->no_pengadaan }}">
                                 {{-- <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
                                 <button class="btn btn-danger w-100">
                                     Yakin
                                 </button>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     @endforeach
     {{-- end modal delete Pengadaan --}}
 

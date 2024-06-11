@@ -93,6 +93,11 @@
                             <i class="fa-solid fa-chalkboard-user"></i>Training
                         </a>
                     </li>
+                    <li class="nav-item mb-1">
+                        <a href="/departemen" class="{{ $title === 'Data Departemen' ? 'active' : '' }}">
+                            <i class="fa-solid fa-building"></i>Departemen
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item mb-1 mt-1">

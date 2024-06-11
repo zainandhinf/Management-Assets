@@ -169,7 +169,8 @@
                     {{-- <td>lorem</td> --}}
                     <td>No Barang: <b>{{ $keranjang->no_barang }}</b> <br>Barcode:
                         <b>{!! DNS1D::getBarcodeHTML($keranjang->kode_barcode, 'UPCA') !!}{{ $keranjang->kode_barcode }}</b> <br>No
-                        Asset: <b>{{ $keranjang->no_asset }}</b>
+                        Asset: <b>{{ $keranjang->no_asset }}</b><br>Nomor
+                        Kodifikasi: <b>{{ $keranjang->nomor_kodifikasi }}</b>
                     </td>
                     <td>{{ $keranjang->merk }}, {{ $keranjang->spesifikasi }}</td>
                     {{-- <td>{{ $keranjang->jenis_pengadaan }}</td> --}}

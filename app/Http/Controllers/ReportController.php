@@ -786,7 +786,7 @@ class ReportController extends Controller
         return $pdf->stream('laporan-data-ruangan.pdf');
     }
     //END RUANGAN
-    
+
     //PENGADAAN
     public function goLaporanPengadaan()
     {
@@ -959,7 +959,7 @@ class ReportController extends Controller
 
         // $data = [$petugas];
 
-   
+
 
 
         $detail_barang = DB::table('detail_barangs')
@@ -994,6 +994,1063 @@ class ReportController extends Controller
         return $pdf->stream('laporan-data-pengadaan.pdf');
     }
     //END PENGADAAN
+
+    //PENEMPATAN
+    public function goLaporanPenempatan()
+    {
+        $data_penempatans = DB::table('penempatans')->select('*')->get();
+
+        $penempatans = DB::table('penempatans')
+            ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
+            ->select('penempatans.*', 'detail_penempatans.kode_barcode')
+            ->get();
+
+        return view('petugas.layout.laporan.laporan-penempatan')->with([
+            'title' => 'Laporan Data Penempatan',
+            'active' => 'Laporan Data Penempatan',
+            'open' => 'yes-3',
+            'penempatans' => $penempatans,
+            'data_penempatans' => $data_penempatans,
+            'requests' => null
+
+        ]);
+    }
+    public function goLaporanPenempatanFilter(Request $request)
+    {
+        // Jika $dates tidak ada atau kosong, tetapkan nilai default sebagai string kosong
+        // $filter = urldecode($filter ?? '');
+
+        $date = $request->query('date');
+        $role = $request->query('role');
+
+
+        if ($role == "koordinator" || $role == "super_user") {
+            if ($role == "koordinator") {
+                $petugas = DB::table('users')->where('role', 'petugas')->get();
+            } else {
+                $petugas = DB::table('users')->where('role', $role)->get();
+            }
+        } else {
+            $dateArray = explode('~', $date);
+
+            $tanggalPertama = $dateArray[0] ?? null;
+            $tanggalKedua = $dateArray[1] ?? null;
+
+            if ($role == "koordinator") {
+                $role = "petugas";
+            }
+
+            // dd($dateArray);
+
+            // // Validasi bahwa kedua tanggal ada
+            // if ($tanggalPertama && $tanggalKedua) {
+            //     // Query dengan whereBetween
+            //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+            // } elseif ($tanggalPertama) {
+            //     // Query jika hanya tanggal pertama yang ada
+            //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+            // } elseif ($tanggalKedua) {
+            //     // Query jika hanya tanggal kedua yang ada
+            //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+            // } else {
+            //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+            //     $petugas = User::all();
+            // }
+
+            $query = User::query();
+
+            if ($tanggalPertama && $tanggalKedua && $role) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+            } else if ($tanggalPertama && $tanggalKedua) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+            } elseif ($tanggalPertama && $role) {
+                $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+            } elseif ($tanggalPertama) {
+                $query->where('created_at', '>=', $tanggalPertama);
+            } elseif ($tanggalKedua && $role) {
+                $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+            } elseif ($tanggalKedua) {
+                $query->where('created_at', '<=', $tanggalKedua);
+            }
+            // dd($query);
+
+            // if ($role) {
+            //     $query->where('role', $role);
+            //     dd($query);
+            // }
+
+            $petugas = $query->get();
+
+            // $petugas = DB::table('users')
+            // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+            // ->get();
+        }
+
+
+        return view('petugas.layout.laporan.laporan-petugas')->with([
+            'title' => 'Laporan Data Petugas',
+            'active' => 'Laporan Data Petugas',
+            'open' => 'yes-3',
+            'petugass' => $petugas,
+            'requests' => $request
+
+        ]);
+    }
+    public function goLaporanPenempatanPdf(Request $request)
+    {
+        // if ($request->input('date') == null && $request->input('role') == null) {
+        //     $data = [
+        //         'petugass' => User::all(),
+        //     ];
+        // } else {
+
+        //     $date = $request->input('date');
+        //     $role = $request->input('role');
+
+
+        //     if ($role == "koordinator" || $role == "super_user") {
+        //         if ($role == "koordinator") {
+        //             $petugas = DB::table('users')->where('role', 'petugas')->get();
+        //         } else {
+        //             $petugas = DB::table('users')->where('role', $role)->get();
+        //         }
+        //     } else {
+        //         $dateArray = explode('~', $date);
+
+        //         $tanggalPertama = $dateArray[0] ?? null;
+        //         $tanggalKedua = $dateArray[1] ?? null;
+
+        //         if ($role == "koordinator") {
+        //             $role = "petugas";
+        //         }
+
+        //         // dd($dateArray);
+
+        //         // // Validasi bahwa kedua tanggal ada
+        //         // if ($tanggalPertama && $tanggalKedua) {
+        //         //     // Query dengan whereBetween
+        //         //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+        //         // } elseif ($tanggalPertama) {
+        //         //     // Query jika hanya tanggal pertama yang ada
+        //         //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+        //         // } elseif ($tanggalKedua) {
+        //         //     // Query jika hanya tanggal kedua yang ada
+        //         //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+        //         // } else {
+        //         //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+        //         //     $petugas = User::all();
+        //         // }
+
+        //         $query = User::query();
+
+        //         if ($tanggalPertama && $tanggalKedua && $role) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+        //         } else if ($tanggalPertama && $tanggalKedua) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+        //         } elseif ($tanggalPertama && $role) {
+        //             $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+        //         } elseif ($tanggalPertama) {
+        //             $query->where('created_at', '>=', $tanggalPertama);
+        //         } elseif ($tanggalKedua && $role) {
+        //             $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+        //         } elseif ($tanggalKedua) {
+        //             $query->where('created_at', '<=', $tanggalKedua);
+        //         }
+        //         // dd($query);
+
+        //         // if ($role) {
+        //         //     $query->where('role', $role);
+        //         //     dd($query);
+        //         // }
+
+        //         $petugas = $query->get();
+
+        //         // $petugas = DB::table('users')
+        //         // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+        //         // ->get();
+        //     }
+
+        // $data = [$petugas];
+
+
+
+
+        $detail_barang = DB::table('detail_barangs')
+            ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+            ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
+            ->get();
+
+
+        // dd($keranjang);
+
+        if ($request->query('no_penempatan')) {
+            $penempatans = penempatan::select('*')
+                ->where('no_penempatan', '=', $request->query('no_penempatan'))
+                ->get();
+        } else {
+            $penempatans = penempatan::select('*')
+                // ->where('pengadaans.no_pengadaan', '=', $request->query('no_pengadaan'))
+                ->get();
+        }
+
+
+        $data = [
+            // 'pegawais' => $petugas,
+            // 'assets' => $kategori_barang,
+            'penempatans' => $penempatans
+        ];
+        // }
+        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-penempatan-pdf', $data)->setPaper('a4', 'portrait');
+        // return $pdf->download('invoice.pdf');
+        return $pdf->stream('laporan-data-penempatan.pdf');
+    }
+    //END PENEMPATAN
+
+    //MUTASI
+    public function goLaporanMutasi()
+    {
+
+        $mutasis = DB::table('mutasis')
+            ->select('*')
+            ->get();
+
+
+        return view('petugas.layout.laporan.laporan-mutasi')->with([
+            'title' => 'Laporan Data Mutasi',
+            'active' => 'Laporan Data Mutasi',
+            'open' => 'yes-3',
+            'mutasis' => $mutasis,
+            'requests' => null
+
+        ]);
+    }
+    public function goLaporanMutasiFilter(Request $request)
+    {
+        // Jika $dates tidak ada atau kosong, tetapkan nilai default sebagai string kosong
+        // $filter = urldecode($filter ?? '');
+
+        $date = $request->query('date');
+        $role = $request->query('role');
+
+
+        if ($role == "koordinator" || $role == "super_user") {
+            if ($role == "koordinator") {
+                $petugas = DB::table('users')->where('role', 'petugas')->get();
+            } else {
+                $petugas = DB::table('users')->where('role', $role)->get();
+            }
+        } else {
+            $dateArray = explode('~', $date);
+
+            $tanggalPertama = $dateArray[0] ?? null;
+            $tanggalKedua = $dateArray[1] ?? null;
+
+            if ($role == "koordinator") {
+                $role = "petugas";
+            }
+
+            // dd($dateArray);
+
+            // // Validasi bahwa kedua tanggal ada
+            // if ($tanggalPertama && $tanggalKedua) {
+            //     // Query dengan whereBetween
+            //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+            // } elseif ($tanggalPertama) {
+            //     // Query jika hanya tanggal pertama yang ada
+            //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+            // } elseif ($tanggalKedua) {
+            //     // Query jika hanya tanggal kedua yang ada
+            //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+            // } else {
+            //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+            //     $petugas = User::all();
+            // }
+
+            $query = User::query();
+
+            if ($tanggalPertama && $tanggalKedua && $role) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+            } else if ($tanggalPertama && $tanggalKedua) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+            } elseif ($tanggalPertama && $role) {
+                $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+            } elseif ($tanggalPertama) {
+                $query->where('created_at', '>=', $tanggalPertama);
+            } elseif ($tanggalKedua && $role) {
+                $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+            } elseif ($tanggalKedua) {
+                $query->where('created_at', '<=', $tanggalKedua);
+            }
+            // dd($query);
+
+            // if ($role) {
+            //     $query->where('role', $role);
+            //     dd($query);
+            // }
+
+            $petugas = $query->get();
+
+            // $petugas = DB::table('users')
+            // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+            // ->get();
+        }
+
+
+        return view('petugas.layout.laporan.laporan-petugas')->with([
+            'title' => 'Laporan Data Petugas',
+            'active' => 'Laporan Data Petugas',
+            'open' => 'yes-3',
+            'petugass' => $petugas,
+            'requests' => $request
+
+        ]);
+    }
+    public function goLaporanMutasiPdf(Request $request)
+    {
+        // if ($request->input('date') == null && $request->input('role') == null) {
+        //     $data = [
+        //         'petugass' => User::all(),
+        //     ];
+        // } else {
+
+        //     $date = $request->input('date');
+        //     $role = $request->input('role');
+
+
+        //     if ($role == "koordinator" || $role == "super_user") {
+        //         if ($role == "koordinator") {
+        //             $petugas = DB::table('users')->where('role', 'petugas')->get();
+        //         } else {
+        //             $petugas = DB::table('users')->where('role', $role)->get();
+        //         }
+        //     } else {
+        //         $dateArray = explode('~', $date);
+
+        //         $tanggalPertama = $dateArray[0] ?? null;
+        //         $tanggalKedua = $dateArray[1] ?? null;
+
+        //         if ($role == "koordinator") {
+        //             $role = "petugas";
+        //         }
+
+        //         // dd($dateArray);
+
+        //         // // Validasi bahwa kedua tanggal ada
+        //         // if ($tanggalPertama && $tanggalKedua) {
+        //         //     // Query dengan whereBetween
+        //         //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+        //         // } elseif ($tanggalPertama) {
+        //         //     // Query jika hanya tanggal pertama yang ada
+        //         //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+        //         // } elseif ($tanggalKedua) {
+        //         //     // Query jika hanya tanggal kedua yang ada
+        //         //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+        //         // } else {
+        //         //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+        //         //     $petugas = User::all();
+        //         // }
+
+        //         $query = User::query();
+
+        //         if ($tanggalPertama && $tanggalKedua && $role) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+        //         } else if ($tanggalPertama && $tanggalKedua) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+        //         } elseif ($tanggalPertama && $role) {
+        //             $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+        //         } elseif ($tanggalPertama) {
+        //             $query->where('created_at', '>=', $tanggalPertama);
+        //         } elseif ($tanggalKedua && $role) {
+        //             $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+        //         } elseif ($tanggalKedua) {
+        //             $query->where('created_at', '<=', $tanggalKedua);
+        //         }
+        //         // dd($query);
+
+        //         // if ($role) {
+        //         //     $query->where('role', $role);
+        //         //     dd($query);
+        //         // }
+
+        //         $petugas = $query->get();
+
+        //         // $petugas = DB::table('users')
+        //         // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+        //         // ->get();
+        //     }
+
+        // $data = [$petugas];
+
+
+
+
+        $detail_barang = DB::table('detail_barangs')
+            ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+            ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
+            ->get();
+
+
+        // dd($keranjang);
+
+        if ($request->query('no_mutasi')) {
+            $mutasis = mutasi::select('*')
+                ->where('no_mutasi', '=', $request->query('no_mutasi'))
+                ->get();
+        } else {
+            $mutasis = mutasi::select('*')
+                // ->where('pengadaans.no_pengadaan', '=', $request->query('no_pengadaan'))
+                ->get();
+        }
+
+
+        $data = [
+            // 'pegawais' => $petugas,
+            // 'assets' => $kategori_barang,
+            'mutasis' => $mutasis
+        ];
+        // }
+        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-mutasi-pdf', $data)->setPaper('a4', 'portrait');
+        // return $pdf->download('invoice.pdf');
+        return $pdf->stream('laporan-data-mutasi.pdf');
+    }
+    //END MUTASI
+
+    //PEMINJAMAN
+    public function goLaporanPeminjaman()
+    {
+
+        $peminjamans = DB::table('peminjamans')
+            ->select('*')
+            ->get();
+
+
+        return view('petugas.layout.laporan.laporan-peminjaman')->with([
+            'title' => 'Laporan Data Peminjaman',
+            'active' => 'Laporan Data Peminjaman',
+            'open' => 'yes-3',
+            'peminjamans' => $peminjamans,
+            'requests' => null
+
+        ]);
+
+    }
+    public function goLaporanPeminjamanFilter(Request $request)
+    {
+        // Jika $dates tidak ada atau kosong, tetapkan nilai default sebagai string kosong
+        // $filter = urldecode($filter ?? '');
+
+        $date = $request->query('date');
+        $role = $request->query('role');
+
+
+        if ($role == "koordinator" || $role == "super_user") {
+            if ($role == "koordinator") {
+                $petugas = DB::table('users')->where('role', 'petugas')->get();
+            } else {
+                $petugas = DB::table('users')->where('role', $role)->get();
+            }
+        } else {
+            $dateArray = explode('~', $date);
+
+            $tanggalPertama = $dateArray[0] ?? null;
+            $tanggalKedua = $dateArray[1] ?? null;
+
+            if ($role == "koordinator") {
+                $role = "petugas";
+            }
+
+            // dd($dateArray);
+
+            // // Validasi bahwa kedua tanggal ada
+            // if ($tanggalPertama && $tanggalKedua) {
+            //     // Query dengan whereBetween
+            //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+            // } elseif ($tanggalPertama) {
+            //     // Query jika hanya tanggal pertama yang ada
+            //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+            // } elseif ($tanggalKedua) {
+            //     // Query jika hanya tanggal kedua yang ada
+            //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+            // } else {
+            //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+            //     $petugas = User::all();
+            // }
+
+            $query = User::query();
+
+            if ($tanggalPertama && $tanggalKedua && $role) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+            } else if ($tanggalPertama && $tanggalKedua) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+            } elseif ($tanggalPertama && $role) {
+                $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+            } elseif ($tanggalPertama) {
+                $query->where('created_at', '>=', $tanggalPertama);
+            } elseif ($tanggalKedua && $role) {
+                $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+            } elseif ($tanggalKedua) {
+                $query->where('created_at', '<=', $tanggalKedua);
+            }
+            // dd($query);
+
+            // if ($role) {
+            //     $query->where('role', $role);
+            //     dd($query);
+            // }
+
+            $petugas = $query->get();
+
+            // $petugas = DB::table('users')
+            // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+            // ->get();
+        }
+
+
+        return view('petugas.layout.laporan.laporan-petugas')->with([
+            'title' => 'Laporan Data Petugas',
+            'active' => 'Laporan Data Petugas',
+            'open' => 'yes-3',
+            'petugass' => $petugas,
+            'requests' => $request
+
+        ]);
+    }
+    public function goLaporanPeminjamanPdf(Request $request)
+    {
+        // if ($request->input('date') == null && $request->input('role') == null) {
+        //     $data = [
+        //         'petugass' => User::all(),
+        //     ];
+        // } else {
+
+        //     $date = $request->input('date');
+        //     $role = $request->input('role');
+
+
+        //     if ($role == "koordinator" || $role == "super_user") {
+        //         if ($role == "koordinator") {
+        //             $petugas = DB::table('users')->where('role', 'petugas')->get();
+        //         } else {
+        //             $petugas = DB::table('users')->where('role', $role)->get();
+        //         }
+        //     } else {
+        //         $dateArray = explode('~', $date);
+
+        //         $tanggalPertama = $dateArray[0] ?? null;
+        //         $tanggalKedua = $dateArray[1] ?? null;
+
+        //         if ($role == "koordinator") {
+        //             $role = "petugas";
+        //         }
+
+        //         // dd($dateArray);
+
+        //         // // Validasi bahwa kedua tanggal ada
+        //         // if ($tanggalPertama && $tanggalKedua) {
+        //         //     // Query dengan whereBetween
+        //         //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+        //         // } elseif ($tanggalPertama) {
+        //         //     // Query jika hanya tanggal pertama yang ada
+        //         //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+        //         // } elseif ($tanggalKedua) {
+        //         //     // Query jika hanya tanggal kedua yang ada
+        //         //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+        //         // } else {
+        //         //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+        //         //     $petugas = User::all();
+        //         // }
+
+        //         $query = User::query();
+
+        //         if ($tanggalPertama && $tanggalKedua && $role) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+        //         } else if ($tanggalPertama && $tanggalKedua) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+        //         } elseif ($tanggalPertama && $role) {
+        //             $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+        //         } elseif ($tanggalPertama) {
+        //             $query->where('created_at', '>=', $tanggalPertama);
+        //         } elseif ($tanggalKedua && $role) {
+        //             $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+        //         } elseif ($tanggalKedua) {
+        //             $query->where('created_at', '<=', $tanggalKedua);
+        //         }
+        //         // dd($query);
+
+        //         // if ($role) {
+        //         //     $query->where('role', $role);
+        //         //     dd($query);
+        //         // }
+
+        //         $petugas = $query->get();
+
+        //         // $petugas = DB::table('users')
+        //         // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+        //         // ->get();
+        //     }
+
+        // $data = [$petugas];
+
+
+
+
+        $detail_barang = DB::table('detail_barangs')
+            ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+            ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
+            ->get();
+
+
+        // dd($keranjang);
+
+        if ($request->query('no_peminjaman') || $request->query('kode_barcode')) {
+            $peminjamans = DB::table('peminjamans')
+                ->select('*')
+                ->where('no_peminjaman', '=', $request->query('no_peminjaman'))
+                ->get();
+            $kode_barcode = $request->query('kode_barcode');
+        } else {
+            $peminjamans = DB::table('peminjamans')
+                ->select('*')
+                // ->where('pengadaans.no_pengadaan', '=', $request->query('no_pengadaan'))
+                ->get();
+            $kode_barcode = null;
+        }
+
+
+        $data = [
+            // 'pegawais' => $petugas,
+            // 'assets' => $kategori_barang,
+            'peminjamans' => $peminjamans,
+            'kode_barcode' => $kode_barcode
+        ];
+        // }
+        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-peminjaman-pdf', $data)->setPaper('a4', 'portrait');
+        // return $pdf->download('invoice.pdf');
+        return $pdf->stream('laporan-data-peminjaman.pdf');
+    }
+    //END PEMINJAMAN
+
+    //MAINTENANCE
+    public function goLaporanMaintenance()
+    {
+
+        $maintenances = DB::table('maintenances')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'maintenances.kode_barcode')
+            ->select('detail_barangs.*', 'maintenances.status as status_maintenance', 'maintenances.keterangan as keterangan_maintenance', 'maintenances.no_maintenance', 'maintenances.tanggal_maintenance', 'maintenances.biaya', 'maintenances.user_id')
+            ->get();
+
+        return view('petugas.layout.laporan.laporan-maintenance')->with([
+            'title' => 'Laporan Data Maintenance',
+            'active' => 'Laporan Data Maintenance',
+            'open' => 'yes-3',
+            'maintenances' => $maintenances,
+            'requests' => null
+
+        ]);
+
+    }
+    public function goLaporanMaintenanceFilter(Request $request)
+    {
+        // Jika $dates tidak ada atau kosong, tetapkan nilai default sebagai string kosong
+        // $filter = urldecode($filter ?? '');
+
+        $date = $request->query('date');
+        $role = $request->query('role');
+
+
+        if ($role == "koordinator" || $role == "super_user") {
+            if ($role == "koordinator") {
+                $petugas = DB::table('users')->where('role', 'petugas')->get();
+            } else {
+                $petugas = DB::table('users')->where('role', $role)->get();
+            }
+        } else {
+            $dateArray = explode('~', $date);
+
+            $tanggalPertama = $dateArray[0] ?? null;
+            $tanggalKedua = $dateArray[1] ?? null;
+
+            if ($role == "koordinator") {
+                $role = "petugas";
+            }
+
+            // dd($dateArray);
+
+            // // Validasi bahwa kedua tanggal ada
+            // if ($tanggalPertama && $tanggalKedua) {
+            //     // Query dengan whereBetween
+            //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+            // } elseif ($tanggalPertama) {
+            //     // Query jika hanya tanggal pertama yang ada
+            //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+            // } elseif ($tanggalKedua) {
+            //     // Query jika hanya tanggal kedua yang ada
+            //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+            // } else {
+            //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+            //     $petugas = User::all();
+            // }
+
+            $query = User::query();
+
+            if ($tanggalPertama && $tanggalKedua && $role) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+            } else if ($tanggalPertama && $tanggalKedua) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+            } elseif ($tanggalPertama && $role) {
+                $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+            } elseif ($tanggalPertama) {
+                $query->where('created_at', '>=', $tanggalPertama);
+            } elseif ($tanggalKedua && $role) {
+                $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+            } elseif ($tanggalKedua) {
+                $query->where('created_at', '<=', $tanggalKedua);
+            }
+            // dd($query);
+
+            // if ($role) {
+            //     $query->where('role', $role);
+            //     dd($query);
+            // }
+
+            $petugas = $query->get();
+
+            // $petugas = DB::table('users')
+            // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+            // ->get();
+        }
+
+
+        return view('petugas.layout.laporan.laporan-petugas')->with([
+            'title' => 'Laporan Data Petugas',
+            'active' => 'Laporan Data Petugas',
+            'open' => 'yes-3',
+            'petugass' => $petugas,
+            'requests' => $request
+
+        ]);
+    }
+    public function goLaporanMaintenancePdf(Request $request)
+    {
+        // if ($request->input('date') == null && $request->input('role') == null) {
+        //     $data = [
+        //         'petugass' => User::all(),
+        //     ];
+        // } else {
+
+        //     $date = $request->input('date');
+        //     $role = $request->input('role');
+
+
+        //     if ($role == "koordinator" || $role == "super_user") {
+        //         if ($role == "koordinator") {
+        //             $petugas = DB::table('users')->where('role', 'petugas')->get();
+        //         } else {
+        //             $petugas = DB::table('users')->where('role', $role)->get();
+        //         }
+        //     } else {
+        //         $dateArray = explode('~', $date);
+
+        //         $tanggalPertama = $dateArray[0] ?? null;
+        //         $tanggalKedua = $dateArray[1] ?? null;
+
+        //         if ($role == "koordinator") {
+        //             $role = "petugas";
+        //         }
+
+        //         // dd($dateArray);
+
+        //         // // Validasi bahwa kedua tanggal ada
+        //         // if ($tanggalPertama && $tanggalKedua) {
+        //         //     // Query dengan whereBetween
+        //         //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+        //         // } elseif ($tanggalPertama) {
+        //         //     // Query jika hanya tanggal pertama yang ada
+        //         //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+        //         // } elseif ($tanggalKedua) {
+        //         //     // Query jika hanya tanggal kedua yang ada
+        //         //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+        //         // } else {
+        //         //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+        //         //     $petugas = User::all();
+        //         // }
+
+        //         $query = User::query();
+
+        //         if ($tanggalPertama && $tanggalKedua && $role) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+        //         } else if ($tanggalPertama && $tanggalKedua) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+        //         } elseif ($tanggalPertama && $role) {
+        //             $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+        //         } elseif ($tanggalPertama) {
+        //             $query->where('created_at', '>=', $tanggalPertama);
+        //         } elseif ($tanggalKedua && $role) {
+        //             $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+        //         } elseif ($tanggalKedua) {
+        //             $query->where('created_at', '<=', $tanggalKedua);
+        //         }
+        //         // dd($query);
+
+        //         // if ($role) {
+        //         //     $query->where('role', $role);
+        //         //     dd($query);
+        //         // }
+
+        //         $petugas = $query->get();
+
+        //         // $petugas = DB::table('users')
+        //         // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+        //         // ->get();
+        //     }
+
+        // $data = [$petugas];
+
+
+
+
+        $detail_barang = DB::table('detail_barangs')
+            ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+            ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
+            ->get();
+
+
+
+        if ($request->query('no_maintenance')) {
+            $maintenances = DB::table('maintenances')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'maintenances.kode_barcode')
+            ->select('detail_barangs.*', 'maintenances.status as status_maintenance', 'maintenances.keterangan as keterangan_maintenance', 'maintenances.no_maintenance', 'maintenances.tanggal_maintenance', 'maintenances.biaya', 'maintenances.user_id', 'maintenances.tanggal_selesai')
+            ->where('no_maintenance', '=', $request->query('no_maintenance'))
+            ->get();
+        } else {
+            $maintenances = DB::table('maintenances')
+                ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'maintenances.kode_barcode')
+                ->select('detail_barangs.*', 'maintenances.status as status_maintenance', 'maintenances.keterangan as keterangan_maintenance', 'maintenances.no_maintenance', 'maintenances.tanggal_maintenance', 'maintenances.biaya', 'maintenances.user_id', 'maintenances.tanggal_selesai')
+                ->get();
+        }
+
+        // dd($maintenances);
+
+        $data = [
+            // 'pegawais' => $petugas,
+            // 'assets' => $kategori_barang,
+            'maintenances' => $maintenances
+        ];
+        // }
+        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-maintenance-pdf', $data)->setPaper('a4', 'portrait');
+        // return $pdf->download('invoice.pdf');
+        return $pdf->stream('laporan-data-maintenance.pdf');
+    }
+    //END MAINTENANCE
+
+    //PENGHAPUSAN
+    public function goLaporanPenghapusan()
+    {
+
+        $penghapusans = DB::table('penghapusans')
+            ->select('*')
+            ->get();
+
+
+        return view('petugas.layout.laporan.laporan-penghapusan')->with([
+            'title' => 'Laporan Data Penghapusan',
+            'active' => 'Laporan Data Penghapusan',
+            'open' => 'yes-3',
+            'penghapusans' => $penghapusans,
+            'requests' => null
+
+        ]);
+    }
+    public function goLaporanPenghapusanFilter(Request $request)
+    {
+        // Jika $dates tidak ada atau kosong, tetapkan nilai default sebagai string kosong
+        // $filter = urldecode($filter ?? '');
+
+        $date = $request->query('date');
+        $role = $request->query('role');
+
+
+        if ($role == "koordinator" || $role == "super_user") {
+            if ($role == "koordinator") {
+                $petugas = DB::table('users')->where('role', 'petugas')->get();
+            } else {
+                $petugas = DB::table('users')->where('role', $role)->get();
+            }
+        } else {
+            $dateArray = explode('~', $date);
+
+            $tanggalPertama = $dateArray[0] ?? null;
+            $tanggalKedua = $dateArray[1] ?? null;
+
+            if ($role == "koordinator") {
+                $role = "petugas";
+            }
+
+            // dd($dateArray);
+
+            // // Validasi bahwa kedua tanggal ada
+            // if ($tanggalPertama && $tanggalKedua) {
+            //     // Query dengan whereBetween
+            //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+            // } elseif ($tanggalPertama) {
+            //     // Query jika hanya tanggal pertama yang ada
+            //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+            // } elseif ($tanggalKedua) {
+            //     // Query jika hanya tanggal kedua yang ada
+            //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+            // } else {
+            //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+            //     $petugas = User::all();
+            // }
+
+            $query = User::query();
+
+            if ($tanggalPertama && $tanggalKedua && $role) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+            } else if ($tanggalPertama && $tanggalKedua) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+            } elseif ($tanggalPertama && $role) {
+                $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+            } elseif ($tanggalPertama) {
+                $query->where('created_at', '>=', $tanggalPertama);
+            } elseif ($tanggalKedua && $role) {
+                $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+            } elseif ($tanggalKedua) {
+                $query->where('created_at', '<=', $tanggalKedua);
+            }
+            // dd($query);
+
+            // if ($role) {
+            //     $query->where('role', $role);
+            //     dd($query);
+            // }
+
+            $petugas = $query->get();
+
+            // $petugas = DB::table('users')
+            // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+            // ->get();
+        }
+
+
+        return view('petugas.layout.laporan.laporan-petugas')->with([
+            'title' => 'Laporan Data Petugas',
+            'active' => 'Laporan Data Petugas',
+            'open' => 'yes-3',
+            'petugass' => $petugas,
+            'requests' => $request
+
+        ]);
+    }
+    public function goLaporanPenghapusanPdf(Request $request)
+    {
+        // if ($request->input('date') == null && $request->input('role') == null) {
+        //     $data = [
+        //         'petugass' => User::all(),
+        //     ];
+        // } else {
+
+        //     $date = $request->input('date');
+        //     $role = $request->input('role');
+
+
+        //     if ($role == "koordinator" || $role == "super_user") {
+        //         if ($role == "koordinator") {
+        //             $petugas = DB::table('users')->where('role', 'petugas')->get();
+        //         } else {
+        //             $petugas = DB::table('users')->where('role', $role)->get();
+        //         }
+        //     } else {
+        //         $dateArray = explode('~', $date);
+
+        //         $tanggalPertama = $dateArray[0] ?? null;
+        //         $tanggalKedua = $dateArray[1] ?? null;
+
+        //         if ($role == "koordinator") {
+        //             $role = "petugas";
+        //         }
+
+        //         // dd($dateArray);
+
+        //         // // Validasi bahwa kedua tanggal ada
+        //         // if ($tanggalPertama && $tanggalKedua) {
+        //         //     // Query dengan whereBetween
+        //         //     $petugas = User::whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->get();
+        //         // } elseif ($tanggalPertama) {
+        //         //     // Query jika hanya tanggal pertama yang ada
+        //         //     $petugas = User::where('created_at', '>=', $tanggalPertama)->get();
+        //         // } elseif ($tanggalKedua) {
+        //         //     // Query jika hanya tanggal kedua yang ada
+        //         //     $petugas = User::where('created_at', '<=', $tanggalKedua)->get();
+        //         // } else {
+        //         //     // Tidak ada tanggal, ambil semua data atau sesuai kebutuhan
+        //         //     $petugas = User::all();
+        //         // }
+
+        //         $query = User::query();
+
+        //         if ($tanggalPertama && $tanggalKedua && $role) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role);
+        //         } else if ($tanggalPertama && $tanggalKedua) {
+        //             $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+        //         } elseif ($tanggalPertama && $role) {
+        //             $query->where('created_at', '>=', $tanggalPertama)->where('role', $role);
+        //         } elseif ($tanggalPertama) {
+        //             $query->where('created_at', '>=', $tanggalPertama);
+        //         } elseif ($tanggalKedua && $role) {
+        //             $query->where('created_at', '<=', $tanggalKedua)->where('role', $role);
+        //         } elseif ($tanggalKedua) {
+        //             $query->where('created_at', '<=', $tanggalKedua);
+        //         }
+        //         // dd($query);
+
+        //         // if ($role) {
+        //         //     $query->where('role', $role);
+        //         //     dd($query);
+        //         // }
+
+        //         $petugas = $query->get();
+
+        //         // $petugas = DB::table('users')
+        //         // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
+        //         // ->get();
+        //     }
+
+        // $data = [$petugas];
+
+
+
+
+        $detail_barang = DB::table('detail_barangs')
+            ->join('pengadaans', 'detail_barangs.no_pengadaan', '=', 'pengadaans.no_pengadaan')
+            ->select('pengadaans.tanggal_pengadaan', 'detail_barangs.*')
+            ->get();
+
+
+        // dd($keranjang);
+
+        if ($request->query('no_penghapusan')) {
+            $penghapusans = penghapusan::select('*')
+                ->where('no_penghapusan', '=', $request->query('no_penghapusan'))
+                ->get();
+        } else {
+            $penghapusans = penghapusan::select('*')
+                // ->where('pengadaans.no_pengadaan', '=', $request->query('no_pengadaan'))
+                ->get();
+        }
+
+
+        $data = [
+            // 'pegawais' => $petugas,
+            // 'assets' => $kategori_barang,
+            'penghapusans' => $penghapusans
+        ];
+        // }
+        $pdf = Pdf::loadView('petugas.layout.laporan.laporan-penghapusan-pdf', $data)->setPaper('a4', 'portrait');
+        // return $pdf->download('invoice.pdf');
+        return $pdf->stream('laporan-data-penghapusan.pdf');
+    }
+    //END PENGHAPUSAN
 
 
     //AKTIVA

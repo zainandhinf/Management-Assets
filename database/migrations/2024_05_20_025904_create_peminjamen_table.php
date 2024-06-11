@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('tanggal_kembali');
             $table->string('id_pegawai');
             $table->string('status_peminjaman');
-            $table->string('keterangan');
+            $table->text('keterangan');
             $table->timestamps();
         });
     }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('no_ruangan')->unique();
             $table->string('ruangan');
             $table->text('lokasi');
+            $table->string('id_departemen');
             $table->integer('kapasitas');
             // $table->string('foto_ruangan');
             $table->string('tipe_ruangan');
