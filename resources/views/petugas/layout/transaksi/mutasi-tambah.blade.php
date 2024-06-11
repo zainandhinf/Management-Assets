@@ -129,19 +129,21 @@
                         ->where('detail_mutasis.kode_barcode', '=', $keranjang->kode_barcode)
                         ->first();
 
+
                     if ($cek == null) {
                         $penempatan = DB::table('detail_penempatans')
                             ->join('penempatans', 'penempatans.no_penempatan', '=', 'detail_penempatans.no_penempatan')
                             ->where('detail_penempatans.kode_barcode', '=', $keranjang->kode_barcode)
                             ->first();
 
-                        $lokasi = DB::table('penempatans')
+
+                            $lokasi = DB::table('penempatans')
                             ->join(
                                 'detail_penempatans',
                                 'penempatans.no_penempatan',
                                 '=',
                                 'detail_penempatans.no_penempatan',
-                            )
+                                )
                             ->join('ruangans', 'penempatans.no_ruangan', '=', 'ruangans.no_ruangan')
                             ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
                             ->first();
@@ -175,7 +177,9 @@
                     <td>{{ $keranjang->merk }}, {{ $keranjang->spesifikasi }}</td>
                     {{-- <td>{{ $keranjang->jenis_pengadaan }}</td> --}}
                     <td>{{ $keranjang->kondisi }}</td>
-                    <td>{{ $keranjang->status }}</td>
+                    @if($keranjang->status == "Sudah Ditempatkan")
+                    <td>{{ $keranjang->status }} <br> (Siap Dipindahkan)</td>
+                    @endif
                     <td>{{ $lokasi->ruangan }}</td>
                     {{-- <td>Rp. {{ number_format($keranjang->harga) }}</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}

@@ -275,7 +275,7 @@
                     <div class="modal-footer">
                         <div class="w-100">
                             <div class="row">
-                                <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal"
+                                <div class="col"><button class="btn w-100 mb-2" data-bs-dismiss="modal" onclick="refresh()"
                                         aria-label="Close">
                                         Cancel
                                     </button></div>
@@ -283,6 +283,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <input type="hidden" name="id_detail" value="{{ $barang->id }}">
+                                    <input type="hidden" name="kode_barcode" value="{{ $barang->kode_barcode }}">
                                     {{-- <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
                                     <button class="btn btn-danger w-100">
                                         Yakin
@@ -432,5 +433,9 @@
         $(document).ready(function() {
             $('#data-tables-keranjang').DataTable();
         });
+
+        function refresh() {
+            location.reload();
+        }
     </script>
 @endsection

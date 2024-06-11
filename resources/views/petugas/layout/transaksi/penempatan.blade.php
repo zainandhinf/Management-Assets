@@ -31,6 +31,7 @@
             @endphp
             @foreach ($data_penempatans as $penempatan)
                 @php
+                // dd($penempatan);
                     $lokasi = DB::table('ruangans')->select('*')->where('no_ruangan','=',$penempatan->no_ruangan)->first();
                     // dd($lokasi);
                     if ($penempatan->user_id == null) {
@@ -64,11 +65,11 @@
                     @endif
                     <td>{{ $penempatan->keterangan }}</td>
                     <td>
-                        <button data-bs-toggle="modal" data-bs-target="#showdata{{ $penempatan->id }}"
+                        <button data-bs-toggle="modal" data-bs-target="#showdata{{ $penempatan->no_penempatan }}"
                             class="btn btn-primary mt-1">
                             <i class="fa fa-eye"></i>
                         </button>
-                        <button data-bs-toggle="modal" data-bs-target="#deletePenempatan{{ $penempatan->id }}"
+                        <button data-bs-toggle="modal" data-bs-target="#deletePenempatan{{ $penempatan->no_penempatan }}"
                             class="btn btn-danger mt-1">
                             <i class="fa fa-trash"></i>
                         </button>
@@ -189,6 +190,7 @@
                     'detail_barangs.spesifikasi',
                     'detail_barangs.nomor_kodifikasi'
                 )
+                ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
                 ->get();
 
                 // dd($detail_barangs);
@@ -203,7 +205,7 @@
 
 
         @endphp
-        <div class="modal modal-blur fade" id="showdata{{ $penempatan->id }}" tabindex="-1" role="dialog"
+        <div class="modal modal-blur fade" id="showdata{{ $penempatan->no_penempatan }}" tabindex="-1" role="dialog"
             aria-hidden="true" style="font-size: 14px;">
             <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
                 <div class="modal-content">
@@ -240,6 +242,8 @@
                             @endphp
                             @foreach ($detail_barangs as $detail_barang)
                                 @php
+                            // dd($detail_barang);
+
                                     if ($detail_barang->user_id == null) {
                                         $pengguna = 'Tidak ada pengguna';
                                     } else {
@@ -279,7 +283,7 @@
                                         style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button> --}}
                                         <a href="/print/barcode?barcode={{ $detail_barang->kode_barcode }}" target="blank" class="btn btn-warning mt-1"><i
                                             class="fa-solid fa-barcode"></i></a>
-                                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $detail_barang->id }}"
+                                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $detail_barang->kode_barcode }}"
                                             class="btn btn-danger mt-1" onclick="dnonemodal({{ $penempatan->id }})">
                                             <i class="fa fa-trash"></i>
                                         </button>
@@ -296,11 +300,12 @@
 
  {{-- modal delete data detail --}}
 
-    @foreach ($barangs as $detail_barang)
+    @foreach ($barangs as $barang)
     @php
+    // dd($detail_barang);
      $brg = DB::table('detail_barangs')
                     ->join('detail_penempatans', 'detail_penempatans.kode_barcode', '=', 'detail_barangs.kode_barcode')
-                    ->where('detail_barangs.kode_barcode', '=', $detail_barang->kode_barcode)
+                    ->where('detail_barangs.kode_barcode', '=', $barang->kode_barcode)
                     ->select('detail_barangs.merk', 'detail_penempatans.no_penempatan', 'detail_barangs.kode_barcode')
                     ->first();
 
@@ -313,7 +318,7 @@
     @endphp
     @if($brg != null)
 
-        <div class="modal modal-blur fade" id="deletedata{{ $detail_barang->id }}" tabindex="-1" role="dialog"
+        <div class="modal modal-blur fade" id="deletedata{{ $barang->kode_barcode }}" tabindex="-1" role="dialog"
             aria-hidden="true">
             <div class="modal-dialog w-50 modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -342,7 +347,7 @@
                                 <form action="/deletedetailpenempatan" method="post">
                                     @csrf
                                     @method('DELETE')
-                                    <input type="hidden" name="id_detail" value="{{ $detail_barang->id }}">
+                                    <input type="hidden" name="id_detail" value="{{ $barang->id }}">
                                     <input type="hidden" name="no_penempatan" value="{{ $brg->no_penempatan }}">
                                     <input type="hidden" name="kode_barcode" value="{{ $brg->kode_barcode }}">
                                     {{-- <input type="hidden" name="no_keranjang" value="{{ $keranjang->no_keranjang }}"> --}}
@@ -366,7 +371,7 @@
     @endforeach
     {{-- end modal view data --}}
 
-    {{-- modal delete Pengadaan --}}
+    {{-- modal delete PENEMPATAN --}}
     @foreach ($penempatans as $penempatan)
     @php
           $room = DB::table('penempatans')
@@ -375,7 +380,7 @@
                             ->select('ruangans.ruangan', 'penempatans.tanggal_penempatan')
                             ->first();
     @endphp
-    <div class="modal modal-blur fade" id="deletePenempatan{{ $penempatan->id }}" tabindex="-1" role="dialog"
+    <div class="modal modal-blur fade" id="deletePenempatan{{ $penempatan->no_penempatan }}" tabindex="-1" role="dialog"
         aria-hidden="true">
         <div class="modal-dialog w-50 modal-dialog-centered" role="document">
             <div class="modal-content">
