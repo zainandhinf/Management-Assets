@@ -49,7 +49,8 @@
                     <td>No.Maintenance: <b>{{ $maintenance->no_maintenance }}</b><br> No. Barang:
                         <b>{{ $maintenance->no_barang }}</b> <br>Barcode:
                         <b>{!! DNS1D::getBarcodeHTML($maintenance->kode_barcode, 'UPCA') !!}{{ $maintenance->kode_barcode }}</b> <br>No
-                        Asset: <b>{{ $maintenance->no_asset }}</b>
+                        Asset: <b>{{ $maintenance->no_asset }}</b><br>Nomor
+                        Kodifikasi: <b>{{ $maintenance->nomor_kodifikasi }}</b>
                     </td>
                     <td>{{ $maintenance->merk }}, {{ $maintenance->spesifikasi }}</td>
                     <td>{{ $maintenance->tanggal_maintenance }}</td>
@@ -125,7 +126,8 @@
                                 {{-- <td>lorem</td> --}}
                                 <td>No Barang: <b>{{ $barang->no_barang }}</b> <br>Barcode:
                                     <b>{!! DNS1D::getBarcodeHTML($barang->kode_barcode, 'UPCA') !!}{{ $barang->kode_barcode }}</b> <br>No Asset:
-                                    <b>{{ $barang->no_asset }}</b>
+                                    <b>{{ $barang->no_asset }}</b><br>Nomor
+                                    Kodifikasi: <b>{{ $barang->nomor_kodifikasi }}</b>
                                 </td>
                                 <td>{{ $nama_barang->nama_barang }}</td>
                                 <td>{{ $barang->merk }}, {{ $barang->spesifikasi }}</td>

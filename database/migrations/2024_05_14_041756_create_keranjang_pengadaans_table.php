@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('no_barang'); //Dari Tabel Barang otomatis terisi
             $table->string('kode_barcode'); // Otomatis / Kode auto
             $table->string('no_asset'); // Diisikan oleh penginput dengan format ('KL'-'Input Sendiri'-'Input Sendiri')
+            $table->string('nomor_kodifikasi'); // Diisikan oleh penginput dengan format
             $table->string('merk'); // Barang nya Laptop Merek nya Acer jadi Laptop Acer
             // $table->string('tanggal_pengadaan'); // Pertama Kali barang ini ditempatkan dari status awalnya 'Belum Ditempatkan'
             $table->string('jenis_pengadaan'); // Pembelian - Donasi - Sumbangan - Hibah

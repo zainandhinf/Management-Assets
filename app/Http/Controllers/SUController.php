@@ -11,6 +11,7 @@ use App\Models\kategori_barang;
 use App\Models\ruangan;
 use App\Models\tipe_ruangan;
 use App\Models\barang;
+use App\Models\departemen;
 use App\Models\image_ruangan;
 use App\Models\training;
 use App\Models\detail_barang;
@@ -179,6 +180,15 @@ class SUController extends Controller
             'cek' => $cek,
             'cek_pegawai' => $cek_pegawai,
             'open' => 'no',
+        ]);
+    }
+    public function goDepartemen()
+    {
+        return view('super_user.layout.departemen')->with([
+            'title' => 'Data Departemen',
+            'active' => 'Data Departemen',
+            'departemens' => departemen::all(),
+            'open' => 'yes',
         ]);
     }
     public function goProfile()
@@ -502,7 +512,7 @@ class SUController extends Controller
             'jenis_kelamin' => 'required',
             'no_telepon' => 'nullable|max:12',
             'alamat' => 'nullable|max:255',
-            'organisasi' => 'required',
+            'id_departemen' => 'required',
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048']
         ]);
 
@@ -534,9 +544,10 @@ class SUController extends Controller
             'jenis_kelamin' => 'max:10',
             'alamat' => 'nullable|max:255',
             'no_telepon' => 'nullable|max:13',
+            'id_departemen' => 'nullable',
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ]);
-
+        
         $validatedData2 = $request->validate([
             'nik' => 'required|max:16',
             'nama_user' => 'required|max:255',
@@ -776,6 +787,7 @@ class SUController extends Controller
             'no_ruangan' => 'required|max:16|unique:ruangans',
             'ruangan' => 'required|max:255',
             'lokasi' => 'required',
+            'id_departemen' => 'required',
             'kapasitas' => 'required|numeric',
             'tipe_ruangan' => 'required',
         ]);
@@ -813,6 +825,7 @@ class SUController extends Controller
             'no_ruangan' => 'required|max:16',
             'ruangan' => 'required|max:255',
             'lokasi' => 'required',
+            'id_departemen' => 'required',
             'kapasitas' => 'required|numeric',
             'tipe_ruangan' => 'required',
         ]);
@@ -879,6 +892,54 @@ class SUController extends Controller
         $request->session()->flash('error', 'Foto ruangan telah berhasil dihapus!');
 
         return redirect('/ruangan');
+    }
+    //
+
+
+
+    //departemen
+    public function addDepartemen(Request $request)
+    {
+        $validatedData = $request->validate([
+            'no_departemen' => 'required|max:255',
+            'departemen' => 'required|max:255'
+        ]);
+
+        departemen::create($validatedData);
+
+        $request->session()->flash('success', 'Departemen baru telah ditambahkan!');
+
+        return redirect('/departemen');
+    }
+    public function editDepartemen(Request $request, kategori_barang $kategori_barangs)
+    {
+        $validatedData = $request->validate([
+            'no_departemen' => 'required|max:255',
+            'departemen' => 'required|max:255'
+        ]);
+
+        DB::table('departemens')
+            ->where('id', $request->input('id_departemen'))
+            ->update($validatedData);
+
+        $request->session()->flash('success', 'Data departemen telah berhasil diedit!');
+
+        return redirect('/departemen');
+    }
+    public function deleteDepartemen(Request $request, kategori_barang $kategori_barangs)
+    {
+        $nama_departemen = DB::table('departemens')
+            ->select('departemen')
+            ->where('id', '=', $request->input('id_departemen'))
+            ->get();
+
+        DB::table('departemens')->where('id', $request->input('id_departemen'))->delete();
+
+        $pesanFlash = "Departemen (Nama Departemen: **{$nama_departemen[0]->departemen}** ) telah berhasil dihapus!";
+
+        $request->session()->flash('error', $pesanFlash);
+
+        return redirect('/departemen');
     }
     //
 

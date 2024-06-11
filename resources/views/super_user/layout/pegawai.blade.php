@@ -17,6 +17,7 @@
 
                     {{-- <th>Alamat</th> --}}
                     <th>No Telp</th>
+                    <th>Organisasi</th>
                     {{-- <th>Foto</th> --}}
                     <th data-searchable="false">Action</th>
                 </tr>
@@ -25,6 +26,12 @@
                 $no = 1;
             @endphp
             @foreach ($pegawais as $pegawai)
+                @php
+                    $departemen = DB::table('departemens')
+                        ->select('*')
+                        ->where('id', '=', $pegawai->id_departemen)
+                        ->first();
+                @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
                     <td>
@@ -53,6 +60,7 @@
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
                     <td>{{ $pegawai->no_telepon }}</td>
+                    <td>({{ $departemen->no_departemen }}) {{ $departemen->departemen }}</td>
 
                     <td>
                         {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $pegawai->id }}"
@@ -160,11 +168,21 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <label for="name" class="col-form-label">Organisasi* :</label>
-                                    <input style="font-size: 14px;" type="text"
-                                        class="form-control @error('organisasi') is-invalid @enderror"
-                                        placeholder="Organisasi.." id="name" name="organisasi" required>
-                                    @error('organisasi')
+                                    @php
+                                        $departemens = DB::table('departemens')->select('*')->get();
+                                    @endphp
+                                    <label for="name" class="col-form-label">Departemen :</label>
+                                    <select style="font-size: 14px;"
+                                        class="form-select @error('id_departemen')
+                                        is-invalid
+                                    @enderror"
+                                        id="inputGroupSelect01" name="id_departemen">
+                                        @foreach ($departemens as $departemen)
+                                            <option value="{{ $departemen->id }}">{{ $departemen->departemen }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('id_departemen')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
@@ -290,6 +308,30 @@
                                             placeholder="No telepon.." id="name" name="no_telepon"
                                             value="{{ $pegawai->no_telepon }}">
                                         @error('no_telepon')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        @php
+                                            $departemens = DB::table('departemens')->select('*')->get();
+                                        @endphp
+                                        <label for="name" class="col-form-label">Departemen :</label>
+                                        <select style="font-size: 14px;"
+                                            class="form-select @error('id_departemen')
+                                        is-invalid
+                                    @enderror"
+                                            id="inputGroupSelect01" name="id_departemen">
+                                            @foreach ($departemens as $departemen)
+                                                @if (old('id_departemen', $pegawai->id_departemen) == $departemen->id)
+                                                    <option value="{{ $departemen->id }}" selected>
+                                                        {{ $departemen->departemen }}</option>
+                                                @else
+                                                    <option value="{{ $departemen->id }}">
+                                                        {{ $departemen->departemen }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('id_departemen')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>

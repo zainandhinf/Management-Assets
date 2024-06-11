@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('no_barang'); //Dari Tabel Barang otomatis terisi
             $table->string('kode_barcode'); // Otomatis / Kode auto
             $table->string('no_asset'); // Diisikan oleh penginput dengan format ('KL'-'Input Sendiri'-'Input Sendiri')
+            $table->string('nomor_kodifikasi')->nullable(); // Diisikan oleh penginput dengan
             $table->string('merk'); // Barang nya Laptop Merek nya Acer jadi Laptop Acer
             // $table->date('tanggal_pengadaan'); // Pertama Kali barang ini ditempatkan dari status awalnya 'Belum Ditempatkan'
             $table->string('jenis_pengadaan'); // Pembelian - Donasi - Sumbangan - Hibah
@@ -27,7 +28,7 @@ return new class extends Migration
             $table->integer('harga')->nullable(); // Rp. 20.000,00
             $table->integer('foto_barang')->nullable(); // FOTONYA
             // $table->string('kode_aktiva');
-            $table->string('keterangan')->nullable(); // Pengadaan Baru untuk Buang duit
+            $table->text('keterangan')->nullable(); // Pengadaan Baru untuk Buang duit
             $table->timestamps();
         });
     }

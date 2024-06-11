@@ -105,7 +105,8 @@
                                 {{-- <td>lorem</td> --}}
                                 <td>No Barang: <b>{{ $barang->no_barang }}</b> <br>Barcode:
                                     <b>{!! DNS1D::getBarcodeHTML($barang->kode_barcode, 'UPCA') !!}{{ $barang->kode_barcode }}</b> <br>No Asset:
-                                    <b>{{ $barang->no_asset }}</b>
+                                    <b>{{ $barang->no_asset }}</b><br>Nomor
+                                    Kodifikasi: <b>{{ $barang->nomor_kodifikasi }}</b>
                                 </td>
                                 <td>{{ $nama_barang->nama_barang }}</td>
                                 <td>{{ $barang->merk }}, {{ $barang->spesifikasi }}</td>
@@ -247,7 +248,8 @@
                                     {{-- <td>lorem</td> --}}
                                     <td>No Barang: <b>{{ $detail_penghapusan->no_barang }}</b> <br>Barcode:
                                         <b>{!! DNS1D::getBarcodeHTML($detail_penghapusan->kode_barcode, 'UPCA') !!}{{ $detail_penghapusan->kode_barcode }}</b> <br>No
-                                        Asset: <b>{{ $detail_penghapusan->no_asset }}</b>
+                                        Asset: <b>{{ $detail_penghapusan->no_asset }}</b><br>Nomor
+                                        Kodifikasi: <b>{{ $detail_penghapusan->nomor_kodifikasi }}</b>
                                     </td>
                                     <td>{{ $detail_penghapusan->merk }}, {{ $detail_penghapusan->spesifikasi }}</td>
                                     <td>{{ $detail_penghapusan->tanggal_penghapusan }}</td>

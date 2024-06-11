@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('tanggal_penempatan');
             $table->string('no_ruangan');
             $table->string('user_id')->nullable();
-            $table->string('keterangan')->nullable();
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

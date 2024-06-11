@@ -127,7 +127,8 @@
                                 {{-- <td>lorem</td> --}}
                                 <td>No Barang: <b>{{ $barang->no_barang }}</b> <br>Barcode:
                                     <b>{!! DNS1D::getBarcodeHTML($barang->kode_barcode, 'UPCA') !!}{{ $barang->kode_barcode }}</b> <br>No Asset:
-                                    <b>{{ $barang->no_asset }}</b>
+                                    <b>{{ $barang->no_asset }}</b><br>Nomor
+                                    Kodifikasi: <b>{{ $barang->nomor_kodifikasi }}</b>
                                 </td>
                                 <td>{{ $nama_barang->nama_barang }}</td>
                                 <td>{{ $barang->merk }}, {{ $barang->spesifikasi }}</td>
@@ -186,7 +187,8 @@
                     'detail_penempatans.*',
                     'detail_barangs.no_asset',
                     'detail_barangs.merk',
-                    'detail_barangs.spesifikasi'
+                    'detail_barangs.spesifikasi',
+                    'detail_barangs.nomor_kodifikasi'
                 )
                 ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
                 ->get();
@@ -263,7 +265,8 @@
                                     {{-- <td>lorem</td> --}}
                                     <td>No Barang: <b>{{ $detail_barang->no_barang }}</b> <br>Barcode:
                                         <b>{!! DNS1D::getBarcodeHTML($detail_barang->kode_barcode, 'UPCA') !!}{{ $detail_barang->kode_barcode }}</b> <br>No
-                                        Asset: <b>{{ $detail_barang->no_asset }}</b>
+                                        Asset: <b>{{ $detail_barang->no_asset }}</b><br>Nomor
+                                        Kodifikasi: <b>{{ $detail_barang->nomor_kodifikasi }}</b>
                                     </td>
                                     <td>{{ $detail_barang->merk }}, {{ $detail_barang->spesifikasi }}</td>
                                     {{-- <td>{{ $detail_barang->tanggal_penempatan }}</td> --}}

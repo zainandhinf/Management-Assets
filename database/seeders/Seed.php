@@ -56,6 +56,7 @@ class Seed extends Seeder
             'no_ruangan' =>'Ruang-211',
             'ruangan' =>'Ruang Training 211',
             'lokasi' =>'Lt. 3 Gedung Diklat, Pusat Pembelajaran',
+            'id_departemen' =>'1',
             'kapasitas' =>'2',
             'tipe_ruangan' =>'1',
         ]);
@@ -63,6 +64,7 @@ class Seed extends Seeder
             'no_ruangan' =>'R-212',
             'ruangan' =>'Ruang Training 212',
             'lokasi' =>'Lt. 3 Gedung Diklat, Pusat Pembelajaran',
+            'id_departemen' =>'2',
             'kapasitas' =>'36',
             'tipe_ruangan' =>'1',
         ]);
@@ -73,7 +75,7 @@ class Seed extends Seeder
             'alamat' =>'Bandung, JL. Braga No. 10',
             'no_telepon' =>'0812345678910',
             'foto' =>'',
-            'organisasi' =>'IT5000',
+            'id_departemen' =>'1',
         ]);
         DB::table('pegawais')->insert([
             'nik' =>'2222',
@@ -82,7 +84,7 @@ class Seed extends Seeder
             'alamat' =>'Bandung, JL. Asia Afrika No. 11',
             'no_telepon' =>'088811112234',
             'foto' =>'',
-            'organisasi' =>'UI2500',
+            'id_departemen' =>'2',
 
         ]);
         DB::table('pegawais')->insert([
@@ -92,7 +94,7 @@ class Seed extends Seeder
             'alamat' =>'Bandung, JL. Asia Afrika No. 12',
             'no_telepon' =>'081123456789',
             'foto' =>'',
-            'organisasi' =>'SC7000',
+            'id_departemen' =>'1',
 
         ]);
         DB::table('pegawais')->insert([
@@ -102,7 +104,17 @@ class Seed extends Seeder
             'alamat' =>'Bandung, JL. Asia Afrika No. 14',
             'no_telepon' =>'081243546576',
             'foto' =>'',
-            'organisasi' =>'HD3000',
+            'id_departemen' =>'2',
+
+        ]);
+        DB::table('departemens')->insert([
+            'no_departemen' =>'HD3000',
+            'departemen' =>'Departemen Pusat Pembelajaran',
+
+        ]);
+        DB::table('departemens')->insert([
+            'no_departemen' =>'IT3000',
+            'departemen' =>'Departemen IT',
 
         ]);
 

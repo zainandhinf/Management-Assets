@@ -14,6 +14,7 @@
                         <th>No Ruangan</th>
                         <th>Ruangan</th>
                         <th>Lokasi</th>
+                        <th>Departemen</th>
                         <th>Kapasitas</th>
                         <th>Foto Ruangan</th>
                         <th>Tipe Ruangan</th>
@@ -29,6 +30,10 @@
                             ->select('nama_tipe')
                             ->where('id', '=', $ruangan->tipe_ruangan)
                             ->get();
+                        $departemen = DB::table('departemens')
+                            ->select('*')
+                            ->where('id', '=', $ruangan->id_departemen)
+                            ->first();
                         $image_ruangan = DB::table('image_ruangans')
                             ->select('image')
                             ->where('no_ruangan', '=', $ruangan->no_ruangan)
@@ -40,6 +45,7 @@
                         <td>{{ $ruangan->no_ruangan }}</td>
                         <td>{{ $ruangan->ruangan }}</td>
                         <td>{{ $ruangan->lokasi }}</td>
+                        <td>({{ $departemen->no_departemen }}) {{ $departemen->departemen }}</td>
                         <td>{{ $ruangan->kapasitas }}</td>
                         <td>
                             <div class="d-flex flex-column image-ruangan">
@@ -140,6 +146,25 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
+                                    @php
+                                        $departemens = DB::table('departemens')->select('*')->get();
+                                    @endphp
+                                    <label for="name" class="col-form-label">Departemen :</label>
+                                    <select style="font-size: 14px;"
+                                        class="form-select @error('id_departemen')
+                                        is-invalid
+                                    @enderror"
+                                        id="inputGroupSelect01" name="id_departemen">
+                                        @foreach ($departemens as $departemen)
+                                            <option value="{{ $departemen->id }}">{{ $departemen->departemen }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('id_departemen')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -210,7 +235,7 @@
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title fs-6">Tambah {{ $title }}</h5>
+                        <h5 class="modal-title fs-6">Edit {{ $title }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/editruangan" method="post">
@@ -252,6 +277,30 @@
               @enderror" placeholder="Lokasi.."
                                             id="name" name="lokasi" required>{{ old('lokasi', $ruangan->lokasi) }}</textarea>
                                         @error('lokasi')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                        @php
+                                            $departemens = DB::table('departemens')->select('*')->get();
+                                        @endphp
+                                        <label for="name" class="col-form-label">Departemen :</label>
+                                        <select style="font-size: 14px;"
+                                            class="form-select @error('id_departemen')
+                                        is-invalid
+                                    @enderror"
+                                            id="inputGroupSelect01" name="id_departemen">
+                                            @foreach ($departemens as $departemen)
+                                                @if (old('id_departemen', $ruangan->id_departemen) == $departemen->id)
+                                                    <option value="{{ $departemen->id }}" selected>
+                                                        {{ $departemen->departemen }}</option>
+                                                @else
+                                                    <option value="{{ $departemen->id }}">
+                                                        {{ $departemen->departemen }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('id_departemen')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>

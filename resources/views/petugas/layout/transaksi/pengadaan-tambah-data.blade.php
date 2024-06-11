@@ -49,6 +49,12 @@
                         <input type="text" placeholder="No asset.." name="no_asset" class="form-control mb-2"
                             value="" required>
                     </div>
+                    
+                    <label for="">Nomor Kodifikasi</label><br>
+                    <div class="input-group">
+                        <input type="text" placeholder="Nomor kodifikasi..(opsional)" name="nomor_kodifikasi" class="form-control mb-2"
+                            value="" required>
+                    </div>
 
                     <label for="">Merk</label><br>
                     <input type="text" name="merk" class="form-control mb-2" value="" placeholder="Merk.."

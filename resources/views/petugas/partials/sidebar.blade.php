@@ -93,6 +93,11 @@
                             <i class="fa-solid fa-door-closed"></i>Ruangan
                         </a>
                     </li>
+                    <li class="nav-item mb-1">
+                        <a href="/departemen-koordinator" class="{{ $title === 'Data Departemen' ? 'active' : '' }}">
+                            <i class="fa-solid fa-building"></i>Departemen
+                        </a>
+                    </li>
                 </ul>
             </li>
 
@@ -232,7 +237,7 @@
                             class="{{ $active === 'data' ? 'active-custom' : '' }}">
                             <div class="customtoogle">
                                 <i class="fa-solid fa-share-from-square ms-1"></i>
-                                Data Master {{-- Jangan Panjang Panhjang ntar rusak --}}
+                                Laporan Data Master {{-- Jangan Panjang Panhjang ntar rusak --}}
                             </div>
                             <i class="fa-solid fa-chevron-down down mt-1"></i>
                         </button>
@@ -279,7 +284,7 @@
                             class="{{ $active === 'data' ? 'active-custom' : '' }}">
                             <div class="customtoogle">
                                 <i class="fa-solid fa-share-from-square ms-1"></i>
-                                Data Transaksi {{-- Jangan Panjang Panhjang ntar rusak --}}
+                                Laporan Data Transaksi {{-- Jangan Panjang Panhjang ntar rusak --}}
                             </div>
                             <i class="fa-solid fa-chevron-down down mt-1"></i>
                         </button>
@@ -295,6 +300,41 @@
                                     class="{{ $title === 'Laporan Data Pengadaan' ? 'active' : '' }}">
                                     <i class="fa-solid fa-cart-plus"></i>
                                     Laporan Data Pengadaan
+                                </a>
+                            </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-penempatan"
+                                    class="{{ $title === 'Laporan Data Penempatan' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                    Laporan Data Penempatan
+                                </a>
+                            </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-mutasi"
+                                    class="{{ $title === 'Laporan Data Mutasi' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-building-circle-arrow-right"></i>
+                                    Laporan Data Mutasi
+                                </a>
+                            </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-peminjaman"
+                                    class="{{ $title === 'Laporan Data Peminjaman' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-handshake"></i>
+                                    Laporan Data Peminjaman
+                                </a>
+                            </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-maintenance"
+                                    class="{{ $title === 'Laporan Data Maintenance' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    Laporan Data Maintenance
+                                </a>
+                            </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-penghapusan"
+                                    class="{{ $title === 'Laporan Data Penghapusans' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-ban"></i>
+                                    Laporan Data Penghapusan
                                 </a>
                             </li>
                         </ul>

@@ -14,6 +14,7 @@ class keranjang_pengadaan extends Model
         'no_barang',
         'kode_barcode',
         'no_asset',
+        'nomor_kodifikasi',
         'merk',
         'jenis_pengadaan',
         'spesifikasi',

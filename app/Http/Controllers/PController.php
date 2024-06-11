@@ -10,6 +10,7 @@ use App\Models\pegawai;
 use App\Models\kategori_barang;
 use App\Models\ruangan;
 use App\Models\tipe_ruangan;
+use App\Models\departemen;
 use App\Models\barang;
 use App\Models\image_ruangan;
 use App\Models\training;
@@ -157,6 +158,15 @@ class PController extends Controller
             'active' => 'Jadwal Training',
             'open' => 'no',
 
+        ]);
+    }
+    public function goDepartemen()
+    {
+        return view('petugas.layout.departemen')->with([
+            'title' => 'Data Departemen',
+            'active' => 'Data Departemen',
+            'departemens' => departemen::all(),
+            'open' => 'yes-1',
         ]);
     }
     public function goProfile()
@@ -573,56 +583,57 @@ class PController extends Controller
 
         $na = $request->input('kode_awal') . '-' . $request->input('no_asset') . '-LC';
         $cek = DB::table('keranjang_pengadaans')
-                    ->where('no_asset', '=', $na)
-                    ->count();
+            ->where('no_asset', '=', $na)
+            ->count();
         // dd($cek);
 
         if ($cek > 0) {
             $a = $request->no_asset;
-            $pesanFlash = "No. Asset: ". $a ." Sudah terdaftar! Pilih Nomor lain.";
+            $pesanFlash = "No. Asset: " . $a . " Sudah terdaftar! Pilih Nomor lain.";
             $request->session()->flash('error', $pesanFlash);
 
-        return redirect('/pengadaan-tambah');
+            return redirect('/pengadaan-tambah');
 
         } else {
 
 
-        $validatedData = $request->validate([
-            'no_pengadaan' => 'nullable',
-            'no_barang' => 'required',
-            'kode_barcode' => 'required',
-            'no_asset' => 'required|unique:keranjang_pengadaans',
-            'merk' => 'required|max:255',
-            'jenis_pengadaan' => 'required',
-            'spesifikasi' => 'required|max:255',
-            'kondisi' => 'required',
-            'status' => 'required',
-            'harga' => 'required',
-            'foto_barang' => '',
-            'keterangan' => 'max:255',
-        ]);
+            $validatedData = $request->validate([
+                'no_pengadaan' => 'nullable',
+                'no_barang' => 'required',
+                'kode_barcode' => 'required',
+                'no_asset' => 'required|unique:keranjang_pengadaans',
+                'nomor_kodifikasi' => 'required',
+                'merk' => 'required|max:255',
+                'jenis_pengadaan' => 'required',
+                'spesifikasi' => 'required|max:255',
+                'kondisi' => 'required',
+                'status' => 'required',
+                'harga' => 'required',
+                'foto_barang' => '',
+                'keterangan' => 'max:255',
+            ]);
 
-        $harga = str_replace('.', '', $request->input('harga'));
-        $validatedData['harga'] = intval($harga);
-        $validatedData['keterangan'] = 'Pengadaan barang untuk pendataan.';
+            $harga = str_replace('.', '', $request->input('harga'));
+            $validatedData['harga'] = intval($harga);
+            $validatedData['keterangan'] = 'Pengadaan barang untuk pendataan.';
 
-        $validatedData['no_asset'] = $request->input('kode_awal') . '-' . $request->input('no_asset') . '-LC';
+            $validatedData['no_asset'] = $request->input('kode_awal') . '-' . $request->input('no_asset') . '-LC';
 
-        if ($request->foto_barang == null) {
-            $validatedData['foto_barang'] = '';
+            if ($request->foto_barang == null) {
+                $validatedData['foto_barang'] = '';
 
 
-        } else {
-            $validatedData['foto_barang'] = $request->file('foto_barang')->store('fotobarang');
+            } else {
+                $validatedData['foto_barang'] = $request->file('foto_barang')->store('fotobarang');
+            }
+
+
+            keranjang_pengadaan::create($validatedData);
+
+            $request->session()->flash('success', 'Barang masuk kedalam List Pengadaan!');
+
+            return redirect('/pengadaan');
         }
-
-
-        keranjang_pengadaan::create($validatedData);
-
-        $request->session()->flash('success', 'Barang masuk kedalam List Pengadaan!');
-
-        return redirect('/pengadaan');
-    }
 
     }
 
@@ -713,8 +724,8 @@ class PController extends Controller
         $headPengadaan->tanggal_pengadaan = $request->input('tanggal_pengadaan');
         $headPengadaan->save();
 
-        DB::statement("INSERT INTO detail_barangs (no_pengadaan, no_barang, kode_barcode, no_asset, merk, jenis_pengadaan, spesifikasi, kondisi, status, harga, keterangan)
-         SELECT '$no_pengadaan', no_barang, kode_barcode, no_asset, merk, jenis_pengadaan, spesifikasi, kondisi, status, harga, keterangan FROM keranjang_pengadaans");
+        DB::statement("INSERT INTO detail_barangs (no_pengadaan, no_barang, kode_barcode, no_asset, nomor_kodifikasi, merk, jenis_pengadaan, spesifikasi, kondisi, status, harga, keterangan)
+         SELECT '$no_pengadaan', no_barang, kode_barcode, no_asset, nomor_kodifikasi, merk, jenis_pengadaan, spesifikasi, kondisi, status, harga, keterangan FROM keranjang_pengadaans");
 
         DB::table('keranjang_pengadaans')->truncate();
 
@@ -876,31 +887,31 @@ class PController extends Controller
             DB::table('detail_barangs')
                 ->where('no_pengadaan', $request->no_pengadaan)
                 ->delete();
-        // }
-        // $np = DB::table('detail_barangs')
-        //     ->where('no_pengadaan', '=', $request->input('no_pengadaan'))
-        //     ->select('*')
-        //     ->first();
+            // }
+            // $np = DB::table('detail_barangs')
+            //     ->where('no_pengadaan', '=', $request->input('no_pengadaan'))
+            //     ->select('*')
+            //     ->first();
             // dd($request->input('no_pengadaan'));
 
-        DB::table('detail_barangs')->where('no_pengadaan', $request->input('no_pengadaan'))->delete();
-        DB::table('pengadaans')->where('no_pengadaan', $request->input('no_pengadaan'))->delete();
+            DB::table('detail_barangs')->where('no_pengadaan', $request->input('no_pengadaan'))->delete();
+            DB::table('pengadaans')->where('no_pengadaan', $request->input('no_pengadaan'))->delete();
 
-        $pesanFlash = "Semua Barang (No. Pengadaan: *{$request->no_pengadaan} ) telah berhasil dihapus!";
+            $pesanFlash = "Semua Barang (No. Pengadaan: *{$request->no_pengadaan} ) telah berhasil dihapus!";
 
-        $request->session()->flash('error', $pesanFlash);
+            $request->session()->flash('error', $pesanFlash);
 
-        return redirect('/pengadaan');
-    } else {
+            return redirect('/pengadaan');
+        } else {
 
-        $pesanFlash = "Keyword tidak Cocok! GAGAL Menghapus Data..";
+            $pesanFlash = "Keyword tidak Cocok! GAGAL Menghapus Data..";
 
-        $request->session()->flash('error', $pesanFlash);
+            $request->session()->flash('error', $pesanFlash);
 
-        return redirect('/pengadaan');
+            return redirect('/pengadaan');
 
 
-    }
+        }
 
     }
 
@@ -972,8 +983,8 @@ class PController extends Controller
     {
 
         $cekKeranjang = DB::table('keranjang_penempatans')
-                            ->select('*')
-                            ->count();
+            ->select('*')
+            ->count();
 
         if ($cekKeranjang == 0) {
 
@@ -984,62 +995,62 @@ class PController extends Controller
         } else {
 
 
-        $cek = DB::table('penempatans')
-                    ->where('no_penempatan', '=', $request->no_penempatan)
-                    ->count();
+            $cek = DB::table('penempatans')
+                ->where('no_penempatan', '=', $request->no_penempatan)
+                ->count();
 
-                    // dd($cek);
+            // dd($cek);
 
-        if ($cek > 0) {
-            $pesanFlash = "Data dengan (No. Penempatan: *{$request->no_penempatan} ) Sudah ada sebelumnya!";
+            if ($cek > 0) {
+                $pesanFlash = "Data dengan (No. Penempatan: *{$request->no_penempatan} ) Sudah ada sebelumnya!";
 
-            $request->session()->flash('error', $pesanFlash);
+                $request->session()->flash('error', $pesanFlash);
 
-            return redirect('/penempatan-tambah');
-        } else {
+                return redirect('/penempatan-tambah');
+            } else {
 
 
-        $validatedData = $request->validate([
-            'no_penempatan' => '',
-            'no_ruangan' => '',
-            'user_id' => '',
-            'keterangan' => 'nullable',
-        ]);
+                $validatedData = $request->validate([
+                    'no_penempatan' => '',
+                    'no_ruangan' => '',
+                    'user_id' => '',
+                    'keterangan' => 'nullable',
+                ]);
 
-        if ($request->keterangan == null) {
+                if ($request->keterangan == null) {
 
-            $validatedData['keterangan'] = 'Penempatan baru.';
+                    $validatedData['keterangan'] = 'Penempatan baru.';
 
-        }
+                }
 
-        $validatedData['tanggal_penempatan'] = now()->format('Y-m-d');
+                $validatedData['tanggal_penempatan'] = now()->format('Y-m-d');
 
-        $kode_barcodes = DB::table('keranjang_penempatans')->select('kode_barcode')->get();
+                $kode_barcodes = DB::table('keranjang_penempatans')->select('kode_barcode')->get();
 
-        penempatan::create($validatedData);
+                penempatan::create($validatedData);
 
-        $validatedDataStatus['status'] = "Sudah Ditempatkan";
+                $validatedDataStatus['status'] = "Sudah Ditempatkan";
 
-        // dd($validatedDataStatus['status']);
+                // dd($validatedDataStatus['status']);
 
-        foreach ($kode_barcodes as $kode_barcode) {
-            DB::table('detail_barangs')
-                ->where('kode_barcode', $kode_barcode->kode_barcode)
-                ->update($validatedDataStatus);
-        }
+                foreach ($kode_barcodes as $kode_barcode) {
+                    DB::table('detail_barangs')
+                        ->where('kode_barcode', $kode_barcode->kode_barcode)
+                        ->update($validatedDataStatus);
+                }
 
-        DB::statement("INSERT INTO detail_penempatans (no_penempatan, no_barang, kode_barcode)
+                DB::statement("INSERT INTO detail_penempatans (no_penempatan, no_barang, kode_barcode)
          SELECT '$request->no_penempatan', no_barang, kode_barcode FROM keranjang_penempatans");
 
-        DB::table('keranjang_penempatans')->truncate();
+                DB::table('keranjang_penempatans')->truncate();
 
 
-        $request->session()->flash('success', 'Penempatan Baru telah berhasil ditambahkan!');
+                $request->session()->flash('success', 'Penempatan Baru telah berhasil ditambahkan!');
 
-        return redirect('/penempatan');
-    }
+                return redirect('/penempatan');
+            }
 
-    }
+        }
 
     }
 
@@ -1116,20 +1127,20 @@ class PController extends Controller
             ->select('detail_barangs.merk', 'detail_penempatans.*')
             ->first();
 
-            // dd($data);
+        // dd($data);
 
         $room = DB::table('penempatans')
-                    ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
-                    ->where('penempatans.no_penempatan', '=', $request->no_penempatan)
-                    ->select('penempatans.no_ruangan')
-                    ->first();
+            ->join('detail_penempatans', 'detail_penempatans.no_penempatan', '=', 'penempatans.no_penempatan')
+            ->where('penempatans.no_penempatan', '=', $request->no_penempatan)
+            ->select('penempatans.no_ruangan')
+            ->first();
 
         $roomName = DB::table('ruangans')
-                            ->join('penempatans', 'penempatans.no_ruangan', '=', 'ruangans.no_ruangan')
-                            ->where('ruangans.no_ruangan', '=', $room->no_ruangan)
-                            ->select('ruangans.ruangan')
-                            ->first();
-            // dd($roomName);
+            ->join('penempatans', 'penempatans.no_ruangan', '=', 'ruangans.no_ruangan')
+            ->where('ruangans.no_ruangan', '=', $room->no_ruangan)
+            ->select('ruangans.ruangan')
+            ->first();
+        // dd($roomName);
 
         DB::table('detail_penempatans')->where('kode_barcode', $request->input('kode_barcode'))->delete();
 
@@ -1137,8 +1148,8 @@ class PController extends Controller
 
 
         DB::table('detail_barangs')
-                ->where('kode_barcode', $request->kode_barcode)
-                ->update($updateStatus);
+            ->where('kode_barcode', $request->kode_barcode)
+            ->update($updateStatus);
 
         $pesanFlash = "Barang (Merk: *{$data->merk} ) BERHASIL dihapus dari Ruangan: {$roomName->ruangan}!";
 
@@ -1158,6 +1169,7 @@ class PController extends Controller
         // ->where('no_pengadaan', '=', $request->no_pengadaan)
         // ->select('no_pengadaan')
         // ->get();
+
         $detail = DB::table('detail_penempatans')
         // ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'detail_penempatans.kode_barcode')
         ->where('no_penempatan', '=', $request->no_penempatan)
@@ -1179,18 +1191,18 @@ class PController extends Controller
             // DB::table('detail_barangs')
             //     ->where('no_pengadaan', $request->no_pengadaan)
             //     ->delete();
-        // }
-        // $np = DB::table('detail_barangs')
-        //     ->where('no_pengadaan', '=', $request->input('no_pengadaan'))
-        //     ->select('*')
-        //     ->first();
+            // }
+            // $np = DB::table('detail_barangs')
+            //     ->where('no_pengadaan', '=', $request->input('no_pengadaan'))
+            //     ->select('*')
+            //     ->first();
             // dd($request->input('no_pengadaan'));
 
             // dd($detail);
         DB::table('detail_penempatans')->where('no_penempatan', $request->input('no_penempatan'))->delete();
         DB::table('penempatans')->where('no_penempatan', $request->input('no_penempatan'))->delete();
 
-        $updateStatus['status'] = "Belum Ditempatkan";
+            $updateStatus['status'] = "Belum Ditempatkan";
 
 
             foreach ($detail as $kode_barcode) {
@@ -1199,21 +1211,21 @@ class PController extends Controller
                         ->update($updateStatus);
             }
 
-        $pesanFlash = "Semua Penempatan (No. Penempatan: *{$request->no_penempatan} ) telah berhasil dihapus!";
+            $pesanFlash = "Semua Penempatan (No. Penempatan: *{$request->no_penempatan} ) telah berhasil dihapus!";
 
-        $request->session()->flash('error', $pesanFlash);
+            $request->session()->flash('error', $pesanFlash);
 
-        return redirect('/penempatan');
-    } else {
+            return redirect('/penempatan');
+        } else {
 
-        $pesanFlash = "Keyword tidak Cocok! GAGAL Menghapus Data..";
+            $pesanFlash = "Keyword tidak Cocok! GAGAL Menghapus Data..";
 
-        $request->session()->flash('error', $pesanFlash);
+            $request->session()->flash('error', $pesanFlash);
 
-        return redirect('/penempatan');
+            return redirect('/penempatan');
 
 
-    }
+        }
 
     }
     //End Transaksi Penempatan
@@ -1278,6 +1290,88 @@ class PController extends Controller
     public function addMutasi(Request $request)
     {
 
+        $keranjangs = DB::table('keranjang_mutasis')
+            ->join('detail_barangs', 'detail_barangs.kode_barcode', '=', 'keranjang_mutasis.kode_barcode')
+            ->get();
+        // dd($keranjangs);
+        foreach ($keranjangs as $keranjang) {
+            $penempatan = DB::table('detail_penempatans')
+                ->join('penempatans', 'penempatans.no_penempatan', '=', 'detail_penempatans.no_penempatan')
+                ->where('detail_penempatans.kode_barcode', '=', $keranjang->kode_barcode)
+                ->first();
+            $mutasi = DB::table('detail_mutasis')
+                ->join('mutasis', 'mutasis.no_mutasi', '=', 'detail_mutasis.no_mutasi')
+                ->where('detail_mutasis.kode_barcode', '=', $keranjang->kode_barcode)
+                ->first();
+            $lokasidetailbarang = DB::table('penempatans')
+                ->join('detail_penempatans', 'penempatans.no_penempatan', '=', 'detail_penempatans.no_penempatan')
+                ->where('detail_penempatans.kode_barcode', '=', $keranjang->kode_barcode)
+                ->first();
+
+            if ($mutasi == null) {
+                $lokasi = DB::table('penempatans')
+                ->join(
+                    'detail_penempatans',
+                    'penempatans.no_penempatan',
+                    '=',
+                    'detail_penempatans.no_penempatan',
+                )->join(
+                    'ruangans',
+                    'penempatans.no_ruangan',
+                    '=',
+                    'ruangans.no_ruangan',
+                )
+                ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
+                ->first();
+
+            // dd($request->no_ruangan);
+
+                if ($lokasi->no_ruangan == $request->no_ruangan) {
+                    $request->session()->flash('error', 'Data gagal ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+
+                    return redirect('/mutasi-tambah');
+                }
+            } else {
+                $lokasi = DB::table('penempatans')
+                ->join(
+                    'detail_penempatans',
+                    'penempatans.no_penempatan',
+                    '=',
+                    'detail_penempatans.no_penempatan',
+                )->join(
+                    'ruangans',
+                    'penempatans.no_ruangan',
+                    '=',
+                    'ruangans.no_ruangan',
+                )
+                ->where('penempatans.no_penempatan', '=', $penempatan->no_penempatan)
+                ->first();
+            $lokasibaru = DB::table('mutasis')
+                ->join(
+                    'detail_mutasis',
+                    'mutasis.no_mutasi',
+                    '=',
+                    'detail_mutasis.no_mutasi',
+                )->join(
+                    'ruangans',
+                    'mutasis.no_ruangan',
+                    '=',
+                    'ruangans.no_ruangan',
+                )
+                ->where('mutasis.no_mutasi', '=', $mutasi->no_mutasi)
+                ->first();
+
+                if ($lokasibaru->no_ruangan == $request->no_ruangan) {
+                            // $request->session()->flash('error', 'Data gagal ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+
+                            // return redirect('/mutasi-tambah');
+                            if ($lokasi->no_ruangan == $request->no_ruangan) {
+                                $request->session()->flash('error', 'Data GAGAL ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+
+                                return redirect('/mutasi-tambah');
+                            }
+                        }
+                    }
 
 
         $keranjangs = DB::table('keranjang_mutasis')
@@ -1290,10 +1384,28 @@ class PController extends Controller
                 ->where('detail_penempatans.kode_barcode', '=', $keranjang->kode_barcode)
                 ->first();
 
-            $mutasi = DB::table('detail_mutasis')
-                ->join('mutasis', 'mutasis.no_mutasi', '=', 'detail_mutasis.no_mutasi')
-                ->where('detail_mutasis.kode_barcode', '=', $keranjang->kode_barcode)
-                ->first();
+            //         return redirect('/mutasi-tambah');
+            //     }
+            // }
+            // }
+
+
+        }
+        //     $lokasibaru = DB::table('mutasis')
+        //         ->join(
+        //             'detail_mutasis',
+        //             'mutasis.no_mutasi',
+        //             '=',
+        //             'detail_mutasis.no_mutasi',
+        //         )->join(
+        //             'ruangans',
+        //             'mutasis.no_ruangan',
+        //             '=',
+        //             'ruangans.no_ruangan',
+        //         )
+        //         ->where('mutasis.no_mutasi', '=',
+        //          $mutasi->no_mutasi)
+        //         ->first();
 
             // dd($mutasi);
 
@@ -1382,43 +1494,7 @@ class PController extends Controller
         return redirect('/mutasi');
 
 
-        $validatedData = $request->validate([
-            'no_mutasi' => '',
-            'no_ruangan' => '',
-            'keterangan' => 'nullable',
-        ]);
 
-        if ($request->keterangan == null) {
-
-            $validatedData['keterangan'] = 'Mutasi baru.';
-
-        }
-
-        $validatedData['tanggal_mutasi'] = now()->format('Y-m-d');
-
-        // $kode_barcodes = DB::table('keranjang_mutasis')->select('kode_barcode')->get();
-
-        mutasi::create($validatedData);
-
-        // $validatedDataStatus['status'] = "Sudah Ditempatkan di " . $request->input('lokasi_penempatan');
-
-        // dd($validatedDataStatus['status']);
-
-        // foreach ($kode_barcodes as $kode_barcode) {
-        //     DB::table('detail_barangs')
-        //         ->where('kode_barcode', $kode_barcode->kode_barcode)
-        //         ->update($validatedDataStatus);
-        // }
-
-        DB::statement("INSERT INTO detail_mutasis (no_mutasi, no_barang, kode_barcode)
-         SELECT '$request->no_mutasi', no_barang, kode_barcode FROM keranjang_mutasis");
-
-        DB::table('keranjang_mutasis')->truncate();
-
-
-        $request->session()->flash('success', 'Data telah berhasil ditambahkan!');
-
-        return redirect('/mutasi');
 
 
 

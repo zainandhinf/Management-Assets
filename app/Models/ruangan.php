@@ -13,6 +13,7 @@ class ruangan extends Model
         'no_ruangan',
         'ruangan',
         'lokasi',
+        'id_departemen',
         'kapasitas',
         'tipe_ruangan',
     ];

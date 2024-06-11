@@ -25,6 +25,10 @@
                             ->select('nama_tipe')
                             ->where('id', '=', $ruangan->tipe_ruangan)
                             ->get();
+                        $departemen = DB::table('departemens')
+                            ->select('*')
+                            ->where('id', '=', $ruangan->id_departemen)
+                            ->get();
                         $image_ruangan = DB::table('image_ruangans')
                             ->select('image')
                             ->where('no_ruangan', '=', $ruangan->no_ruangan)
@@ -36,6 +40,7 @@
                         <td>{{ $ruangan->no_ruangan }}</td>
                         <td>{{ $ruangan->ruangan }}</td>
                         <td>{{ $ruangan->lokasi }}</td>
+                        <td>({{ $departemen->no_departemen }}) {{ $departemen->departemen }}</td>
                         <td>{{ $ruangan->kapasitas }}</td>
                         <td>
                             <div class="d-flex flex-column image-ruangan">
@@ -86,8 +91,8 @@
 
     {{-- modal view image --}}
     @foreach ($ruangans as $ruangan)
-        <div class="modal modal-blur fade" id="viewimg{{ $ruangan->id }}" tabindex="-1" role="dialog"
-            aria-hidden="true" style="font-size: 14px;">
+        <div class="modal modal-blur fade" id="viewimg{{ $ruangan->id }}" tabindex="-1" role="dialog" aria-hidden="true"
+            style="font-size: 14px;">
             <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                 <div class="modal-content bg-transparent">
                     <div class="modal-body d-flex justify-content-center">
@@ -124,15 +129,13 @@
                                             </button>
                                         </div>
                                     </div> --}}
-                                    @if($image_view == null)
-                                    
-                                    No Png
-                                    
+                                    @if ($image_view == null)
+                                        No Png
                                     @else
-                                    <div class="img-ruangan">
-                                        <img src="{{ asset('storage/' . $image_view->image) }}"
-                                            class="d-block img-fluid" alt="...">
-                                        {{-- <div class="delete-button-img-ruangan">
+                                        <div class="img-ruangan">
+                                            <img src="{{ asset('storage/' . $image_view->image) }}"
+                                                class="d-block img-fluid" alt="...">
+                                            {{-- <div class="delete-button-img-ruangan">
                                             <a class="btn btn-primary btn-lg text-decoration-none"
                                                 href="http://127.0.0.1:8000{{ asset('storage/' . $image_view->image) }}"
                                                 target="blank">
@@ -144,9 +147,7 @@
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </div> --}}
-                                    </div>
-
-
+                                        </div>
                                     @endif
                                 </div>
                                 @foreach ($images_view->skip(1) as $image)
