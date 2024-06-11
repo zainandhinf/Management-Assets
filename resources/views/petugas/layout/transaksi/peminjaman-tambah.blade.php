@@ -61,14 +61,20 @@
                         <td>Peminjam</td>
                         <td>
                             @php
-                                $pegawais = DB::table('pegawais')->select('*')->get();
+                                // $pegawais = DB::table('pegawais')->select('*')->get();
                                 // dd($pegawais);
+                                $pegawais = DB::table('departemens')
+                                                ->join('pegawais', 'pegawais.id_departemen', '=', 'departemens.id')
+                                                ->select('pegawais.nik', 'pegawais.nama_user', 'departemens.departemen')
+                                                ->get();
+                            // dd($pegawais);
+
                             @endphp
                             <select class="form-select" name="" id="peminjam">
                                 <option value="" selected>-- Pilih Peminjam --
                                 </option>
                                 @foreach ($pegawais as $pegawai)
-                                    <option value="{{ $pegawai->nik }}">[ {{ $pegawai->nik }} ] {{ $pegawai->nama_user }} - {{ $pegawai->organisasi }}
+                                    <option value="{{ $pegawai->nik }}">[ {{ $pegawai->nik }} ] {{ $pegawai->nama_user }} - {{ $pegawai->departemen }}
                                     </option>
                                 @endforeach
                             </select>
