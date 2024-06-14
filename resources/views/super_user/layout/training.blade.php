@@ -61,7 +61,8 @@
                                 'pegawais.nama_user',
                                 'pegawais.jenis_kelamin',
                                 'pegawais.no_telepon',
-                                'pegawais.organisasi',
+                                'pegawais.id_departemen',
+                                'departemens.departemen',
                                 'peserta_trainings.id as id_peserta',
                                 'trainings.nama_training',
                                 'trainings.id as id_training',
@@ -69,6 +70,7 @@
                             ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
                             ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
                             ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
+                            ->join('departemens', 'departemens.id', '=', 'pegawais.id_departemen')
                             ->where('trainings.id', '=', $training->id)
                             ->count();
                     @endphp
@@ -537,7 +539,7 @@
 
                                         </div>
 
-                                        
+
                                         <div style="display: none">
 
                                             <label for="name" class="col-form-label">Tanggal Training :</label>
@@ -757,7 +759,8 @@
                                         'pegawais.nama_user',
                                         'pegawais.jenis_kelamin',
                                         'pegawais.no_telepon',
-                                        'pegawais.organisasi',
+                                        'pegawais.id_departemen',
+                                        'departemens.departemen',
                                         'peserta_trainings.id as id_peserta',
                                         // 'trainings.nama_training',
                                         'trainings.id as id_training',
@@ -765,6 +768,7 @@
                                     ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
                                     ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
                                     ->join('ruangans', 'ruangans.no_ruangan', '=', 'trainings.no_ruangan')
+                                    ->join('departemens', 'departemens.id', '=', 'pegawais.id_departemen')
                                     ->where('trainings.id', '=', $training->id)
                                     ->get();
                             @endphp
@@ -794,7 +798,7 @@
                                     {{-- <td>{{ $city->id }}</td> --}}
                                     {{-- <td>lorem</td> --}}
                                     <td><img src="{{ asset('storage/' . $peserta->foto) }}"
-                                            class="rounded rounded-circle" style="width: 50px;" alt=""></td>
+                                            class="rounded rounded-circle" width="70px" height="70px" style="max-width: 70px; max-height: 70px;" alt=""></td>
                                     <td>{{ $peserta->nik }}</td>
                                     <td>{{ $peserta->nama_user }}</td>
                                     <td>

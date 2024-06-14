@@ -1463,7 +1463,7 @@ class PController extends Controller
         //             'ruangans.no_ruangan',
         //         )
         //         ->where('mutasis.no_mutasi', '=',
-        //          $mutasi->no_mutasi)
+         //          $mutasi->no_mutasi)
         //         ->first();
 
         //     // dd($request->no_ruangan);
@@ -1534,6 +1534,34 @@ class PController extends Controller
     public function addKeranjangPeminjaman(Request $request)
     {
 
+        $cekKeranjang = DB::table('keranjang_peminjamans')
+                        ->where('kode_barcode', '=', $request->kode_barcode)
+                        ->count();
+
+        $cekStatus = DB::table('detail_barangs')
+                        ->leftjoin('detail_peminjamans', 'detail_peminjamans.kode_barcode', '=', 'detail_barangs.kode_barcode')
+                        ->leftjoin('peminjamans', 'peminjamans.no_peminjaman', '=', 'detail_peminjamans.no_peminjaman')
+                        ->where('detail_barangs.kode_barcode', '=', $request->kode_barcode)
+                        ->select('peminjamans.status_peminjaman')
+                        ->first();
+
+                        // dd($cekStatus);
+
+        if ($cekKeranjang > 0) {
+
+            $request->session()->flash('error', 'Barang sudah ada di List Peminjaman!');
+
+            return redirect('/peminjaman-tambah');
+
+        } else if($cekStatus->status_peminjaman == "Dipinjam") {
+
+            $request->session()->flash('error', 'Barang Tersebut sedang Dipinjam saat ini! Pilih barang lain yang tersedia..');
+
+            return redirect('/peminjaman-tambah');
+
+
+        }else{
+
         $validatedData = $request->validate([
             'no_peminjaman' => 'required',
             'kode_barcode' => 'required',
@@ -1562,6 +1590,8 @@ class PController extends Controller
         return redirect('/peminjaman-tambah');
     }
 
+    }
+
     public function deleteKeranjangPeminjaman(Request $request)
     {
 
@@ -1584,25 +1614,39 @@ class PController extends Controller
     {
 
         // dd($request);
-        $validatedData = $request->validate([
-            'no_peminjaman' => 'required',
-            'tanggal_peminjaman' => '',
-            'tanggal_kembali' => 'required',
-            'id_pegawai' => 'requir ed',
-            'status_peminjaman' => '',
-            'keterangan' => 'nullable',
-        ]);
 
-        $nama_peminjam = DB::table('pegawais')
-            ->where('nik', '=', $request->id_pegawai)
-            ->select('nama_user')
-            ->first();
 
-        $nama = $nama_peminjam->nama_user;
+        if($request->id_pegawai == null){
 
-        if ($request->keterangan == null) {
-            $validatedData['keterangan'] = 'Pegawai(' . $nama . ') melakukan Peminjaman.';
-        }
+        $request->session()->flash('error', 'GAGAL! Peminjamaan Tidak memiliki Peminjam!');
+
+        return redirect('/peminjaman-tambah');
+
+        } else {
+
+            $validatedData = $request->validate([
+                'no_peminjaman' => 'required',
+                'tanggal_peminjaman' => '',
+                'tanggal_kembali' => '',
+                'id_pegawai' => 'required',
+                'status_peminjaman' => '',
+                'keterangan' => 'nullable',
+            ]);
+
+            $nama_peminjam = DB::table('pegawais')
+                ->where('nik', '=', $request->id_pegawai)
+                ->select('nama_user')
+                ->first();
+
+            $nama = $nama_peminjam->nama_user;
+
+            if ($request->keterangan == null) {
+                $validatedData['keterangan'] = 'Pegawai(' . $nama . ') melakukan Peminjaman.';
+            }
+            if ($request->tanggal_kembali == null) {
+                $validatedData['tanggal_kembali'] = now()->format('Y-m-d');
+            }
+
 
         // $validatedData['tanggal_penempatan'] = now()->format('Y-m-d');
 
@@ -1631,6 +1675,8 @@ class PController extends Controller
         $request->session()->flash('success', 'Peminjamaan telah berhasil Dilakukan!');
 
         return redirect('/peminjaman');
+    }
+
 
     }
 
