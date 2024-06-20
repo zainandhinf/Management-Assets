@@ -276,6 +276,13 @@
                                     Laporan Data Ruangan
                                 </a>
                             </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-departemen"
+                                    class="{{ $title === 'Laporan Data Departemen' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-building"></i>
+                                    Laporan Data Departemen
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li
@@ -332,7 +339,7 @@
                             </li>
                             <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
                                 <a href="/laporan-data-penghapusan"
-                                    class="{{ $title === 'Laporan Data Penghapusans' ? 'active' : '' }}">
+                                    class="{{ $title === 'Laporan Data Penghapusan' ? 'active' : '' }}">
                                     <i class="fa-solid fa-ban"></i>
                                     Laporan Data Penghapusan
                                 </a>

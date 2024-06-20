@@ -207,7 +207,7 @@
         @endphp
         <div class="modal modal-blur fade" id="showdata{{ $penempatan->no_penempatan }}" tabindex="-1" role="dialog"
             aria-hidden="true" style="font-size: 14px;">
-            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header d-flex justify-content-between">
                         <h5 class="modal-title">

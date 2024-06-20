@@ -72,7 +72,7 @@
         }
 
         .keterangan {
-            margin-left: 120px;
+            margin-left: 180px;
             margin-bottom: 18px;
         }
 
@@ -128,7 +128,7 @@
         </div>
         <div class="judul">
             <div style="width: 100%; text-align: center;">
-                <h1>DAFTAR Maintenance</h1>
+                <h1>DAFTAR MAINTENANCE</h1>
             </div>
             <hr>
             <div style="width: 100%; text-align: center;">
@@ -149,31 +149,30 @@
                 @else
                     {{ $maintenance->tanggal_selesai }}
                 @endif
-            </p>
+                </p>
             <p style="margin-left: -55px;">BIAYA</p>
-            <p style="margin-top: -20px; margin-left: 150px;">: {{ number_format($maintenance->biaya) }}</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: RP.  {{ number_format($maintenance->biaya) }}</p>
             <p style="margin-left: -55px;">STATUS</p>
-            <p style="margin-top: -20px; margin-left: 150px;">: {{ $maintenance->status }}</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $maintenance->status_maintenance }}</p>
             <p style="margin-left: -55px;">KETERANGAN</p>
-            <p style="margin-top: -20px; margin-left: 150px;">: {{ $maintenance->keterangan }}</p>
-        </div>
-        <div class="table">
-            <table class="table table-striped" id="data-tables-keranjang">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode</th>
-                        <th>Nama Barang</th>
-                        <th>Merk</th>
-                        <th>Kondisi</th>
-                        <th>Nama Pengguna</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
+            <p style="margin-top: -20px; margin-left: 150px; width: 240px;">: {{ $maintenance->keterangan_maintenance }}</p>
+            </div>
+            <div class="table">
+                <table class="table table-striped" id="data-tables-keranjang">
+                    <thead>
+                        <tr>
+                            <th>NO</th>
+                            <th style="row-gap: 10px;">NAMA BARANG</th>
+                            <th>NOMOR <br> KODIFIKASI</th>
+                            <th>KONDISI</th>
+                            <th>NAMA <br> PENGGUNA</th>
+                            <th>KET</th>
+                        </tr>
+                    </thead>
                 @php
 
                     $asset = DB::table('detail_barangs')
-                        ->select('*')
+                        ->select('*','detail_barangs.keterangan as keterangan_barang')
                         ->join('maintenances', 'maintenances.kode_barcode', '=', 'detail_barangs.kode_barcode')
                         ->where('maintenances.no_maintenance', $maintenance->no_maintenance)
                         // ->groupBy('no_ruangan')
@@ -214,19 +213,22 @@
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
-                    <td>No Barang: <b>{{ $asset->no_barang }}</b> <br>Barcode:
+                    {{-- <td>No Barang: <b>{{ $asset->no_barang }}</b> <br>Barcode:
                         <b>{!! DNS1D::getBarcodeHTML($asset->kode_barcode, 'UPCA') !!}{{ $asset->kode_barcode }}</b> <br>No Asset:
                         <b>{{ $asset->no_asset }}</b>
-                    </td>
-                    <td>{{ $nama_barang->nama_barang }}</td>
-                    <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td>
+                        </td> --}}
+                        {{-- <td>{{ $nama_barang->nama_barang }}</td> --}}
+                        <td>{{ $nama_barang->nama_barang }}, {{ $asset->merk }}</td>
+                    <td style="text-align: center;">{{ $asset->nomor_kodifikasi }}</td>
+                    {{-- <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td> --}}
                     <td style="text-align: center;">{{ $asset->kondisi }}</td>
+                    {{-- <td>{{ $pengguna->nama_user }}</td> --}}
                     @if ($user_id == null || $user_id->user_id == null || $no_penempatan->no_penempatan == null)
                         <td></td>
                     @else
                         <td>{{ $pengguna->nama_user }}</td>
                     @endif
-                    <td style="text-align: center;">{{ $asset->status }}</td>
+                    <td>{{ $asset->keterangan_barang }}</td>
                 </tr>
             </table>
         </div>

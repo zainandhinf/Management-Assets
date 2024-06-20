@@ -21,20 +21,66 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Rules\SquareImage;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
+
 
 class SUController extends Controller
 {
     // route view
+    public function getTrainingsThisWeek()
+    {
+        // Mendapatkan tanggal awal dan akhir minggu ini
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        // Mengambil training yang sedang dilaksanakan minggu ini
+        $trainings = training::where(function ($query) use ($startOfWeek, $endOfWeek) {
+            $query->whereBetween('tanggal_mulai', [$startOfWeek, $endOfWeek])
+                ->orWhereBetween('tanggal_selesai', [$startOfWeek, $endOfWeek])
+                ->orWhere(function ($query) use ($startOfWeek, $endOfWeek) {
+                    $query->where('tanggal_mulai', '<', $startOfWeek)
+                        ->where('tanggal_selesai', '>', $endOfWeek);
+                });
+        })->get();
+
+        return $trainings;
+    }
     public function index()
     {
+        $petugas = DB::table('users')->count();
+        $pegawai = DB::table('pegawais')->count();
+        $barang = DB::table('barangs')->count();
+        $ruangan = DB::table('ruangans')->count();
+        $departemen = DB::table('departemens')->count();
+        $pengadaan = DB::table('pengadaans')->count();
+        $penempatan = DB::table('penempatans')->count();
+        $mutasi = DB::table('mutasis')->count();
+        $peminjaman = DB::table('peminjamans')->count();
+        $maintenance = DB::table('maintenances')->count();
+        $penghapusan = DB::table('penghapusans')->count();
+
+        $trainings = $this->getTrainingsThisWeek();
+
         return view(
             'super_user.layout.dashboard',
             [
                 'title' => 'Dashboard',
                 'active' => 'Dashboard',
                 'open' => 'no',
-                ]
-            );
+                'petugas' => $petugas,
+                'pegawai' => $pegawai,
+                'barang' => $barang,
+                'ruangan' => $ruangan,
+                'departemen' => $departemen,
+                'pengadaan' => $pengadaan,
+                'penempatan' => $penempatan,
+                'mutasi' => $mutasi,
+                'peminjaman' => $peminjaman,
+                'maintenance' => $maintenance,
+                'penghapusan' => $penghapusan,
+                'trainings' => $trainings,
+            ]
+        );
     }
 
     public function goPetugas()

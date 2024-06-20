@@ -22,7 +22,7 @@
                     @if ($requests == null)
                     @else
                         <input type="hidden" name="date" id="requestsInput" value="{{ $requests->query('date') }}">
-                        <input type="hidden" name="role" id="requestsInput" value="{{ $requests->query('role') }}">
+                        <input type="hidden" name="kategori" id="requestsInput" value="{{ $requests->query('kategori') }}">
                     @endif
                     <button type="submit" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
                         <i class="fa-solid fa-print"></i>
@@ -40,6 +40,7 @@
                     <th>Nama</th>
                     <th>Kategori</th>
                     <th>Qty</th>
+                    <th>Tanggal Data Dibuat</th>
                     <th data-searchable="false">Action</th>
                 </tr>
             </thead>
@@ -51,20 +52,25 @@
                     $qty = DB::table('detail_barangs')
                         ->where('no_barang', '=', $barang->no_barang)
                         ->count();
+                    // dd($barang);
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>{{ $barang->kode_aktiva }}</td> --}}
                     <td>{{ $barang->nama_barang }}</td>
-                    <td>{{ $barang->nama_kategori }}</td>
+                    @php
+                        $nama_kategori = DB::table('kategori_barangs')->where('id', $barang->id_kategori)->first();
+                    @endphp
+                    <td>{{ $nama_kategori->nama_kategori }}</td>
                     <td>{{ $qty }}</td>
+                    <td>{{ $barang->created_at }}</td>
                     <td>
 
                         <button data-bs-toggle="modal" data-bs-target="#showdata{{ $barang->id }}"
                             style="margin-right: 10px" class="btn btn-primary mr-2"><i class="fa fa-eye"></i></button>
-                        <a href="/print-data-barang-pdf?no_barang={{ $barang->no_barang }}" target="blank" style="margin-right: 10px"
-                            class="btn btn-warning mr-2"><i class="fa-solid fa-print"></i></a>
+                        <a href="/print-data-barang-pdf?no_barang={{ $barang->no_barang }}" target="blank"
+                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa-solid fa-print"></i></a>
 
 
 
@@ -148,5 +154,88 @@
             </div>
         @endforeach
         {{-- end modal view data --}}
+
+        {{-- modal filter --}}
+        <div class="modal fade" id="filter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body" style="font-size: 14px;">
+                        <label class="mb-1" for="">Filter Berdasarkan Tanggal Dibuat Data Barang :</label>
+                        <div class="form-group d-flex flex-direction-column">
+                            <input type="date" class="form-control form-control-sm" id="startDate">
+                            <span class="p-2"> - </span>
+                            <input type="date" class="form-control form-control-sm" id="endDate">
+                        </div>
+                        <label for="">Kategori</label>
+                        <select style="font-size: 14px;" class="form-select" id="kategori" name="kategori">
+                            <option value="">choose..</option>
+                            {{-- <option value="super_user">Super User</option>
+                        <option value="koordinator">Koordinator</option> --}}
+                            @php
+                                $kategoris = DB::table('kategori_barangs')->select('*')->get();
+                                // dd($kategoris);
+                            @endphp
+                            @foreach ($kategoris as $kategori)
+                                <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                            @endforeach
+                        </select>
+                        <div class="mt-1">
+                            <a href="" id="filterBtn" type="button" class="btn btn-primary btn-sm">Filter</a>
+                        </div>
+                        {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- end modal filter --}}
     </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const kategoriInput = document.getElementById('kategori');
+            const filterBtn = document.getElementById('filterBtn');
+
+            console.log(kategoriInput);
+
+            function updateFilterHref() {
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+                const kategori = kategoriInput.value;
+                let href = '/laporan-data-barang/f=hah';
+
+                if (startDate && endDate && kategori) {
+                    href = `/laporan-data-barang/f=?date=${startDate}_${endDate}&kategori=${kategori}`;
+                } else if (kategori) {
+                    href = `/laporan-data-barang/f=?kategori=${kategori}`;
+                } else if (kategori && startDate) {
+                    href = `/laporan-data-barang/f=?date=${startDate}&kategori=${kategori}`;
+                } else if (kategori && endDate) {
+                    href = `/laporan-data-barang/f=?date=${endDate}&kategori=${kategori}`;
+                    // } else if (startDate && endDate) {
+                    //     href = `/laporan-data-barang/f=?date=${startDate}_${endDate}&kategori=${kategori}`;
+                } else if (startDate) {
+                    href = `/laporan-data-barang/f=?date=${startDate}`;
+                } else if (endDate) {
+                    href = `/laporan-data-barang/f=?date=${endDate}]`;
+                    // href = `/laporan-data-petugas/f=_${endDate}]`;
+                }
+
+                // if (kategori && startDate == null && endDate == null) {
+                //     // href += (href.includes('?') ? '&' : (href ? '' : '')) + `${kategori}`;
+                //     href += (href.includes('?') ? '&' : '') + `${kategori}`;
+                // }else if (kategori){
+                //     href += (href.includes('?') ? '&' : (href ? '?kategori=' : '')) + `${kategori}`;
+                // }
+
+                filterBtn.href = href;
+            }
+
+            startDateInput.addEventListener('change', updateFilterHref);
+            endDateInput.addEventListener('change', updateFilterHref);
+            kategoriInput.addEventListener('change', updateFilterHref);
+        });
+    </script>
 @endsection

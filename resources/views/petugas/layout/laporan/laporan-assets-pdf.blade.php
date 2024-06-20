@@ -116,6 +116,7 @@
 <body>
     @php
         $no = 1;
+        $barang = DB::table('barangs')->select('*')->where('no_barang','=',$no_barang)->first();
     @endphp
     <div class="logo">
         <img src="assets/image/logoPTDIterbarucrophitam.jpg" alt="">
@@ -135,24 +136,24 @@
     </div>
     <div class="keterangan">
         <p style="margin-left: -55px;">UNIT ORGANISASI</p>
-        <p style="margin-top: -20px; margin-left: 150px;">:HD0000 (Divisi Pengembangan Sumber Daya Manusia)-DU</p>
-        <p style="margin-left: -55px;">DEPARTEMEN</p>
-        <p style="margin-top: -20px; margin-left: 150px;">:HD3000 (Dept. Pendidikan dan Pelatihan)</p>
+        <p style="margin-top: -20px; margin-left: 150px;">: HD0000 (Divisi Pengembangan Sumber Daya Manusia)-DU</p>
+        {{-- <p style="margin-left: -55px;">DEPARTEMEN</p>
+        <p style="margin-top: -20px; margin-left: 150px;">:HD3000 (Dept. Pendidikan dan Pelatihan)</p> --}}
         <p style="margin-left: -55px;">NAMA GEDUNG</p>
         <p style="margin-top: -20px; margin-left: 150px;">: K-TC (Kantor Training Center)</p>
         <p style="margin-left: -55px;">NOMOR BARANG </p>
-        <p style="margin-top: -20px; margin-left: 150px;">: {{ $no_barang }}</p>
+        <p style="margin-top: -20px; margin-left: 150px;">: {{ $no_barang }} ({{ $barang->nama_barang }})</p>
     </div>
     <div class="table">
         <table class="table table-striped" id="data-tables-keranjang">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Kode</th>
-                    <th>Nama Barang</th>
-                    <th>Merk</th>
-                    <th>Kondisi</th>
-                    <th>Nama Pengguna</th>
+                    <th>NO</th>
+                    <th style="row-gap: 10px;">NAMA BARANG</th>
+                    <th>NOMOR <br> KODIFIKASI</th>
+                    <th>KONDISI</th>
+                    <th>NAMA <br> PENGGUNA</th>
+                    <th>KET</th>
                 </tr>
             </thead>
             @foreach ($assets as $asset)
@@ -175,12 +176,14 @@
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
-                    <td>No Barang: <b>{{ $asset->no_barang }}</b> <br>Barcode:
+                    {{-- <td>No Barang: <b>{{ $asset->no_barang }}</b> <br>Barcode:
                         <b>{!! DNS1D::getBarcodeHTML($asset->kode_barcode, 'UPCA') !!}{{ $asset->kode_barcode }}</b> <br>No Asset:
                         <b>{{ $asset->no_asset }}</b>
-                    </td>
-                    <td>{{ $asset->nama_barang }}</td>
-                    <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td>
+                    </td> --}}
+                    {{-- <td>{{ $asset->nama_barang }}</td>
+                    <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td> --}}
+                    <td>{{ $asset->nama_barang }}, {{ $asset->merk }}</td>
+                    <td style="text-align: center;">{{ $asset->nomor_kodifikasi }}</td>
                     <td style="text-align: center;">{{ $asset->kondisi }}</td>
                     @if ($user_id->user_id == null)
                         <td></td>
@@ -189,6 +192,7 @@
                     @else
                         <td>{{ $pengguna->nama_user }}</td>
                     @endif
+                    <td>{{ $asset->keterangan }}</td>
                 </tr>
             @endforeach
         </table>

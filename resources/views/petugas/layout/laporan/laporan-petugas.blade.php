@@ -21,7 +21,6 @@
                 <!-- Form untuk mengirimkan data saat print -->
                 <form action="/print-data-petugas-pdf" method="GET" target="_blank" id="printForm">
                     @if ($requests == null)
-                      
                     @else
                         <input type="hidden" name="date" id="requestsInput" value="{{ $requests->query('date') }}">
                         <input type="hidden" name="role" id="requestsInput" value="{{ $requests->query('role') }}">
@@ -32,40 +31,58 @@
                     </button>
                 </form>
             </div>
+            <form method="GET" action="/export-laporan-data-petugas">
+                @if ($requests == null)
+                @else
+                    <input type="hidden" name="date" id="requestsInput" value="{{ $requests->query('date') }}">
+                    <input type="hidden" name="role" id="requestsInput" value="{{ $requests->query('role') }}">
+                @endif
+                <button type="submit" class="btn btn-success mb-2"><i class="fa-solid fa-download me-2"></i>Download
+                    Excel</button>
+            </form>
         </div>
 
 
-        @php
-            $no = 1;
-            // dd($requests);
-        @endphp
         <table class="table table-striped" id="data-tables">
             <thead>
                 <tr>
                     <th>#</th>
                     {{-- <th>Foto Profil</th> --}}
+                    <th>Foto</th>
                     <th>NIK</th>
                     <th>Nama</th>
-                    <th>Gender</th>
+                    <th>L/P</th>
                     {{-- <th>Alamat</th> --}}
                     {{-- <th>No Telepon</th> --}}
                     <th>Username</th>
                     <th>Role</th>
-                    {{-- <th data-searchable="false">Action</th> --}}
+                    <th>Tanggal Data Dibuat</th>
                 </tr>
             </thead>
+            @php
+                $no = 1;
+            @endphp
             @foreach ($petugass as $petugas)
                 <tr>
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
+                    <td>
+                        @if ($petugas->foto == null)
+                            <img src="{{ asset('nophoto.png') }}" alt="No Photo" class="rounded rounded-circle"
+                                style="width: 60px; height: 60px;" style="width: 50px;" alt="">
+                        @else
+                            <img src="{{ asset('storage/' . $petugas->foto) }}" class="rounded rounded-circle"
+                                style="width: 60px; height: 60px;" style="width: 50px;" alt="">
+                        @endif
+                    </td>
                     <td>{{ $petugas->nik }}</td>
                     <td>{{ $petugas->nama_user }}</td>
                     <td>
                         @if ($petugas->jenis_kelamin === 'L')
-                            Laki-Laki
+                            L
                         @else
-                            Perempuan
+                            P
                         @endif
                     </td>
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
@@ -78,18 +95,7 @@
                             Koordinator
                         @endif
                     </td>
-                    {{-- <td>
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
-                            style="margin-right: 10px" class="btn btn-primary mr-2"><i
-                                class="fa-regular fa-eye"></i></button>
-
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
-                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
-                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $petugas->id }}"
-                            class="btn btn-danger mt-1">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </td> --}}
+                    <td>{{ $petugas->created_at }}</td>
                 </tr>
             @endforeach
         </table>
