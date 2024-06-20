@@ -215,7 +215,7 @@ class SUController extends Controller
         $cek_pegawai = DB::table('pegawais')->count();
 
         $pesertas = DB::table('peserta_trainings')
-            ->select('pegawais.foto', 'pegawais.nik', 'pegawais.nama_user', 'pegawais.jenis_kelamin', 'pegawais.no_telepon', 'pegawais.organisasi', 'peserta_trainings.id as id_peserta', 'trainings.id as id_training')
+            ->select('pegawais.foto', 'pegawais.nik', 'pegawais.nama_user', 'pegawais.jenis_kelamin', 'pegawais.no_telepon', 'peserta_trainings.id as id_peserta', 'trainings.id as id_training')
             ->join('pegawais', 'pegawais.nik', '=', 'peserta_trainings.nik')
             ->join('trainings', 'trainings.id', '=', 'peserta_trainings.id_training')
             ->get();
@@ -593,7 +593,7 @@ class SUController extends Controller
             'id_departemen' => 'nullable',
             'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ]);
-        
+
         $validatedData2 = $request->validate([
             'nik' => 'required|max:16',
             'nama_user' => 'required|max:255',
@@ -1242,7 +1242,7 @@ class SUController extends Controller
 
         $cekPeserta = DB::table('peserta_trainings')
             ->join('trainings', 'peserta_trainings.id_training', '=', 'trainings.id')
-            ->where('peserta_trainings.id_training', '=', $request->input('id_training'))
+            ->where('peserta_trainings.nik', '=', $request->input('nik'))
             ->select('peserta_trainings.id')
             ->first();
 
@@ -1358,7 +1358,13 @@ class SUController extends Controller
     public function getUserByNik(Request $request)
     {
         $nik = $request->input('nik');
-        $user = pegawai::where('nik', $nik)->first();
+        // $user = pegawai::where('nik', $nik)->first();
+
+        $user = DB::table('pegawais')
+        ->where('pegawais.nik', '=', $nik)
+        ->join('departemens', 'pegawais.id_departemen', '=', 'departemens.id')
+        ->select('pegawais.*', 'departemens.departemen')
+        ->first();
 
         if ($user) {
             return response()->json(['status' => 'success', 'data' => $user]);

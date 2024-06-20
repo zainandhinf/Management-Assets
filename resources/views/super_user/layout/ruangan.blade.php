@@ -252,7 +252,7 @@
                       is-invalid
                   @enderror"
                                             placeholder="No Ruangan.." id="name" name="no_ruangan"
-                                            value="{{ old('no_ruangan', $ruangan->no_ruangan) }}" required>
+                                            value="{{ old('no_ruangan', $ruangan->no_ruangan) }}" required readonly>
                                         @error('no_ruangan')
                                             <div class="invalid-feedback">
                                                 {{ $message }}

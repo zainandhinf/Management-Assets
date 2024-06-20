@@ -42,7 +42,11 @@
                             ->select('*')
                             ->where('id', '=', $training->training_id)
                             ->first();
-                            
+                        $organisasi = DB::table('pegawais')
+                                        ->join('departemens', 'departemens.id', '=', 'pegawais.id_departemen')
+                                        ->select('departemens.departemen')
+                                        ->first();
+
                     @endphp
                     <tr>
                         <td>{{ $no++ }}</td>
@@ -59,7 +63,7 @@
                                 P
                             @endif
                         </td>
-                        <td>{{ $peserta->organisasi }}</td>
+                        <td>{{ $organisasi->departemen }}</td>
                         <td>{{ $nama_training->nama_training }}</td>
                         <td>
                             {{-- <button data-bs-toggle="modal" data-bs-target="#editdata{{ $peserta->id }}" style=""
@@ -146,6 +150,7 @@
                                     <input type="text" id="alamat" class="form-control" disabled>
                                     <label for="no_telepon" class="col-form-label">No Telepon :</label>
                                     <input type="text" id="no_telepon" class="form-control" disabled>
+
                                     <label for="organisasi" class="col-form-label">Organisasi :</label>
                                     <input type="text" id="organisasi" class="form-control" disabled>
                                     <input type="hidden" id="nik-2" name="nik" class="form-control">
@@ -406,10 +411,11 @@
                                 $('#jenis_kelamin').val(user.jenis_kelamin);
                                 $('#alamat').val(user.alamat);
                                 $('#no_telepon').val(user.no_telepon);
-                                $('#organisasi').val(user.organisasi);
+                                $('#organisasi').val(user.departemen);
                                 $('#foto').attr('src', fotoUrl);
                                 // $('#nik').prop('disabled', true);
-                            } else {
+                                } else {
+                                console.log("haha");
                                 alert(response.message);
                             }
                         }

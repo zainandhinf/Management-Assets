@@ -31,8 +31,16 @@
             </thead>
             @php
                 $no = 1;
+
+
             @endphp
             @foreach ($data_peminjaman as $peminjaman)
+            @php
+                $nama_peminjam = DB::table('pegawais')
+                                    ->select('nama_user')
+                                    ->where('nik', '=', $peminjaman->id_pegawai)
+                                    ->first();
+            @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
                     <td>No. Peminjaman <b>{{ $peminjaman->no_peminjaman }}</b><br>No Barang: <b>{{ $peminjaman->no_barang }}</b> <br>Barcode:
@@ -43,8 +51,17 @@
                     <td>{{ $peminjaman->merk }}, {{ $peminjaman->spesifikasi }}</td>
                     <td>{{ $peminjaman->tanggal_peminjaman }} - {{ $peminjaman->tanggal_kembali }}</td>
                     {{-- <td>{{ $peminjaman->jenis_pengadaan }}</td> --}}
-                    <td>{{ $peminjaman->id_pegawai }}</td>
-                    <td>{{ $peminjaman->status_peminjaman }}</td>
+                    <td>{{ $peminjaman->id_pegawai }} - {{ $nama_peminjam->nama_user }}</td>
+                    <td>
+
+
+                        <button
+                                class="btn btn-sm rounded-pill @if ($peminjaman->status_peminjaman == 'Dipinjam') btn-warning @elseif ($peminjaman->status_peminjaman == 'Dikembalikan') btn-success @else btn-success @endif text-white"
+                                style="cursor: default;">{{ $peminjaman->status_peminjaman }}
+                        </button>
+
+                        </td>
+
                     <td>{{ $peminjaman->keterangan }}</td>
                     {{-- <td>Rp. {{ number_format($peminjaman->harga) }}</td> --}}
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
