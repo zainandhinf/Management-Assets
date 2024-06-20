@@ -131,6 +131,7 @@ class PController extends Controller
     {
         $cek1 = DB::table('users')->where('role', '=', 'petugas')->count();
         $cek2 = DB::table('ruangans')->count();
+
         return view('petugas.layout.training')->with([
             'title' => 'Data Training',
             'active' => 'Data Training',
@@ -153,6 +154,15 @@ class PController extends Controller
     }
     public function goSchedule()
     {
+       $yourTraining = DB::table('trainings')
+                ->join('users', 'users.id', '=', 'trainings.id_petugas')
+                ->where('trainings.id_petugas', '=', auth()->user()->id)
+                ->get();
+
+                dd($yourTraining);
+
+
+
         return view('petugas.layout.schedule-training')->with([
             'title' => 'Jadwal Training',
             'active' => 'Jadwal Training',
@@ -264,6 +274,10 @@ class PController extends Controller
     }
     public function goPenempatanTambah()
     {
+        $detail_barangs = DB::table('detail_barangs')
+        ->select('*')
+        ->get();
+
 
         $noPenempatan = "PN-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
         $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
@@ -279,6 +293,7 @@ class PController extends Controller
             'active' => 'Penempatan',
             'detail_barangs' => detail_barang::all(),
             'barangs' => $barangAll,
+            'detail_barangs' => $detail_barangs,
             'noPenempatan' => $noPenempatan,
             'today' => $today,
             'keranjangs' => $keranjang,
@@ -318,6 +333,10 @@ class PController extends Controller
     public function goMutasiTambah()
     {
 
+        $detail_barangs = DB::table('detail_barangs')
+        ->select('*')
+        ->get();
+
         $noMutasi = "M-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
         $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
@@ -333,6 +352,7 @@ class PController extends Controller
             'active' => 'Mutasi',
             'detail_barangs' => detail_barang::all(),
             'barangs' => $barangAll,
+            'detail_barangs' => $detail_barangs,
             'no_mutasi' => $noMutasi,
             'today' => $today,
             'keranjangs' => $keranjang,
@@ -371,6 +391,10 @@ class PController extends Controller
     public function goPeminjamanTambah()
     {
 
+        $detail_barangs = DB::table('detail_barangs')
+        ->select('*')
+        ->get();
+
         $noPeminjaman = "PJ-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
         $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
@@ -385,6 +409,7 @@ class PController extends Controller
             'active' => 'Peminjaman',
             'detail_barangs' => detail_barang::all(),
             'barangs' => $barangAll,
+            'detail_barangs' => $detail_barangs,
             'noPeminjaman' => $noPeminjaman,
             'today' => $today,
             'keranjangs' => $keranjang,
@@ -469,6 +494,10 @@ class PController extends Controller
     public function goPenghapusanTambah()
     {
 
+        $detail_barangs = DB::table('detail_barangs')
+        ->select('*')
+        ->get();
+
         $noPenghapusan = "PH-" . Carbon::now()->setTimezone('Asia/Jakarta')->format('YmdHis');
         $barangAll = barang::join('kategori_barangs', 'kategori_barangs.id', '=', 'barangs.id_kategori')
             ->select('barangs.*', 'kategori_barangs.nama_kategori')
@@ -483,6 +512,7 @@ class PController extends Controller
             'active' => 'Penghapusan',
             'detail_barangs' => detail_barang::all(),
             'barangs' => $barangAll,
+            'detail_barangs' => $detail_barangs,
             'noPenghapusan' => $noPenghapusan,
             'today' => $today,
             'keranjangs' => $keranjang,
@@ -581,6 +611,8 @@ class PController extends Controller
     public function addKeranjang(Request $request)
     {
 
+
+
         $na = $request->input('kode_awal') . '-' . $request->input('no_asset') . '-LC';
         $cek = DB::table('keranjang_pengadaans')
             ->where('no_asset', '=', $na)
@@ -634,6 +666,8 @@ class PController extends Controller
 
             return redirect('/pengadaan');
         }
+
+
 
     }
 
@@ -921,6 +955,19 @@ class PController extends Controller
     // Transaksi Penempatan
     public function addKeranjangPenempatan(Request $request)
     {
+
+        $cekExist = DB::table('detail_barangs')
+        ->where('kode_barcode', '=', $request->kode_barcode)
+        ->count();
+
+        if ($cekExist == 0) {
+
+        $request->session()->flash('error', 'Barang TIDAK Terdaftar didalam Database!');
+        return redirect('/penempatan-tambah');
+
+        } else {
+
+
         $cek1 = DB::table('keranjang_penempatans')->where('kode_barcode', '=', $request->kode_barcode)->first();
         $cek2 = DB::table('detail_penempatans')->where('kode_barcode', '=', $request->kode_barcode)->first();
         $cek3 = DB::table('detail_barangs')->where('kode_barcode', '=', $request->kode_barcode)->first();
@@ -960,7 +1007,7 @@ class PController extends Controller
 
             return redirect('/penempatan-tambah');
         }
-
+    }
 
     }
     public function deleteKeranjangPenempatan(Request $request)
@@ -1232,6 +1279,19 @@ class PController extends Controller
     //End Transaksi Penempatan
     public function addKeranjangMutasi(Request $request)
     {
+
+        $cekExist = DB::table('detail_barangs')
+        ->where('kode_barcode', '=', $request->kode_barcode)
+        ->count();
+
+        if ($cekExist == 0) {
+
+        $request->session()->flash('error', 'Barang TIDAK Terdaftar didalam Database!');
+        return redirect('/mutasi-tambah');
+
+        } else {
+
+
         $cek1 = DB::table('keranjang_mutasis')->where('kode_barcode', '=', $request->kode_barcode)->first();
         $cek2 = DB::table('detail_barangs')->where('kode_barcode', '=', $request->kode_barcode)->first();
 
@@ -1269,6 +1329,7 @@ class PController extends Controller
 
             return redirect('/mutasi-tambah');
         }
+    }
 
     }
     public function deleteKeranjangMutasi(Request $request)
@@ -1534,6 +1595,18 @@ class PController extends Controller
     public function addKeranjangPeminjaman(Request $request)
     {
 
+        $cekExist = DB::table('detail_barangs')
+        ->where('kode_barcode', '=', $request->kode_barcode)
+        ->count();
+
+        if ($cekExist == 0) {
+
+        $request->session()->flash('error', 'Barang TIDAK Terdaftar didalam Database!');
+        return redirect('/peminjaman-tambah');
+
+        } else {
+
+
         $cekKeranjang = DB::table('keranjang_peminjamans')
                         ->where('kode_barcode', '=', $request->kode_barcode)
                         ->count();
@@ -1589,6 +1662,7 @@ class PController extends Controller
 
         return redirect('/peminjaman-tambah');
     }
+}
 
     }
 
@@ -1796,6 +1870,19 @@ class PController extends Controller
     // Transaksi Penghapusan
     public function addKeranjangPenghapusan(Request $request)
     {
+
+        $cekExist = DB::table('detail_barangs')
+        ->where('kode_barcode', '=', $request->kode_barcode)
+        ->count();
+
+        if ($cekExist == 0) {
+
+        $request->session()->flash('error', 'Barang TIDAK Terdaftar didalam Database!');
+        return redirect('/penghapusan-tambah');
+
+        } else {
+
+
         $cek1 = DB::table('keranjang_penghapusans')->where('kode_barcode', '=', $request->kode_barcode)->first();
         $cek2 = DB::table('detail_penghapusans')->where('kode_barcode', '=', $request->kode_barcode)->first();
 
@@ -1829,6 +1916,7 @@ class PController extends Controller
             return redirect('/penghapusan-tambah');
         }
 
+    }
 
     }
     public function deleteKeranjangPenghapusan(Request $request)

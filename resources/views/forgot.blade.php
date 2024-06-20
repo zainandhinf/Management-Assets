@@ -97,7 +97,7 @@ body {
 <body>
     @include('sweetalert::alert')
 
-    <form method="post" action="/loginrequest">
+    <form method="post" action="/try">
       @csrf
       <div class="wrapper-login" style="font-family: 'Inter';">
 
@@ -109,23 +109,23 @@ body {
             <img src="assets/image/logoPTDIterbaru.jpg" alt="LOGO" width="120px">
           </div>
 
-          <h4 class="ps-3 pt-3 pe-3">Management Asset</h4>
-          <h6 class="pb-3">Learning Center</h6>
+          <h4 class="ps-3 pt-3 pe-3">Reset Password</h4>
+          <h6 class="pb-3">Masukan Nik Pegawai yang terdaftar</h6>
           <div>
 
             <table>
                 <div class="form-group">
                 <tr>
-                    <td style="padding: 10px;">Username</td>
+                    <td style="padding: 10px;">Nik Pegawai</td>
                     <td>
-                        <input class="form-control mb-2" type="text" id="username" name="username" placeholder="Username" autocomplete="off" autofocus required>
+                        <input class="form-control mb-2" type="text" id="nik" name="nik" placeholder="" autocomplete="off" autofocus required>
                     </td>
                 </tr>
-                <tr>
-                    <td style="padding: 10px;">Password</td>
+                {{-- <tr>
+                    <td style="padding: 10px;">Tgl. Lahir</td>
                     <td>
-                        <input class="form-control mb-2" type="password" id="password" name="password" placeholder="Password" required></td>
-                </tr>
+                        <input class="form-control mb-2" type="date" id="date" name="tanggal_lahir" placeholder="" required></td>
+                </tr> --}}
 
                 {{-- @if(session()->has('Login Gagal'))
         <div class="alert bg-danger text-light alert-dismissible fade show">
@@ -145,12 +145,12 @@ body {
 
 
             <button type="submit" id="login" class="btn btn-success m-2">
-                Login
+                Check
             </button>
 
 
           <div id="create-account-wrap">
-            <p class="mt-2" style="color: black;">forgot password? <a href="/fp">click here</a><p>
+            <p class="mt-2" style="color: black;">You remembered? <a href="/">login</a><p>
           </div>
         </div>
 

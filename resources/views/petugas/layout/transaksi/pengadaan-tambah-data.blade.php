@@ -49,18 +49,18 @@
                         <input type="text" placeholder="No asset.." name="no_asset" class="form-control mb-2"
                             value="" required>
                     </div>
-                    
+
                     <label for="">Nomor Kodifikasi</label><br>
                     <div class="input-group">
                         <input type="text" placeholder="Nomor kodifikasi..(opsional)" name="nomor_kodifikasi" class="form-control mb-2"
                             value="" required>
                     </div>
 
-                    <label for="">Merk</label><br>
+                    <label for="">Merk*</label><br>
                     <input type="text" name="merk" class="form-control mb-2" value="" placeholder="Merk.."
                         required>
 
-                    <label for="">Spesifikasi</label><br>
+                    <label for="">Spesifikasi*</label><br>
                     <textarea class="form-control" name="spesifikasi" cols="10" rows="3"
                         placeholder="*Contoh pengisian: Intel Core i7 Gen 13 Ram 2 dst.." required></textarea>
 
@@ -73,7 +73,7 @@
 
                     <input type="hidden" value="Belum Ditempatkan" name="status" class="form-control mb-2">
 
-                    <label for="">Rp./Harga Beli</label><br>
+                    <label for="">Rp./Harga Beli*</label><br>
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">Rp.</span>
                         <input type="text" name="harga" class="form-control" placeholder="000.000,00(opsional)" id="harga" required>

@@ -126,7 +126,7 @@
             @endif
         </a>
         <span style="margin-top: 4px;">
-            <h6 class="mt-1 mb-0" style="font-size: 14px;">{{ auth()->user()->username }}</h6>
+            <h6 class="mt-1 mb-0" style="font-size: 14px;">{{ auth()->user()->nama_user }}</h6>
             <div class="d-flex">
                 <small class="me-1">Super</small>
                 <small>User</small>

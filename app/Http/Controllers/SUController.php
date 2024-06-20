@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Rules\SquareImage;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
+
 
 class SUController extends Controller
 {
@@ -146,11 +148,9 @@ class SUController extends Controller
     {
         $cek1 = DB::table('users')->where('role', '=', 'petugas')->count();
         $cek2 = DB::table('ruangans')->count();
+        $cek3 = DB::table('data_trainings')->count();
 
 
-
-
-                    // dd($total_peserta);
 
         return view('super_user.layout.training')->with([
             'title' => 'Data Jadwal Training',
@@ -159,6 +159,7 @@ class SUController extends Controller
             // 'total_peserta' => $total_peserta,
             'cek1' => $cek1,
             'cek2' => $cek2,
+            'cek3' => $cek3,
             'open' => 'no',
         ]);
     }
@@ -221,17 +222,24 @@ class SUController extends Controller
             'nama_kategori' => 'required|max:255'
         ]);
 
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
         kategori_barang::create($validatedData);
 
         $request->session()->flash('success', 'Kategori baru telah ditambahkan!');
 
         return redirect('/kategori-barang');
     }
+
     public function editKategori(Request $request, kategori_barang $kategori_barangs)
     {
         $validatedData = $request->validate([
             'nama_kategori' => 'required|max:255'
         ]);
+
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         DB::table('kategori_barangs')
             ->where('id', $request->input('id_ktgr'))
@@ -269,6 +277,9 @@ class SUController extends Controller
             'nama_tipe' => 'required|max:255',
             'keterangan' => 'required|max:255'
         ]);
+
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         tipe_ruangan::create($validatedData);
 
@@ -488,9 +499,9 @@ class SUController extends Controller
             ->where('id', '=', $request->input('id_user'))
             ->get();
 
-        if ($request->foto != null) {
-            Storage::delete($request->input('foto'));
-        }
+        // if ($request->foto != null) {
+        //     Storage::delete($request->input('foto'));
+        // }
 
 
         DB::table('users')->where('id', $request->input('id_user'))->delete();

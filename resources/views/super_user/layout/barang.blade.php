@@ -275,7 +275,7 @@
                             <center class="p-2">Tidak ada Barang apapun.</center>
                         </h5>
                         @else
-                        <table class="table table-striped" id="data-tables" style="font-size: 14px;">
+                        <table class="table table-striped" id="data-tables-detail" style="font-size: 14px;">
                             <thead>
                                 <tr>
                                     <th>#</th>
