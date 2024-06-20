@@ -5,7 +5,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SUController;
 use App\Http\Controllers\PController;
 use App\Http\Controllers\ReportController;
-use App\Exports\PetugasExport;
 use App\Models\ruangan;
 use Illuminate\Http\Request;
 
@@ -189,6 +188,7 @@ Route::get('/export-laporan-data-petugas', [ReportController::class, 'exportpetu
 Route::get('/laporan-data-pegawai', [ReportController::class, 'goLaporanPegawai']);
 Route::get('/laporan-data-pegawai/f=', [ReportController::class, 'goLaporanPegawaiFilter']);
 Route::get('/print-data-pegawai-pdf', [ReportController::class, 'goLaporanPegawaiPdf']);
+Route::get('/export-laporan-data-pegawai', [ReportController::class, 'exportpegawai']);
 //END LAPORAN DATA PEGAWAI
 
 //LAPORAN DATA BARANG
@@ -254,6 +254,10 @@ Route::get('/print/aktiva', [ReportController::class, 'goLaporanAktivaPdf']);
 Route::get('/data-assets', [ReportController::class, 'goAssets']);
 Route::get('/print/assets', [ReportController::class, 'goLaporanAssetsPdf']);
 //END LAPORAN DATA ASSETS
+
+//PENCARIAN ASSET
+Route::get('/pencarian-asset', [ReportController::class, 'goPencarianAssets']);
+//END PENCARIAN ASSET
 
 //PRINT BARCODE
 Route::get('/print/barcode-all', [ReportController::class, 'goBarcodeAllPdf']);

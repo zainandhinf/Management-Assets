@@ -18,7 +18,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 
 
 // class PetugasExport implements FromCollection, WithHeadings
-class PetugasExport implements FromView, ShouldAutoSize
+class PegawaiExport implements FromView, ShouldAutoSize
 {
     // /**
     //  * @return \Illuminate\Support\Collection
@@ -31,7 +31,7 @@ class PetugasExport implements FromView, ShouldAutoSize
         $this->request = $request;
     }
 
-    public function view() : View
+    public function view(): View
     {
         // $query = User::query();
 
@@ -48,24 +48,18 @@ class PetugasExport implements FromView, ShouldAutoSize
         //     $query->where('role', $this->request->get('role'));
         // }
 
-        $date = $this->request->has('date');
-        $role = $this->request->has('role');
+        $date = $this->request->query('date');
+        $departemen = $this->request->query('organisasi');
+        $id_organisasi = DB::table('departemens')->where('no_departemen', $departemen)->first();
 
-        if ($role == "koordinator" || $role == "super_user") {
-            if ($role == "koordinator") {
-                $petugas = DB::table('users')->where('role', 'petugas')->get();
-            } else {
-                $petugas = DB::table('users')->where('role', $role)->get();
-            }
+        // dd($id_organisasi);
+        if ($departemen) {
+            $pegawai = DB::table('pegawais')->where('id_departemen', $id_organisasi->id)->get();
         } else {
             $dateArray = explode('~', $date);
 
             $tanggalPertama = $dateArray[0] ?? null;
             $tanggalKedua = $dateArray[1] ?? null;
-
-            if ($role == "koordinator") {
-                $role = "petugas";
-            }
 
             // dd($dateArray);
 
@@ -84,20 +78,20 @@ class PetugasExport implements FromView, ShouldAutoSize
             //     $petugas = User::all();
             // }
 
-            $query = User::query();
+            $query = pegawai::query();
 
-            if ($tanggalPertama && $tanggalKedua && $role) {
-                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('role', $role)->select('nik, nama_user, jenis_kelamin, alamat, no_telepon, username, role');
+            if ($tanggalPertama && $tanggalKedua && $departemen) {
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->where('id_departemen', $id_organisasi->id);
             } else if ($tanggalPertama && $tanggalKedua) {
-                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])->select('nik, nama_user, jenis_kelamin, alamat, no_telepon, username, role');
-            } elseif ($tanggalPertama && $role) {
-                $query->where('created_at', '>=', $tanggalPertama)->where('role', $role)->select('nik, nama_user, jenis_kelamin, alamat, no_telepon, username, role');
+                $query->whereBetween('created_at', [$tanggalPertama, $tanggalKedua]);
+            } elseif ($tanggalPertama && $departemen) {
+                $query->where('created_at', '>=', $tanggalPertama)->where('id_departemen', $id_organisasi->id);
             } elseif ($tanggalPertama) {
-                $query->where('created_at', '>=', $tanggalPertama)->select('nik, nama_user, jenis_kelamin, alamat, no_telepon, username, role');
-            } elseif ($tanggalKedua && $role) {
-                $query->where('created_at', '<=', $tanggalKedua)->where('role', $role)->select('nik, nama_user, jenis_kelamin, alamat, no_telepon, username, role');
+                $query->where('created_at', '>=', $tanggalPertama);
+            } elseif ($tanggalKedua && $departemen) {
+                $query->where('created_at', '<=', $tanggalKedua)->where('id_departemen', $id_organisasi->id);
             } elseif ($tanggalKedua) {
-                $query->where('created_at', '<=', $tanggalKedua)->select('nik, nama_user, jenis_kelamin, alamat, no_telepon, username, role');
+                $query->where('created_at', '<=', $tanggalKedua);
             }
             // dd($query);
 
@@ -106,7 +100,7 @@ class PetugasExport implements FromView, ShouldAutoSize
             //     dd($query);
             // }
 
-            $petugas = $query->get();
+            $pegawai = $query->get();
 
             // $petugas = DB::table('users')
             // ->whereBetween('created_at', [$tanggalPertama, $tanggalKedua])
@@ -115,15 +109,15 @@ class PetugasExport implements FromView, ShouldAutoSize
         // dd($petugas);
 
         // return $petugas;
-        return view('petugas.layout.laporan.laporan-petugas-excel',[
-            'petugass' => $petugas
+        return view('petugas.layout.laporan.laporan-pegawai-excel', [
+            'pegawais' => $pegawai
         ]);
     }
 
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class => function(AfterSheet $event) {
+            AfterSheet::class => function (AfterSheet $event) {
                 // Get worksheet
                 $sheet = $event->sheet;
 

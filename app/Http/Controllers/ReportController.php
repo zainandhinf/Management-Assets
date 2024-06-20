@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PetugasExport;
+use App\Exports\PegawaiExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -31,6 +33,7 @@ use App\Models\penghapusan;
 use App\Models\keranjang_penghapusan;
 use App\Models\detail_penghapusan;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -211,6 +214,10 @@ class ReportController extends Controller
         // return $pdf->download('invoice.pdf');
         return $pdf->stream('laporan-data-petugas.pdf');
     }
+    public function exportpetugas(Request $request)
+    {
+        return Excel::download(new PetugasExport($request), 'data-petugas.xlsx');
+    }
     //END PETUGAS
 
     //PEGAWAI
@@ -378,6 +385,10 @@ class ReportController extends Controller
             // return $pdf->download('invoice.pdf');
             return $pdf->stream('laporan-data-pegawai.pdf');
         }
+    }
+    public function exportpegawai(Request $request)
+    {
+        return Excel::download(new PegawaiExport($request), 'data-pegawai.xlsx');
     }
     //END PEGAWAI
 
@@ -2144,6 +2155,20 @@ class ReportController extends Controller
         return $pdf->stream('laporan-data-asset.pdf');
     }
     //END ASSETS
+
+    //HALAMAN PENCARIAN
+    public function goPencarianAssets()
+    {
+
+        return view('petugas.layout.pencarian')->with([
+            'title' => 'Pencarian Asset',
+            'active' => 'Pencarian Asset',
+            'assets' => detail_barang::all(),
+            'open' => 'no',
+        ]);
+    }
+    //END HALAMAN PENCARIAN
+
 
     //BARCODE
     public function goBarcodeAllPdf(Request $request)
