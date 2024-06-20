@@ -72,7 +72,7 @@
         }
 
         .keterangan {
-            margin-left: 120px;
+            margin-left: 180px;
             margin-bottom: 18px;
         }
 
@@ -152,7 +152,7 @@
             <p style="margin-left: -55px;">LOKASI PENEMPATAN</p>
             <p style="margin-top: -20px; margin-left: 150px;">: ({{ $penempatan->no_ruangan }}) {{ $nama_ruangan->ruangan }}</p>
             <p style="margin-left: -55px;">KETERANGAN</p>
-            <p style="margin-top: -20px; margin-left: 150px;">: {{ $penempatan->keterangan   }}</p>
+            <p style="margin-top: -20px; margin-left: 150px;">: {{ $penempatan->keterangan }}</p>
             </div>
             <div class="table">
                 <table class="table table-striped" id="data-tables-keranjang">

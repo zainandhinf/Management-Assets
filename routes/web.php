@@ -195,59 +195,69 @@ Route::get('/export-laporan-data-pegawai', [ReportController::class, 'exportpega
 Route::get('/laporan-data-barang', [ReportController::class, 'goLaporanBarang']);
 Route::get('/laporan-data-barang/f=', [ReportController::class, 'goLaporanBarangFilter']);
 Route::get('/print-data-barang-pdf', [ReportController::class, 'goLaporanBarangPdf']);
+Route::get('/export-laporan-data-barang', [ReportController::class, 'exportbarang']);
 //END LAPORAN DATA BARANG
 
 //LAPORAN DATA RUANGAN
 Route::get('/laporan-data-ruangan', [ReportController::class, 'goLaporanRuangan']);
 Route::get('/laporan-data-ruangan/f=', [ReportController::class, 'goLaporanRuanganFilter']);
 Route::get('/print-data-ruangan-pdf', [ReportController::class, 'goLaporanRuanganPdf']);
+Route::get('/export-laporan-data-ruangan', [ReportController::class, 'exportruangan']);
 //END LAPORAN DATA RUANGAN
 
 //LAPORAN DATA DEPARTEMEN
 Route::get('/laporan-data-departemen', [ReportController::class, 'goLaporanDepartemen']);
 Route::get('/laporan-data-departemen/f=', [ReportController::class, 'goLaporanDepartemenFilter']);
 Route::get('/print-data-departemen-pdf', [ReportController::class, 'goLaporanDepartemenPdf']);
+Route::get('/export-laporan-data-departemen', [ReportController::class, 'exportdepartemen']);
 //END LAPORAN DATA DEPARTEMEN
 
 //LAPORAN DATA TRANSAKSI PENGADAAN
 Route::get('/laporan-data-pengadaan', [ReportController::class, 'goLaporanPengadaan']);
 Route::get('/laporan-data-pengadaan/f=', [ReportController::class, 'goLaporanPengadaanFilter']);
 Route::get('/print-data-pengadaan-pdf', [ReportController::class, 'goLaporanPengadaanPdf']);
+Route::get('/export-laporan-data-pengadaan', [ReportController::class, 'exportpengadaan']);
 //END LAPORAN DATA TRANSAKSI PENGADAAN
 
 //LAPORAN DATA TRANSAKSI PENEMPATAN
 Route::get('/laporan-data-penempatan', [ReportController::class, 'goLaporanPenempatan']);
 Route::get('/laporan-data-penempatan/f=', [ReportController::class, 'goLaporanPenempatanFilter']);
 Route::get('/print-data-penempatan-pdf', [ReportController::class, 'goLaporanPenempatanPdf']);
+Route::get('/export-laporan-data-penempatan', [ReportController::class, 'exportpenempatan']);
 //END LAPORAN DATA TRANSAKSI PENEMPATAN
 
 //LAPORAN DATA TRANSAKSI MUTASI
 Route::get('/laporan-data-mutasi', [ReportController::class, 'goLaporanMutasi']);
 Route::get('/laporan-data-mutasi/f=', [ReportController::class, 'goLaporanMutasiFilter']);
 Route::get('/print-data-mutasi-pdf', [ReportController::class, 'goLaporanMutasiPdf']);
+Route::get('/export-laporan-data-mutasi', [ReportController::class, 'exportmutasi']);
 //END LAPORAN DATA TRANSAKSI MUTASI
 
 //LAPORAN DATA TRANSAKSI PEMINJAMAN
 Route::get('/laporan-data-peminjaman', [ReportController::class, 'goLaporanPeminjaman']);
 Route::get('/laporan-data-peminjaman/f=', [ReportController::class, 'goLaporanPeminjamanFilter']);
 Route::get('/print-data-peminjaman-pdf', [ReportController::class, 'goLaporanPeminjamanPdf']);
+Route::get('/export-laporan-data-peminjaman', [ReportController::class, 'exportpeminjaman']);
 //END LAPORAN DATA TRANSAKSI PEMINJAMAN
 
 //LAPORAN DATA TRANSAKSI MAINTENANCE
 Route::get('/laporan-data-maintenance', [ReportController::class, 'goLaporanMaintenance']);
 Route::get('/laporan-data-maintenance/f=', [ReportController::class, 'goLaporanMaintenanceFilter']);
 Route::get('/print-data-maintenance-pdf', [ReportController::class, 'goLaporanMaintenancePdf']);
+Route::get('/export-laporan-data-maintenance', [ReportController::class, 'exportmaintenance']);
 //END LAPORAN DATA TRANSAKSI MAINTENANCE
 
 //LAPORAN DATA TRANSAKSI PENGHAPUSAN
 Route::get('/laporan-data-penghapusan', [ReportController::class, 'goLaporanPenghapusan']);
 Route::get('/laporan-data-penghapusan/f=', [ReportController::class, 'goLaporanPenghapusanFilter']);
 Route::get('/print-data-penghapusan-pdf', [ReportController::class, 'goLaporanPenghapusanPdf']);
+Route::get('/export-laporan-data-penghapusan', [ReportController::class, 'exportpenghapusan']);
 //END LAPORAN DATA TRANSAKSI PENGHAPUSAN
 
 //LAPORAN DATA AKTIVA
 Route::get('/data-aktiva-fasilitas', [ReportController::class, 'goAktiva']);
 Route::get('/print/aktiva', [ReportController::class, 'goLaporanAktivaPdf']);
+Route::get('/export-laporan-data-aktiva', [ReportController::class, 'exportaktiva']);
 //END LAPORAN DATA AKTIVA
 
 //LAPORAN DATA ASSETS
@@ -257,6 +267,7 @@ Route::get('/print/assets', [ReportController::class, 'goLaporanAssetsPdf']);
 
 //PENCARIAN ASSET
 Route::get('/pencarian-asset', [ReportController::class, 'goPencarianAssets']);
+Route::get('/cari-asset', [ReportController::class, 'goCariAssets']);
 //END PENCARIAN ASSET
 
 //PRINT BARCODE

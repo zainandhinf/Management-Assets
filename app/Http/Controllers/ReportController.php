@@ -2,8 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AktivaExport;
+use App\Exports\BarangExport;
+use App\Exports\DepartemenExport;
+use App\Exports\MaintenanceExport;
+use App\Exports\MutasiExport;
+use App\Exports\PeminjamanExport;
+use App\Exports\PenempatanExport;
+use App\Exports\PengadaanExport;
+use App\Exports\PenghapusanExport;
 use App\Exports\PetugasExport;
 use App\Exports\PegawaiExport;
+use App\Exports\RuanganExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -576,13 +586,17 @@ class ReportController extends Controller
             $data = [
                 // 'pegawais' => $petugas,
                 // 'assets' => $kategori_barang,
-                'barangs' => $kategori_barang
+                'barangs' => $barang
             ];
             // }
         }
         $pdf = Pdf::loadView('petugas.layout.laporan.laporan-barang-pdf', $data)->setPaper('a4', 'portrait');
         // return $pdf->download('invoice.pdf');
         return $pdf->stream('laporan-data-barang.pdf');
+    }
+    public function exportbarang(Request $request)
+    {
+        return Excel::download(new BarangExport($request), 'data-barang.xlsx');
     }
     //END BARANG
 
@@ -789,6 +803,10 @@ class ReportController extends Controller
 
 
     }
+    public function exportruangan(Request $request)
+    {
+        return Excel::download(new RuanganExport($request), 'data-ruangan.xlsx');
+    }
     //END RUANGAN
 
     //DEPARTEMEN
@@ -950,6 +968,10 @@ class ReportController extends Controller
 
 
     }
+    public function exportdepartemen(Request $request)
+    {
+        return Excel::download(new DepartemenExport($request), 'data-departemen.xlsx');
+    }
     //END DEPARTEMEN
 
     //PENGADAAN
@@ -1110,6 +1132,10 @@ class ReportController extends Controller
             // return $pdf->download('invoice.pdf');
             return $pdf->stream('laporan-data-pengadaan.pdf');
         }
+    }
+    public function exportpengadaan(Request $request)
+    {
+        return Excel::download(new PengadaanExport($request), 'data-pengadaan.xlsx');
     }
     //END PENGADAAN
 
@@ -1297,6 +1323,10 @@ class ReportController extends Controller
 
         }
     }
+    public function exportpenempatan(Request $request)
+    {
+        return Excel::download(new PenempatanExport($request), 'data-penempatan.xlsx');
+    }
     //END PENEMPATAN
 
     //MUTASI
@@ -1476,6 +1506,10 @@ class ReportController extends Controller
             }
 
         }
+    }
+    public function exportmutasi(Request $request)
+    {
+        return Excel::download(new MutasiExport($request), 'data-mutasi.xlsx');
     }
     //END MUTASI
 
@@ -1669,6 +1703,10 @@ class ReportController extends Controller
             }
 
         }
+    }
+    public function exportpeminjaman(Request $request)
+    {
+        return Excel::download(new PeminjamanExport($request), 'data-peminjaman.xlsx');
     }
     //END PEMINJAMAN
 
@@ -1868,6 +1906,10 @@ class ReportController extends Controller
 
 
     }
+    public function exportmaintenance(Request $request)
+    {
+        return Excel::download(new MaintenanceExport($request), 'data-maintenance.xlsx');
+    }
     //END MAINTENANCE
 
     //PENGHAPUSAN
@@ -2047,6 +2089,10 @@ class ReportController extends Controller
 
         }
     }
+    public function exportpenghapusan(Request $request)
+    {
+        return Excel::download(new PenghapusanExport($request), 'data-penghapusan.xlsx');
+    }
     //END PENGHAPUSAN
 
 
@@ -2106,6 +2152,10 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('petugas.layout.laporan.laporan-aktiva-ruangan-pdf', $data)->setPaper('a4', 'portrait');
         return $pdf->stream('laporan-data-petugas.pdf');
     }
+    public function exportaktiva(Request $request)
+    {
+        return Excel::download(new AktivaExport($request), 'data-aktiva.xlsx');
+    }
     //END AKTIVA
 
     //ASSETS
@@ -2161,6 +2211,16 @@ class ReportController extends Controller
     {
 
         return view('petugas.layout.pencarian')->with([
+            'title' => 'Pencarian Asset',
+            'active' => 'Pencarian Asset',
+            'assets' => detail_barang::all(),
+            'open' => 'no',
+        ]);
+    }
+    public function goCariAssets()
+    {
+
+        return view('super_user.layout.pencarian')->with([
             'title' => 'Pencarian Asset',
             'active' => 'Pencarian Asset',
             'assets' => detail_barang::all(),

@@ -22,7 +22,7 @@
                     @if ($requests == null)
                     @else
                         <input type="hidden" name="date" id="requestsInput" value="{{ $requests->query('date') }}">
-                        <input type="hidden" name="id_tipe" id="requestsInput" value="{{ $requests->query('tipe') }}">
+                        <input type="hidden" name="tipe" id="requestsInput" value="{{ $requests->query('tipe') }}">
                     @endif
                     <button type="submit" class="btn btn-primary btn-sm mt-2 mb-2 w-100">
                         <i class="fa-solid fa-print"></i>
@@ -30,6 +30,15 @@
                     </button>
                 </form>
             </div>
+            <form method="GET" action="/export-laporan-data-ruangan">
+                @if ($requests == null)
+                @else
+                    <input type="hidden" name="date" id="requestsInput" value="{{ $requests->query('date') }}">
+                    <input type="hidden" name="tipe" id="requestsInput" value="{{ $requests->query('tipe') }}">
+                @endif
+                <button type="submit" class="btn btn-success mb-2"><i class="fa-solid fa-download me-2"></i>Download
+                    Excel</button>
+            </form>
         </div>
         <table class="table table-striped" id="data-tables">
             <thead>

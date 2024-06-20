@@ -210,9 +210,9 @@
                         {{-- <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td> --}}
                         <td style="text-align: center;">{{ $asset->kondisi }}</td>
                         {{-- <td>{{ $pengguna->nama_user }}</td> --}}
-                        @if ($user_id->user_id == null)
-                            <td></td>
-                        @elseif ($no_penempatan == null)
+                        @if ($no_penempatan == null)
+                        <td></td>
+                        @elseif ($user_id->user_id == null)
                             <td></td>
                         @else
                             <td>{{ $pengguna->nama_user }}</td>

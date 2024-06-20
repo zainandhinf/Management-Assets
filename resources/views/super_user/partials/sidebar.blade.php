@@ -101,17 +101,23 @@
                 </ul>
             </li>
             <li class="nav-item mb-1 mt-1">
+                <a href="/cari-asset" class="{{ $title === 'Pencarian Asset' ? 'active' : '' }}">
+                    <i class="fa-solid fa-search"></i>
+                    Pencarian Asset
+                </a>
+            </li>
+            <li class="nav-item mb-1 mt-1">
                 <a href="/training" class="{{ $title === 'Data Jadwal Training' ? 'active' : '' }}">
                     <i class="fa-solid fa-chalkboard-user"></i>
                     Training / Programs
                 </a>
             </li>
-            <li class="nav-item mb-1">
+            {{-- <li class="nav-item mb-1">
                 <a href="/admin-reports" class="{{ $title === 'Reports' ? 'active' : '' }}">
                     <i class="fa-solid fa-scroll"></i>
                     Reports
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </div>
     <hr class="mt-0 hr-custom">

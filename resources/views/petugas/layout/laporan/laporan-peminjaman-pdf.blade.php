@@ -72,7 +72,7 @@
         }
 
         .keterangan {
-            margin-left: 120px;
+            margin-left: 180px;
             margin-bottom: 18px;
         }
 

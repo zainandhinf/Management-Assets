@@ -227,6 +227,7 @@
     </div> --}}
 
     <div class="card p-4" style="font-size: 14px;">
+        <h5 class="mb-4">Jadwal Training Minggu Ini</h5>
             <table class="table table-striped" id="data-tables">
                 <thead>
                     <tr>

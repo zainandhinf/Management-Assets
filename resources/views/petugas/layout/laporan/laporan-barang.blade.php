@@ -30,6 +30,15 @@
                     </button>
                 </form>
             </div>
+            <form method="GET" action="/export-laporan-data-barang">
+                @if ($requests == null)
+                @else
+                    <input type="hidden" name="date" id="requestsInput" value="{{ $requests->query('date') }}">
+                    <input type="hidden" name="kategori" id="requestsInput" value="{{ $requests->query('kategori') }}">
+                @endif
+                <button type="submit" class="btn btn-success mb-2"><i class="fa-solid fa-download me-2"></i>Download
+                    Excel</button>
+            </form>
         </div>
 
         <table class="table table-striped" id="data-tables" style="font-size: 14px;">

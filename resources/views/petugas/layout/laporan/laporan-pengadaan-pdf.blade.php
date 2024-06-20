@@ -72,8 +72,9 @@
         }
 
         .keterangan {
-            margin-left: 120px;
+            margin-left: 220px;
             margin-bottom: 18px;
+            
         }
 
         .keterangan p {
