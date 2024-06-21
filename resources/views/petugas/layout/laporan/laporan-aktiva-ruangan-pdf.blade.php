@@ -60,12 +60,12 @@
             font-size: 8px;
             /* font-weight: bold; */
         }
-        
+
         .judul h1 {
             margin-bottom: -8px;
             font-size: 20px;
         }
-        
+
         .judul p {
             font-size: 14px;
             margin-top: -8px;
@@ -116,6 +116,11 @@
 <body>
     @php
         $no = 1;
+        $id_departemen = DB::table('ruangans')->select('id_departemen')->where('no_ruangan', '=', $no_ruangan)->first();
+        $departemen = DB::table('departemens')
+            ->select('*')
+            ->where('id', '=', $id_departemen->id_departemen)
+            ->first();
     @endphp
     <div class="logo">
         <img src="assets/image/logoPTDIterbarucrophitam.jpg" alt="">
@@ -125,15 +130,20 @@
         </div>
     </div>
     <div class="judul">
-        <div style="width: 100%; text-align: center;"><h1>DAFTAR AKTIVA TETAP RUANGAN</h1></div>
+        <div style="width: 100%; text-align: center;">
+            <h1>DAFTAR AKTIVA TETAP RUANGAN</h1>
+        </div>
         <hr>
-        <div style="width: 100%; text-align: center;"><p>Ref: KP Nomor: 77-KP-001 & AP Nomor 77-AP-001</p></div>
+        <div style="width: 100%; text-align: center;">
+            <p>Ref: KP Nomor: 77-KP-001 & AP Nomor 77-AP-001</p>
+        </div>
     </div>
     <div class="keterangan">
         <p style="margin-left: -55px;">UNIT ORGANISASI</p>
-        <p style="margin-top: -20px; margin-left: 150px;">:HD0000 (Divisi Pengembangan Sumber Daya Manusia)-DU</p>
+        <p style="margin-top: -20px; margin-left: 150px;">: HD0000 (Divisi Pengembangan Sumber Daya Manusia)-DU</p>
         <p style="margin-left: -55px;">DEPARTEMEN</p>
-        <p style="margin-top: -20px; margin-left: 150px;">:HD3000 (Dept. Pendidikan dan Pelatihan)</p>
+        <p style="margin-top: -20px; margin-left: 150px;">: {{ $departemen->no_departemen }}
+            ({{ $departemen->departemen }})</p>
         <p style="margin-left: -55px;">NAMA GEDUNG</p>
         <p style="margin-top: -20px; margin-left: 150px;">: K-TC (Kantor Training Center)</p>
         <p style="margin-left: -55px;">NOMOR RUANGAN </p>
@@ -143,12 +153,12 @@
         <table class="table table-striped" id="data-tables-keranjang">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Kode</th>
-                    <th>Nama Barang</th>
-                    <th>Merk</th>
-                    <th>Kondisi</th>
-                    <th>Nama Pengguna</th>
+                    <th>NO</th>
+                    <th style="row-gap: 10px;">NAMA BARANG</th>
+                    <th>NOMOR <br> KODIFIKASI</th>
+                    <th>KONDISI</th>
+                    <th>NAMA <br> PENGGUNA</th>
+                    <th>KET</th>
                 </tr>
             </thead>
             @foreach ($assets as $asset)
@@ -161,24 +171,33 @@
                         ->select('*')
                         ->where('id', '=', $asset->user_id)
                         ->first();
+                        // dd($asset);
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
-                    <td>No Barang: <b>{{ $asset->no_barang }}</b> <br>Barcode:
+                    {{-- <td>No Barang: <b>{{ $asset->no_barang }}</b> <br>Barcode:
                         <b>{!! DNS1D::getBarcodeHTML($asset->kode_barcode, 'UPCA') !!}{{ $asset->kode_barcode }}</b> <br>No Asset:
                         <b>{{ $asset->no_asset }}</b>
-                    </td>
-                    <td>{{ $nama_barang->nama_barang }}</td>
-                    <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td>
+                    </td> --}}
+                    {{-- <td>{{ $nama_barang->nama_barang }}</td> --}}
+                    <td>{{ $nama_barang->nama_barang }}, {{ $asset->merk }}</td>
+                    <td style="text-align: center;">{{ $asset->nomor_kodifikasi }}</td>
+                    {{-- <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td> --}}
                     <td style="text-align: center;">{{ $asset->kondisi }}</td>
-                    <td>{{ $pengguna->nama_user }}</td>
+                    {{-- <td>{{ $pengguna->nama_user }}</td> --}}
+                    @if ($pengguna == null)
+                        <td></td>
+                    @else
+                        <td>{{ $pengguna->nama_user }}</td>
+                        @endif
+                    <td>{{ $asset->keterangan }}</td>
                 </tr>
             @endforeach
         </table>
     </div>
 
     @if ($count > 7)
-    <div class="page-break"></div>
+        <div class="page-break"></div>
     @endif
     <div class="footer">
         <div class="left">

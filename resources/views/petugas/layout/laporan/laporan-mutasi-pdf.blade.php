@@ -154,23 +154,22 @@
             </p>
             <p style="margin-left: -55px;">KETERANGAN</p>
             <p style="margin-top: -20px; margin-left: 150px;">: {{ $mutasi->keterangan }}</p>
-        </div>
-        <div class="table">
-            <table class="table table-striped" id="data-tables-keranjang">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode</th>
-                        <th>Nama Barang</th>
-                        <th>Merk</th>
-                        <th>Kondisi</th>
-                        <th>Nama Pengguna</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
+            </div>
+            <div class="table">
+                <table class="table table-striped" id="data-tables-keranjang">
+                    <thead>
+                        <tr>
+                            <th>NO</th>
+                            <th style="row-gap: 10px;">NAMA BARANG</th>
+                            <th>NOMOR <br> KODIFIKASI</th>
+                            <th>KONDISI</th>
+                            <th>NAMA <br> PENGGUNA</th>
+                            <th>KET</th>
+                        </tr>
+                    </thead>
                 @php
                     $assets = DB::table('detail_mutasis')
-                        ->select('*')
+                        ->select('*', 'detail_barangs.keterangan as keterangan_barang')
                         ->join('detail_barangs', 'detail_mutasis.kode_barcode', '=', 'detail_barangs.kode_barcode')
                         ->join('mutasis', 'detail_mutasis.no_mutasi', '=', 'mutasis.no_mutasi')
                         ->where('detail_mutasis.no_mutasi', $mutasi->no_mutasi)
@@ -212,20 +211,22 @@
                     @endphp
                     <tr>
                         <td>{{ $no++ }}</td>
-                        <td>No Barang: <b>{{ $asset->no_barang }}</b> <br>Barcode:
+                        {{-- <td>No Barang: <b>{{ $asset->no_barang }}</b> <br>Barcode:
                             <b>{!! DNS1D::getBarcodeHTML($asset->kode_barcode, 'UPCA') !!}{{ $asset->kode_barcode }}</b> <br>No Asset:
                             <b>{{ $asset->no_asset }}</b>
-                        </td>
-                        <td>{{ $nama_barang->nama_barang }}</td>
-                        <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td>
+                            </td> --}}
+                            {{-- <td>{{ $nama_barang->nama_barang }}</td> --}}
+                            <td>{{ $nama_barang->nama_barang }}, {{ $asset->merk }}</td>
+                        <td style="text-align: center;">{{ $asset->nomor_kodifikasi }}</td>
+                        {{-- <td>{{ $asset->merk }}, {{ $asset->spesifikasi }}</td> --}}
                         <td style="text-align: center;">{{ $asset->kondisi }}</td>
+                        {{-- <td>{{ $pengguna->nama_user }}</td> --}}
                         @if ($user_id == null || $user_id->user_id == null || $no_penempatan == null)
                             <td></td>
                         @else
                             <td>{{ $pengguna->nama_user }}</td>
                         @endif
-
-                        <td style="text-align: center;">{{ $asset->status }}</td>
+                        <td>{{ $asset->keterangan_barang }}</td>
                     </tr>
                 @endforeach
             </table>

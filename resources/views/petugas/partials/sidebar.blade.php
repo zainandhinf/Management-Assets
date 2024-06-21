@@ -1,7 +1,8 @@
 <div id="bdSidebar" style="overflow: hidden; height: 100vh;"
     class="d-flex flex-column flex-shrink-0 p-3 bg-white offcanvas-md offcanvas-start" style="width: 280px;">
     <div class="navbar-brand d-flex mt-2">
-        <div class="ms-3"><img src="assets/image/logoPTDIterbarucrop.jpg" width="50" alt=""></div>
+        {{-- <div class="ms-3"><img src="assets/image/logoPTDIterbarucrop.jpg" width="50" alt=""></div> --}}
+        <div class="ms-3"><img src="../assets/image/logoPTDIterbarucrop.jpg" width="50" alt=""></div>
         <div class="ms-3 fw-bold">
             <h5>Management <br>Assets - LC</h5>
         </div>
@@ -194,9 +195,15 @@
                 </a>
             </li>
             <li class="nav-item mb-1">
-                <a href="/data-assets" class="{{ $title === 'Data Training' ? 'Data Asstes' : '' }}">
+                <a href="/data-assets" class="{{ $title === 'Data Assets' ? 'active' : '' }}">
                     <i class="fa-solid fa-list"></i>
                     Data Assets
+                </a>
+            </li>
+            <li class="nav-item mb-1">
+                <a href="/pencarian-asset" class="{{ $title === 'Pencarian Asset' ? 'active' : '' }}">
+                    <i class="fa-solid fa-search"></i>
+                    Pencarian Asset
                 </a>
             </li>
             <li class="nav-item mb-1">
@@ -276,6 +283,13 @@
                                     Laporan Data Ruangan
                                 </a>
                             </li>
+                            <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
+                                <a href="/laporan-data-departemen"
+                                    class="{{ $title === 'Laporan Data Departemen' ? 'active' : '' }}">
+                                    <i class="fa-solid fa-building"></i>
+                                    Laporan Data Departemen
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li
@@ -332,7 +346,7 @@
                             </li>
                             <li class="nav-item mb-1" style="background: #f7f7f7; border-radius: 8px;">
                                 <a href="/laporan-data-penghapusan"
-                                    class="{{ $title === 'Laporan Data Penghapusans' ? 'active' : '' }}">
+                                    class="{{ $title === 'Laporan Data Penghapusan' ? 'active' : '' }}">
                                     <i class="fa-solid fa-ban"></i>
                                     Laporan Data Penghapusan
                                 </a>
@@ -347,12 +361,22 @@
     <div class="d-flex user-custom">
         <a href="/profile-koordinator">
             @if (auth()->user()->foto == null)
+<<<<<<< HEAD
             <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
                 style="width: 50px; height: 50px; margin-top: 4px;" alt="">
         @else
             <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-fluid rounded rounded-circle me-2"
                 style="width: 50px; height: 50px; margin-top: 4px;" alt="">
         @endif
+=======
+                <img src="../assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
+                    style="width: 50px; height: 50px; margin-top: 4px;" alt="">
+            @else
+                <img src="{{ asset('storage/' . auth()->user()->foto) }}"
+                    class="img-fluid rounded rounded-circle me-2" style="width: 50px; height: 50px; margin-top: 4px;"
+                    alt="">
+            @endif
+>>>>>>> 10b90c07f49f57de3c0370bef116063539c9aca1
         </a>
         <span style="margin-top: 4px; ">
             <h6 class="mt-1 mb-0">{{ explode(' ', auth()->user()->nama_user)[0] }}</h6>

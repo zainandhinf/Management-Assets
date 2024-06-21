@@ -39,14 +39,58 @@ use Carbon\Carbon;
 class PController extends Controller
 {
     // route view
+    public function getTrainingsThisWeek()
+    {
+        // Mendapatkan tanggal awal dan akhir minggu ini
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        // Mengambil training yang sedang dilaksanakan minggu ini
+        $trainings = training::where(function ($query) use ($startOfWeek, $endOfWeek) {
+            $query->whereBetween('tanggal_mulai', [$startOfWeek, $endOfWeek])
+                ->orWhereBetween('tanggal_selesai', [$startOfWeek, $endOfWeek])
+                ->orWhere(function ($query) use ($startOfWeek, $endOfWeek) {
+                    $query->where('tanggal_mulai', '<', $startOfWeek)
+                        ->where('tanggal_selesai', '>', $endOfWeek);
+                });
+        })->get();
+
+        return $trainings;
+    }
     public function index()
     {
+        $petugas = DB::table('users')->count();
+        $pegawai = DB::table('pegawais')->count();
+        $barang = DB::table('barangs')->count();
+        $ruangan = DB::table('ruangans')->count();
+        $departemen = DB::table('departemens')->count();
+        $pengadaan = DB::table('pengadaans')->count();
+        $penempatan = DB::table('penempatans')->count();
+        $mutasi = DB::table('mutasis')->count();
+        $peminjaman = DB::table('peminjamans')->count();
+        $maintenance = DB::table('maintenances')->count();
+        $penghapusan = DB::table('penghapusans')->count();
+
+        $trainings = $this->getTrainingsThisWeek();
+
         return view(
             'petugas.layout.dashboard',
             [
                 'title' => 'Dashboard',
                 'active' => 'Dashboard',
                 'open' => 'no',
+                'petugas' => $petugas,
+                'pegawai' => $pegawai,
+                'barang' => $barang,
+                'ruangan' => $ruangan,
+                'departemen' => $departemen,
+                'pengadaan' => $pengadaan,
+                'penempatan' => $penempatan,
+                'mutasi' => $mutasi,
+                'peminjaman' => $peminjaman,
+                'maintenance' => $maintenance,
+                'penghapusan' => $penghapusan,
+                'trainings' => $trainings,
             ]
         );
     }
@@ -785,9 +829,9 @@ class PController extends Controller
         // dd($cek2);
         $cek3 = DB::table('keranjang_peminjamans')
 
-                        ->where('kode_barcode', '=', $request->kode_barcode)
-                        ->count();
-                        // dd($cek3);
+            ->where('kode_barcode', '=', $request->kode_barcode)
+            ->count();
+        // dd($cek3);
         $cek4 = DB::table('keranjang_penghapusans')
             ->where('kode_barcode', '=', $request->kode_barcode)
             ->count();
@@ -1434,18 +1478,18 @@ class PController extends Controller
                         $request->session()->flash('error', 'Data GAGAL ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
 
                         return redirect('/mutasi-tambah');
-                            // $request->session()->flash('error', 'Data gagal ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+                        // $request->session()->flash('error', 'Data gagal ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
 
-                            // // return redirect('/mutasi-tambah');
-                            // if ($lokasi->no_ruangan == $request->no_ruangan) {
-                            //     $request->session()->flash('error', 'Data GAGAL ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
+                        // // return redirect('/mutasi-tambah');
+                        // if ($lokasi->no_ruangan == $request->no_ruangan) {
+                        //     $request->session()->flash('error', 'Data GAGAL ditambahkan! Salah satu barang memiliki lokasi lama yang sama dengan lokasi baru');
 
-                            //     return redirect('/mutasi-tambah');
-                            // }
-                        }
+                        //     return redirect('/mutasi-tambah');
+                        // }
                     }
                 }
             }
+        }
 
         //     //     // dd($mutasi);
 
@@ -1733,7 +1777,7 @@ class PController extends Controller
         // dd($validatedData);
         DB::table('peminjamans')->insert($validatedData);
 
-        $validatedDataStatus['status_pinjam'] = "Dipinjam oleh: $nama";
+        $validatedDataStatus['status_pinjam'] = "Dipinjam oleh $nama";
         // dd($validatedDataStatus['status']);
         foreach ($kode_barcodes as $kode_barcode) {
             // return redirect('/jkbkhbd');

@@ -112,6 +112,7 @@
         <table>
             <tr>
                 <th>No</th>
+                <th>Foto</th>
                 <th>NIK</th>
                 <th>Nama</th>
                 <th>Gender</th>
@@ -121,6 +122,19 @@
             @foreach ($petugass as $petugas)
                 <tr>
                     <td>{{ $no++ }}</td>
+                    <td style="text-align: center;">
+                        @if($petugas->foto == null)
+
+                        <img src="nophoto.png" alt="No Photo" class="rounded rounded-circle" style="width: 60px; height: 60px;"
+                        style="width: 50px;" alt="">
+
+                        @else
+
+                        <img src="{{ asset('storage/' . $petugas->foto) }}" class="rounded rounded-circle" style="width: 60px; height: 60px;"
+                        style="width: 50px;" alt="">
+
+                        @endif
+                    </td>
                     <td>{{ $petugas->nik }}</td>
                     <td>{{ $petugas->nama_user }}</td>
                     <td>

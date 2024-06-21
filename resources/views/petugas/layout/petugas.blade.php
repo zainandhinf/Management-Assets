@@ -8,14 +8,14 @@
                 <tr>
                     <th>#</th>
                     {{-- <th>Foto Profil</th> --}}
+                    <th>Foto</th>
                     <th>NIK</th>
                     <th>Nama</th>
-                    <th>Gender</th>
+                    <th>L/P</th>
                     {{-- <th>Alamat</th> --}}
                     {{-- <th>No Telepon</th> --}}
                     <th>Username</th>
                     <th>Role</th>
-                    {{-- <th data-searchable="false">Action</th> --}}
                 </tr>
             </thead>
             @php
@@ -26,13 +26,26 @@
                     <td>{{ $no++ }}</td>
                     {{-- <td>{{ $city->id }}</td> --}}
                     {{-- <td>lorem</td> --}}
+                    <td>
+                        @if($petugas->foto == null)
+
+                        <img src="{{ asset('nophoto.png') }}" alt="No Photo" class="rounded rounded-circle" style="width: 60px; height: 60px;"
+                        style="width: 50px;" alt="">
+
+                        @else
+
+                        <img src="{{ asset('storage/' . $petugas->foto) }}" class="rounded rounded-circle" style="width: 60px; height: 60px;"
+                        style="width: 50px;" alt="">
+
+                        @endif
+                    </td>
                     <td>{{ $petugas->nik }}</td>
                     <td>{{ $petugas->nama_user }}</td>
                     <td>
                         @if ($petugas->jenis_kelamin === 'L')
-                            Laki-Laki
+                            L
                         @else
-                            Perempuan
+                            P
                         @endif
                     </td>
                     {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
@@ -45,18 +58,6 @@
                             Koordinator
                         @endif
                     </td>
-                    {{-- <td>
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
-                            style="margin-right: 10px" class="btn btn-primary mr-2"><i
-                                class="fa-regular fa-eye"></i></button>
-
-                        <button data-bs-toggle="modal" data-bs-target="#editdata{{ $petugas->id }}"
-                            style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
-                        <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $petugas->id }}"
-                            class="btn btn-danger mt-1">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </td> --}}
                 </tr>
             @endforeach
         </table>

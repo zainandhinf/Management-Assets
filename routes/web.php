@@ -187,12 +187,14 @@ Route::get('/laporan-data-petugas/f=', [ReportController::class, 'goLaporanPetug
 // Route::get('/print/laporan-data-petugas/f=', [ReportController::class, 'goLaporanPetugasPdf']);
 Route::get('/print-data-petugas-pdf', [ReportController::class, 'goLaporanPetugasPdf']);
 // Route::get('/print-petugas', [ReportController::class, 'goLaporanPetugasPdf']);
+Route::get('/export-laporan-data-petugas', [ReportController::class, 'exportpetugas']);
 //END LAPORAN DATA PETUGAS
 
 //LAPORAN DATA PEGAWAI
 Route::get('/laporan-data-pegawai', [ReportController::class, 'goLaporanPegawai']);
 Route::get('/laporan-data-pegawai/f=', [ReportController::class, 'goLaporanPegawaiFilter']);
 Route::get('/print-data-pegawai-pdf', [ReportController::class, 'goLaporanPegawaiPdf']);
+Route::get('/export-laporan-data-pegawai', [ReportController::class, 'exportpegawai']);
 //END LAPORAN DATA PEGAWAI
 
 //LAPORAN DATA BARANG
@@ -206,6 +208,12 @@ Route::get('/laporan-data-ruangan', [ReportController::class, 'goLaporanRuangan'
 Route::get('/laporan-data-ruangan/f=', [ReportController::class, 'goLaporanRuanganFilter']);
 Route::get('/print-data-ruangan-pdf', [ReportController::class, 'goLaporanRuanganPdf']);
 //END LAPORAN DATA RUANGAN
+
+//LAPORAN DATA DEPARTEMEN
+Route::get('/laporan-data-departemen', [ReportController::class, 'goLaporanDepartemen']);
+Route::get('/laporan-data-departemen/f=', [ReportController::class, 'goLaporanDepartemenFilter']);
+Route::get('/print-data-departemen-pdf', [ReportController::class, 'goLaporanDepartemenPdf']);
+//END LAPORAN DATA DEPARTEMEN
 
 //LAPORAN DATA TRANSAKSI PENGADAAN
 Route::get('/laporan-data-pengadaan', [ReportController::class, 'goLaporanPengadaan']);
@@ -252,6 +260,10 @@ Route::get('/print/aktiva', [ReportController::class, 'goLaporanAktivaPdf']);
 Route::get('/data-assets', [ReportController::class, 'goAssets']);
 Route::get('/print/assets', [ReportController::class, 'goLaporanAssetsPdf']);
 //END LAPORAN DATA ASSETS
+
+//PENCARIAN ASSET
+Route::get('/pencarian-asset', [ReportController::class, 'goPencarianAssets']);
+//END PENCARIAN ASSET
 
 //PRINT BARCODE
 Route::get('/print/barcode-all', [ReportController::class, 'goBarcodeAllPdf']);

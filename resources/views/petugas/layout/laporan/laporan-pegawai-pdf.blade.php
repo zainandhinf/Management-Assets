@@ -131,7 +131,10 @@
                         @endif
                     </td>
                     <td>{{ $pegawai->no_telepon }}</td>
-                    <td>{{ $pegawai->organisasi }}</td>
+                    @php
+                        $organisasi = DB::table('departemens')->where('id', $pegawai->id_departemen)->first(); 
+                    @endphp
+                    <td>{{ $organisasi->departemen }}</td>
                 </tr>
             @endforeach
         </table>
