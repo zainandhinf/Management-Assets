@@ -265,6 +265,9 @@
         $(document).ready(function() {
             $('#data-tables').DataTable();
         });
+        $(document).ready(function() {
+            $('#data-tables-detail').DataTable();
+        });
 
         $(document).ready(function() {
             if ($(".alert-success").length > 0) {

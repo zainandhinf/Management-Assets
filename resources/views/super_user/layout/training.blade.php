@@ -2,12 +2,16 @@
 
 @section('content')
     <div class="card p-4" style="font-size: 14px;">
-        @if ($cek1 > 0 && $cek2 > 0)
+        @if ($cek1 > 0 && $cek2 > 0 && $cek3 > 0)
             <div class="d-flex">
-
-                <a href="#" onclick="ShowModal1()" type="button" class="btn border-warning btn-sm w-100 me-1">
+                @if($title == "Data Jadwal Training")
+                <button style="cursor: not-allowed" onclick="ShowModal1()" type="button" class="btn border-warning btn-sm w-100 me-1" disabled>
                     Training
-                </a>
+                </button>
+
+
+                @endif
+
                 <a href="/peserta-training" onclick="ShowModal1()" type="button"
                     class="btn  btn-warning border-warning btn-sm w-100 ms-1">
                     Peserta
@@ -106,7 +110,7 @@
         @else
             <b>
                 <h5>
-                    *Note: Data Training hanya bisa dibuat ketika kamu sudah mengisi <a href="/ruangan">Data
+                    *Note: Data Training hanya bisa dibuat ketika kamu sudah mengisi <a href="data-training">Judul Training</a>, <a href="/ruangan">Data
                         Ruangan</a> dan <a href="/petugas">Data Koordinator</a> terlebih dahulu !
                 </h5>
             </b>
@@ -161,7 +165,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    <label for="name" class="col-form-label">Tanggal Training :</label>
+                                    <label for="name" class="col-form-label">Tanggal Training (format: bulan/hari/tahun):</label>
                                     <div class="d-flex">
                                         <input style="font-size: 14px;" type="date" id="tanggal_mulai"
                                             class="form-control @error('tanggal_mulai')

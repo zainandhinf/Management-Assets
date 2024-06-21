@@ -97,7 +97,7 @@ body {
 <body>
     @include('sweetalert::alert')
 
-    <form method="post" action="/loginrequest">
+    <form method="post" action="/cpfc">
       @csrf
       <div class="wrapper-login" style="font-family: 'Inter';">
 
@@ -109,22 +109,23 @@ body {
             <img src="assets/image/logoPTDIterbaru.jpg" alt="LOGO" width="120px">
           </div>
 
-          <h4 class="ps-3 pt-3 pe-3">Management Asset</h4>
-          <h6 class="pb-3">Learning Center</h6>
+          <h4 class="p-4 ps-3 pt-3 pe-3">Reset Password</h4>
+          {{-- <h6 class="pb-3">Enter Your New Password*</h6> --}}
           <div>
 
             <table>
                 <div class="form-group">
                 <tr>
-                    <td style="padding: 10px;">Username</td>
+                    <td style="padding: 10px;">Pegawai</td>
                     <td>
-                        <input class="form-control mb-2" type="text" id="username" name="username" placeholder="Username" autocomplete="off" autofocus required>
+                        <input style="background: #eee" value="({{ $user->nik }}) - {{ $user->nama_user }}" class="form-control mb-2" name="wjdhuhd" type="text">
+                        <input style="background: #eee" value="{{ $user->nik }}" class="form-control mb-2" type="hidden" id="nik" name="nik" placeholder="" autocomplete="off" autofocus required readonly>
                     </td>
                 </tr>
                 <tr>
-                    <td style="padding: 10px;">Password</td>
+                    <td style="padding: 10px;">New Password*</td>
                     <td>
-                        <input class="form-control mb-2" type="password" id="password" name="password" placeholder="Password" required></td>
+                        <input class="form-control mb-2" type="password" id="password" name="password" placeholder="" required></td>
                 </tr>
 
                 {{-- @if(session()->has('Login Gagal'))
@@ -145,12 +146,12 @@ body {
 
 
             <button type="submit" id="login" class="btn btn-success m-2">
-                Login
+                Change Password
             </button>
 
 
           <div id="create-account-wrap">
-            <p class="mt-2" style="color: black;">forgot password? <a href="/fp">click here</a><p>
+            <p class="mt-2" style="color: black;">You remembered? <a href="/">login</a><p>
           </div>
         </div>
 

@@ -28,6 +28,12 @@ Route::get('/', [LoginController::class, 'login']);
 Route::post('/loginrequest', [LoginController::class, 'loginrequest']);
 Route::post('/logout', [LoginController::class, 'logout']);
 
+// change password
+Route::post('/try', [LoginController::class, 'tryCheck'])->middleware('guest');
+Route::get('/fp', [LoginController::class, 'forgotPassword'])->middleware('guest');
+Route::get('/checked', [LoginController::class, 'toChangePassword'])->middleware('guest');
+Route::post('/cpfc', [LoginController::class, 'cpfc'])->middleware('guest');
+
 //super user
 Route::get('/dashboard', [SUController::class, 'index']);
 Route::get('/petugas', [SUController::class, 'goPetugas']);

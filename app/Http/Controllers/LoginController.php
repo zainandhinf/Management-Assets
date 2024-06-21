@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use Alert;
 
 class LoginController extends Controller
@@ -38,7 +40,7 @@ class LoginController extends Controller
             } else{
 
 
-
+            
 
 
                 $request->session()->regenerate();
@@ -63,5 +65,67 @@ class LoginController extends Controller
 
         return redirect('/');
     }
+
+    public function forgotPassword() {
+        return view('forgot');
+    }
+
+    public function tryCheck(Request $request) {
+
+
+
+        $nik = $request->nik;
+
+        $user = DB::table('users')
+                        ->where('nik', '=', $request->nik)
+                        ->first();
+
+                        // dd($user);
+        if ($user != null) {
+            $request->validate([
+                'nik' => 'required|exists:users,nik',
+            ]);
+            Alert::toast('Pegawai Teridentifikasi!','info');
+
+            return view('changepass')->with([
+                'user' => $user,
+
+            ]);
+        } else {
+
+            Alert::toast('Tidak Ditemukan! Coba Periksa Kembali Nik','error');
+
+            return view('forgot');
+
+        }
+
+
+
+    }
+
+    public function cpfc(Request $request) {
+        // dd($request);
+        $nik = $request->nik;
+        $pass = Hash::make($request->input('password'));
+
+
+        $a = DB::table('users')
+                ->where('nik', '=', $nik)
+                ->select('nik', 'id')
+                ->first();
+
+
+        $idString = $a->id;
+
+        $user = User::find($idString);
+        $user->password = $pass;
+        $user->update();
+
+
+        Alert::success('Password Changed!','successfully');
+        return redirect('/');
+
+    }
+
 
 }

@@ -7,9 +7,12 @@
             <a href="/training" onclick="ShowModal1()" type="button" class="btn btn-warning border-warning btn-sm w-100 me-1">
                 Training
             </a>
-            <a href="#" onclick="ShowModal1()" type="button" class="btn border-warning btn-sm w-100 ms-1">
+            @if($title == "Data Peserta Training")
+
+            <button style="cursor: not-allowed" onclick="ShowModal1()" type="button" class="btn border-warning btn-sm w-100 ms-1" disabled>
                 Peserta
-            </a>
+            </button>
+            @endif
         </div>
         @if ($cek > 0 && $cek_pegawai > 0)
             <button onclick="ShowModal1()" type="button" class="btn btn-primary btn-sm mt-2 mb-2" data-bs-toggle="modal"

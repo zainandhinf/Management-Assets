@@ -361,6 +361,14 @@
     <div class="d-flex user-custom">
         <a href="/profile-koordinator">
             @if (auth()->user()->foto == null)
+<<<<<<< HEAD
+            <img src="assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
+                style="width: 50px; height: 50px; margin-top: 4px;" alt="">
+        @else
+            <img src="{{ asset('storage/' . auth()->user()->foto) }}" class="img-fluid rounded rounded-circle me-2"
+                style="width: 50px; height: 50px; margin-top: 4px;" alt="">
+        @endif
+=======
                 <img src="../assets/image/user.png" class="img-fluid rounded rounded-circle me-2"
                     style="width: 50px; height: 50px; margin-top: 4px;" alt="">
             @else
@@ -368,9 +376,10 @@
                     class="img-fluid rounded rounded-circle me-2" style="width: 50px; height: 50px; margin-top: 4px;"
                     alt="">
             @endif
+>>>>>>> 10b90c07f49f57de3c0370bef116063539c9aca1
         </a>
-        <span style="margin-top: 4px">
-            <h6 class="mt-1 mb-0">{{ explode(' ', auth()->user()->username)[0] }}</h6>
+        <span style="margin-top: 4px; ">
+            <h6 class="mt-1 mb-0">{{ explode(' ', auth()->user()->nama_user)[0] }}</h6>
             <small>Koordinator</small>
         </span>
         <div class="logout" style="margin-bottom: 100px">

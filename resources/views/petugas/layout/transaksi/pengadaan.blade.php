@@ -311,6 +311,11 @@
             aria-hidden="true" style="font-size: 14px;">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h4>Detail Pengadaan {{ $pengadaan->no_pengadaan }}</h4>
+                        <br>
+                        Pada Tanggal: {{ $pengadaan->tanggal_pengadaan }}
+                    </div>
                     <div class="modal-body">
                         <table class="table table-striped" id="data-tables">
                             <thead>
@@ -321,7 +326,7 @@
                                     {{-- <th>Alamat</th> --}}
                                     {{-- <th>No Telepon</th> --}}
                                     <th>Merk</th>
-                                    <th>Tanggal Pengadaan</th>
+                                    {{-- <th>Tanggal Pengadaan</th> --}}
                                     {{-- <th>Jenis Pengadaan</th> --}}
                                     <th>Kondisi</th>
                                     {{-- <th>Status</th> --}}
@@ -344,7 +349,7 @@
                                         Kodifikasi: <b>{{ $detail_barang->nomor_kodifikasi }}</b>
                                     </td>
                                     <td>{{ $detail_barang->merk }}, {{ $detail_barang->spesifikasi }}</td>
-                                    <td>{{ $detail_barang->tanggal_pengadaan }}</td>
+                                    {{-- <td>{{ $detail_barang->tanggal_pengadaan }}</td> --}}
                                     {{-- <td>{{ $detail_barang->jenis_pengadaan }}</td> --}}
                                     <td>{{ $detail_barang->kondisi }}</td>
                                     {{-- <td>{{ $detail_barang->status }}</td> --}}

@@ -192,11 +192,9 @@ class SUController extends Controller
     {
         $cek1 = DB::table('users')->where('role', '=', 'petugas')->count();
         $cek2 = DB::table('ruangans')->count();
+        $cek3 = DB::table('data_trainings')->count();
 
 
-
-
-                    // dd($total_peserta);
 
         return view('super_user.layout.training')->with([
             'title' => 'Data Jadwal Training',
@@ -205,6 +203,7 @@ class SUController extends Controller
             // 'total_peserta' => $total_peserta,
             'cek1' => $cek1,
             'cek2' => $cek2,
+            'cek3' => $cek3,
             'open' => 'no',
         ]);
     }
@@ -267,17 +266,24 @@ class SUController extends Controller
             'nama_kategori' => 'required|max:255'
         ]);
 
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
         kategori_barang::create($validatedData);
 
         $request->session()->flash('success', 'Kategori baru telah ditambahkan!');
 
         return redirect('/kategori-barang');
     }
+
     public function editKategori(Request $request, kategori_barang $kategori_barangs)
     {
         $validatedData = $request->validate([
             'nama_kategori' => 'required|max:255'
         ]);
+
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         DB::table('kategori_barangs')
             ->where('id', $request->input('id_ktgr'))
@@ -316,6 +322,9 @@ class SUController extends Controller
             'keterangan' => 'required|max:255'
         ]);
 
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
         tipe_ruangan::create($validatedData);
 
         $request->session()->flash('success', 'Tipe ruangan baru telah ditambahkan!');
@@ -328,6 +337,9 @@ class SUController extends Controller
             'nama_tipe' => 'required|max:255',
             'keterangan' => 'required'
         ]);
+
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         DB::table('tipe_ruangans')
             ->where('id', $request->input('id_tipe'))
@@ -358,6 +370,10 @@ class SUController extends Controller
             'nama_training' => 'required|max:255',
             'keterangan' => 'required|max:255'
         ]);
+
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
 
         data_training::create($validatedData);
 
@@ -412,6 +428,9 @@ class SUController extends Controller
         $validatedData['foto'] = $request->file('foto')->store('fotopetugas');
 
         }
+
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         User::create($validatedData);
 
@@ -478,6 +497,9 @@ class SUController extends Controller
         $validatedData['foto'] = $datapegawai->foto;
         $validatedData['password'] = Hash::make($request->input('password'));
 
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
 
         User::create($validatedData);
 
@@ -515,10 +537,16 @@ class SUController extends Controller
             }
         }
 
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
         DB::table('users')->where('nik', $request->nik)->update($validatedData);
 
         // Update data pegawais
         $validatedData2 = $request->only(['nik', 'nama_user', 'jenis_kelamin', 'alamat', 'no_telepon', 'foto']);
+
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData2['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         DB::table('pegawais')->where('nik', $request->nik)->update($validatedData2);
 
@@ -534,9 +562,9 @@ class SUController extends Controller
             ->where('id', '=', $request->input('id_user'))
             ->get();
 
-        if ($request->foto != null) {
-            Storage::delete($request->input('foto'));
-        }
+        // if ($request->foto != null) {
+        //     Storage::delete($request->input('foto'));
+        // }
 
 
         DB::table('users')->where('id', $request->input('id_user'))->delete();
@@ -573,6 +601,9 @@ class SUController extends Controller
             $validatedData['foto'] = '';
 
         }
+
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         pegawai::create($validatedData);
 
@@ -616,9 +647,15 @@ class SUController extends Controller
         }
 
 
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
             DB::table('pegawais')
                 ->where('id', $request->input('id_user'))
                 ->update($validatedData);
+
+                // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData2['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
             DB::table('users')
             ->where('nik', $request->input('nik'))
@@ -684,6 +721,8 @@ class SUController extends Controller
                     ->withInput();
     }
 
+    $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+    $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
     // Jika validasi berhasil, tambahkan barang
     barang::create($validatedData);
 
@@ -711,6 +750,9 @@ class SUController extends Controller
                         ->withErrors($e->validator)
                         ->withInput();
         }
+
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         DB::table('barangs')
             ->where('id', $request->input('id_barang'))
@@ -859,6 +901,9 @@ class SUController extends Controller
             ]);
         }
 
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
         ruangan::create($validatedData);
 
         $request->session()->flash('success', 'Ruangan baru telah ditambahkan!');
@@ -876,6 +921,8 @@ class SUController extends Controller
             'tipe_ruangan' => 'required',
         ]);
 
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         DB::table('ruangans')
             ->where('id', $request->input('id_ruangan'))
@@ -951,6 +998,9 @@ class SUController extends Controller
             'departemen' => 'required|max:255'
         ]);
 
+        $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
         departemen::create($validatedData);
 
         $request->session()->flash('success', 'Departemen baru telah ditambahkan!');
@@ -963,6 +1013,9 @@ class SUController extends Controller
             'no_departemen' => 'required|max:255',
             'departemen' => 'required|max:255'
         ]);
+
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         DB::table('departemens')
             ->where('id', $request->input('id_departemen'))
@@ -1063,6 +1116,9 @@ class SUController extends Controller
             }
 
             // dd($validatedData);
+            $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+            $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
             training::create($validatedData);
 
             $request->session()->flash('success', 'Training baru telah ditambahkan!');
@@ -1107,6 +1163,8 @@ class SUController extends Controller
             $validatedData['tanggal_selesai'] = $request->input('tanggal_mulai');
         }
 
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
         // dd($validatedData);
         DB::table('trainings')
             ->where('id', $request->input('id_training'))
@@ -1186,6 +1244,9 @@ class SUController extends Controller
             } else {
                 $validatedData['tanggal_selesai'] = $request->input('tanggal_mulai');
             }
+
+            // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+            $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
             // dd($validatedData);
             DB::table('trainings')
@@ -1267,6 +1328,9 @@ class SUController extends Controller
 
                 // dd($validatedData);
 
+                $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+                $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
                 peserta_training::create($validatedData);
 
                 $jumlah_peserta = DB::table('peserta_trainings')
@@ -1306,6 +1370,9 @@ class SUController extends Controller
             'tanggal_lahir' => 'nullable|required',
             'id_training' => 'required',
         ]);
+
+        // $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+        $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
 
         DB::table('peserta_trainings')
             ->where('id', $request->input('id_peserta'))

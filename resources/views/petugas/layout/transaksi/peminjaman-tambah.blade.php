@@ -94,12 +94,21 @@
             Barang yang akan dipinjamkan
         </div>
 
-        <div class="row">
-            <div class="form-group">
-                <label for="">Scan Barcode / Kode Barang</label>
-                <input type="text" value="" class="form-control" id="input-barcode-1"
+        <div class="row d-flex">
+            <div class="col-md-8">
+
+                <div class="form-group">
+                    <label for="">Scan Barcode / Kode Barang</label>
+                    <input type="text" value="" class="form-control" id="input-barcode-1"
                     onchange="addkeranjangpeminjaman()">
+                </div>
             </div>
+
+            <div class="col-md-4"> <button onclick="ShowModal1()" type="button" class="btn btn-warning btn-sm mt-4 mb-2 w-100"
+                data-bs-toggle="modal" data-bs-target="#listdata">
+                <i class="fa-solid fa-cart-flatbed"></i>
+                Data Inventaris
+            </button></div>
         </div>
 
         <button class="btn btn-primary mt-1" onclick="addpeminjaman()">
@@ -222,6 +231,79 @@
     @endforeach
 
     {{-- end modal delete data keranjang --}}
+
+    {{-- modal list data --}}
+    <div class="modal modal-blur fade" id="listdata" tabindex="-1" role="dialog" aria-hidden="true"
+        style="font-size: 14px;">
+        <div class="modal-dialog modal-fullscreen modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-6"><strong>List Barang</strong>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped" id="data-tables-keranjang">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                {{-- <th>Foto Profil</th> --}}
+                                {{-- <th>Alamat</th> --}}
+                                {{-- <th>No Telepon</th> --}}
+                                <th>Kode</th>
+                                <th>Nama Barang</th>
+                                <th>Merk</th>
+                                {{-- <th>Tanggal Pengadaan</th> --}}
+                                <th>Jenis Pengadaan</th>
+                                <th>Kondisi</th>
+                                <th>Status</th>
+                                <th>Harga</th>
+                                <th>Keterangan</th>
+                            </tr>
+                        </thead>
+                        @php
+                            $no = 1;
+                        @endphp
+                        @foreach ($detail_barangs as $barang)
+                            @php
+                                $nama_barang = DB::table('barangs')
+                                    ->select('*')
+                                    ->where('no_barang', '=', $barang->no_barang)
+                                    ->first();
+                            @endphp
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                {{-- <td>{{ $city->id }}</td> --}}
+                                {{-- <td>lorem</td> --}}
+                                <td>No Barang: <b>{{ $barang->no_barang }}</b> <br>Barcode:
+                                    <b>{!! DNS1D::getBarcodeHTML($barang->kode_barcode, 'UPCA') !!}{{ $barang->kode_barcode }}</b> <br>No Asset:
+                                    <b>{{ $barang->no_asset }}</b><br>Nomor
+                                    Kodifikasi: <b>{{ $barang->nomor_kodifikasi }}</b>
+                                </td>
+                                <td>{{ $nama_barang->nama_barang }}</td>
+                                <td>{{ $barang->merk }}, {{ $barang->spesifikasi }}</td>
+                                {{-- <td>{{ $barang->tanggal_pengadaan }}</td> --}}
+                                <td>{{ $barang->jenis_pengadaan }}</td>
+                                <td>{{ $barang->kondisi }}</td>
+                                <td><button
+                                        class="btn btn-sm rounded-pill @if ($barang->status == 'Belum Ditempatkan') btn-warning @elseif ($barang->status == 'Sudah Dihapus') btn-danger @else btn-success @endif text-white"
+                                        style="cursor: default;">{{ $barang->status }}</button></td>
+                                <td>Rp. {{ number_format($barang->harga) }}</td>
+                                {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
+                                {{-- <td>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ut, ipsa.</td> --}}
+                                <td>{{ $barang->keterangan }}</td>
+
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    </div>
+    {{-- END END Modal List Data --}}
 
     <script>
         $(document).ready(function() {
