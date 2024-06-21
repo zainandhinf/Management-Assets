@@ -660,6 +660,9 @@ class PController extends Controller
             }
 
 
+            $validatedData['created_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+            $validatedData['updated_at'] = Carbon::now()->setTimezone('Asia/Jakarta')->format('Y-m-d-H-i-s');
+
             keranjang_pengadaan::create($validatedData);
 
             $request->session()->flash('success', 'Barang masuk kedalam List Pengadaan!');

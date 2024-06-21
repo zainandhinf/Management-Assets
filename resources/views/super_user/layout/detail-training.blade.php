@@ -12,7 +12,7 @@
                     <th>#</th>
                     <th>Nama Training</th>
                     <th>Keterangan</th>
-                    <th data-searchable="false">Action</th>
+                    {{-- <th data-searchable="false">Action</th> --}}
                 </tr>
             </thead>
             @php
@@ -23,7 +23,7 @@
                     <td>{{ $no++ }}</td>
                     <td>{{ $training->nama_training }}</td>
                     <td>{{ $training->keterangan }}</td>
-                    <td>
+                    {{-- <td>
                         <button data-bs-toggle="modal" data-bs-target="#editdata{{ $training->id }}"
                             style="margin-right: 10px" class="btn btn-warning mr-2"><i class="fa fa-edit"></i></button>
                         <button data-bs-toggle="modal" data-bs-target="#deletedata{{ $training->id }}"
@@ -31,7 +31,7 @@
                             <i class="fa fa-trash"></i>
                         </button>
 
-                    </td>
+                    </td> --}}
                 </tr>
             @endforeach
         </table>
@@ -90,7 +90,7 @@
     </div>
     {{-- end modal add data --}}
 
-    
+
 
     {{-- end modal --}}
 @endsection
